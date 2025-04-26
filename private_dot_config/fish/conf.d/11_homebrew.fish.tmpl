@@ -1,0 +1,11 @@
+# ~/.config/fish/conf.d/11_homebrew.fish
+# Check for interactive session AND if Homebrew is already set up to prevent re-initialization
+if status --is-interactive
+    if not set --query BREW_HOME #Check if Homebrew is already initialized
+        {{ if eq .chezmoi.os "linux" }}
+        eval (/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+        {{ else if eq .chezmoi.os "darwin" }}
+        eval (/opt/homebrew/bin/brew shellenv)
+        {{ end }}
+    end
+end

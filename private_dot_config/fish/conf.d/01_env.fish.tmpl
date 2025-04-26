@@ -1,0 +1,25 @@
+# ~/.config/fish/conf.d/01-env.fish
+set --global fish_greeting "" # define your welcome message, you can set it as "" to ban it for better startup time.
+
+# --export for bash or python scripts, if you noly need it work in fish, you do not need to set --export.
+set --global --export EDITOR "nvim"
+set --global --export UPDATE_LOG_FILE "$HOME/.log/update.log" # set update_log_file
+set --global --export XDG_CONFIG_HOME "$HOME/.config"
+set --global --export fisher_path "$HOME/.config/fisher"
+
+{{ if eq .chezmoi.os "linux" }}
+# set env in Linux
+# set IM
+set --global --export XMODIFIERS "@im=fcitx"
+set --global --export QT_IM_MODULE "fcitx"
+set --global --export GTK_IM_MODULE "fcitx"
+# set scripts home
+set --global --export SCRIPTS_HOME "$HOME/Project/scripts"
+{{ end }}
+
+# load env config
+if test -f $HOME/.config/fish/.env.fish
+    source $HOME/.config/fish/.env.fish
+end
+
+
