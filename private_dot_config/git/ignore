@@ -1,0 +1,42 @@
+# OS and tmp file
+*.swp
+*.bak
+.DS_Store
+logs/
+*.log
+node_modules/
+*.cache
+*.lock
+
+# python
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.egg-info/
+*.eggs/
+dist/
+build/
+*.whl
+*.ipynb_checkpoints/
+Untitled*.ipynb
+
+# virtual environment 
+venv/
+.venv/
+env/
+.env/
+virtualenv/
+python_env/
+
+# checkpoint
+*.ckpt
+*.pth
+*.pt
+*.bin
+*.onnx
+*.torchscript
+model_checkpoints/
+tensorboard/
+runs/
+experiments/

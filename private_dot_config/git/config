@@ -1,0 +1,15 @@
+[user]
+    name = mq-yuan
+    email = dearmengqiyuan@outlook.com
+[core]
+    editor = nvim  # 或者你喜欢的编辑器，如 nano, code
+    autocrlf = input  # 跨平台换行符处理，适合 Linux
+    excludesfile = ~/.config/git/ignore  # 全局忽略文件
+[pull]
+    rebase = true  # 默认使用 rebase 拉取
+[color]
+    ui = auto  # 启用彩色输出
+[push]
+    default = simple  # 推送到匹配的分支
+[init]
+    defaultBranch = main  # 新仓库默认分支为 main
