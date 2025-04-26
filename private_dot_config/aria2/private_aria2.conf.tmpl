@@ -1,0 +1,45 @@
+# 基本设置
+enable-rpc=true
+rpc-listen-all=false
+rpc-listen-port={{ (keepassxc "Applications/aria2-jsonrpc").UserName}}
+rpc-allow-origin-all=true 
+rpc-secret={{ (keepassxc "Applications/aria2-jsonrpc").Password}}
+
+# 下载目录
+dir={{ .chezmoi.homeDir }}/Downloads
+file-allocation=prealloc 
+
+# 性能优化
+max-concurrent-downloads=5
+split=16
+max-connection-per-server=16
+min-split-size=100M
+max-overall-download-limit=0
+max-overall-upload-limit=0
+
+# 断点续传和会话管理
+continue=true
+input-file={{ .chezmoi.homeDir }}/.config/aria2/aria2.session
+save-session={{ .chezmoi.homeDir }}/.config/aria2/aria2.session
+save-session-interval=60
+
+# BitTorrent 优化
+bt-enable-lpd=true
+bt-max-peers=55
+bt-request-peer-speed-limit=100K
+seed-ratio=1.0
+seed-time=0
+
+# 安全性
+check-certificate=false
+disable-ipv6=true
+
+# 日志
+log={{ .chezmoi.homeDir }}/.log/aria2.log
+log-level=info
+
+# 其他优化
+disk-cache=64M
+always-resume=true
+max-tries=5
+retry-wait=5

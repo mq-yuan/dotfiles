@@ -1,0 +1,133 @@
+# see https://github.com/sigoden/aichat/blob/main/config.example.yaml
+
+model: xai:grok-3-beta
+clients:
+  - type: openai-compatible
+    name: xai
+    api_base: https://api.x.ai/v1
+    models:
+    - name: grok-3-beta
+      max_input_tokens: 128000
+      max_output_tokens: 16384
+      input_price: 3
+      output_price: 15
+      supports_function_calling: true
+    - name: grok-3-mini-beta
+      max_input_tokens: 128000
+      max_output_tokens: 16384
+      input_price: 0.3
+      output_price: 0.5
+      supports_function_calling: true
+    - name: grok-2-latest
+      max_input_tokens: 131072
+      input_price: 2
+      output_price: 10
+      supports_function_calling: true
+    - name: grok-2-vision-latest
+      max_input_tokens: 32768
+      input_price: 2
+      output_price: 10
+      supports_vision: true
+      supports_function_calling: true
+  - type: openai
+    name: openai
+    api_base: https://aihubmix.com/v1
+    models:
+    - name: chatgpt-4o-latest
+      max_input_tokens: 128000
+      max_output_tokens: 16384
+      input_price: 5
+      output_price: 15
+      supports_vision: true
+      supports_function_calling: true
+    - name: gpt-4o-mini
+      max_input_tokens: 128000
+      max_output_tokens: 16384
+      input_price: 0.15
+      output_price: 0.6
+      supports_vision: true
+      supports_function_calling: true
+    - name: gpt-4o-mini-search-preview
+      max_input_tokens: 128000
+      max_output_tokens: 16384
+      input_price: 0.15
+      output_price: 0.6
+      supports_vision: true
+  - type: openai-compatible
+    name: gemini
+    api_base: https://aihubmix.com/v1
+    models:
+      - name: gemini-2.5-flash-preview-04-17-nothink
+        max_input_tokens: 1048576
+        max_output_tokens: 8192
+        input_price: 0.15
+        output_price: 0.6
+        supports_vision: true
+        supports_function_calling: true
+      - name: gemini-2.5-flash-preview-04-17
+        max_input_tokens: 1048576
+        max_output_tokens: 8192
+        input_price: 0.15
+        output_price: 3.45
+        supports_vision: true
+        supports_function_calling: true
+      - name: gemini-2.0-flash
+        max_input_tokens: 1048576
+        max_output_tokens: 8192
+        input_price: 0.1
+        output_price: 0.4
+        supports_vision: true
+        supports_function_calling: true
+      - name: gemini-2.0-flash-lite
+        max_input_tokens: 1048576
+        max_output_tokens: 8192
+        input_price: 0.076
+        output_price: 0.304
+        supports_vision: true
+        supports_function_calling: true
+      - name: gemini-2.5-pro-preview-03-25
+        max_input_tokens: 1048576
+        max_output_tokens: 65536
+        input_price: 1.25
+        output_price: 10
+        supports_vision: true
+        supports_function_calling: true
+      - name: gemini-2.0-flash-search
+        max_input_tokens: 1048576
+        max_output_tokens: 8192
+        input_price: 0.1
+        output_price: 0.4
+        supports_vision: true
+        supports_function_calling: true
+  - type: openai-compatible
+    name: deepseek
+    api_base: https://api.deepseek.com
+    models:
+    - name: deepseek-chat
+      max_input_tokens: 131072
+      input_price: 0.272
+      output_price: 1.088
+    - name: deepseek-reasoner
+      max_input_tokens: 131072
+      input_price: 0.546
+      output_price: 2.184
+  - type: openai-compatible
+    name: claude
+    api_base: https://aihubmix.com/v1
+    models:
+    - name: claude-3-7-sonnet-20250219
+      max_input_tokens: 200000
+      max_output_tokens: 8192
+      require_max_tokens: true
+      input_price: 3.3
+      output_price: 16.5
+      supports_vision: true
+      supports_function_calling: true
+    - name: claude-3-5-sonnet-20241022
+      max_input_tokens: 200000
+      max_output_tokens: 8192
+      require_max_tokens: true
+      input_price: 3.3
+      output_price: 16.5
+      supports_vision: true
+      supports_function_calling: true
