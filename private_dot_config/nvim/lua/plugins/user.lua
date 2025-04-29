@@ -31,7 +31,7 @@ return {
     }
   },
 
-  --lazygit
+  -- lazygit
   {
     "kdheepak/lazygit.nvim",
     lazy = true,
@@ -47,6 +47,9 @@ return {
       "nvim-lua/plenary.nvim",
     },
   },
+
+  -- golf
+  { 'vuciv/golf' },
 
   -- == Users of Overriding Plugins ==
 
