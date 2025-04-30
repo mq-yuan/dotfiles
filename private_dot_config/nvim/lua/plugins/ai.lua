@@ -121,6 +121,16 @@ return {
                     max_tokens = 128000,
                 },
                 {
+                    name = "gemini-2.5-pro",
+                    url = "https://aihubmix.com/v1/chat/completions",
+                    model = "gemini-2.5-pro-preview-03-25",
+                    api_type = "openai",
+                    fetch_key = function()
+                        return vim.env.GEMINI_API_KEY
+                    end,
+                    max_tokens = 128000,
+                },
+                {
                     name = "deepseek-chat",
                     fetch_key = function()
                         return vim.env.DEEPSEEK_API_KEY
@@ -139,6 +149,16 @@ return {
                     model = "deepseek-reasoner",
                     api_type = "openai",
                     max_tokens = 800000,
+                },
+                {
+                    name = "deepseek-R1T",
+                    url = "https://aihubmix.com/v1/chat/completions",
+                    model = "tngtech/DeepSeek-R1T-Chimera",
+                    api_type = "openai",
+                    fetch_key = function()
+                        return vim.env.GEMINI_API_KEY
+                    end,
+                    max_tokens = 128000,
                 },
             },
 
