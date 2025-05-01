@@ -1191,6 +1191,7 @@ function getRules() {
         "DOMAIN-KEYWORD,kaspersky",
         "DOMAIN-KEYWORD,hf-mirror",
         "DOMAIN,public.boxcloud.com",
+        "DOMAIN-SUFFIX,aowu.tv",
         // "DOMAIN,www.latexlive.com",
         // "DOMAIN-SUFFIX,latexlive.com",
       ],
