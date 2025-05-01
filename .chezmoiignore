@@ -1,0 +1,7 @@
+{{ if ne .chezmoi.os "darwin" }}
+Library/Application Support/App/file.conf
+{{ end }}
+{{ if ne .chezmoi.os "linux" }}
+.local/share/io.github.clash-verge-rev.clash-verge-rev/profiles/LfoXeuET2QoQ.yaml
+.local/share/io.github.clash-verge-rev.clash-verge-rev/profiles/Script.js
+{{ end }}

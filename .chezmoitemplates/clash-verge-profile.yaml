@@ -1,0 +1,75 @@
+proxy-providers:
+  jsjc:
+    type: http
+    url: {{ keepassxcAttribute "Applications/clash-verge" "jsjc-token" | printf "\"https://jsjc.cfd/api/v1/client/subscribe?token=%s\"" }}
+    path: ./proxy_providers/jsjc
+    interval: 3600
+    proxy: PROXY
+    size-limit: 0
+    header:
+      User-Agent:
+      - "mihomo/1.18.3"
+    health-check:
+      enable: true
+      lazy: true
+      url: "https://cp.cloudflare.com"
+      interval: 300
+      timeout: 5000
+      expected-status: 204
+    override:
+      additional-suffix: "-jsjc"
+  alice:
+    type: http
+    url: {{ keepassxcAttribute "Applications/clash-verge" "alice-token" | printf "\"https://sub.alice.sale/api/v1/client/subscribe?token=%s\"" }}
+    path: ./proxy_providers/alice
+    interval: 3600
+    proxy: PROXY
+    size-limit: 0
+    header:
+      User-Agent:
+      - "mihomo/1.18.3"
+    health-check:
+      enable: true
+      lazy: true
+      url: "https://cp.cloudflare.com"
+      interval: 300
+      timeout: 5000
+      expected-status: 204
+    override:
+      additional-suffix: "-alice"
+  
+proxies:
+  - name: mq-Bandwagong-hysteria2
+    server: {{ keepassxcAttribute "Applications/clash-verge" "bandwagong-server" }}
+    port: {{ keepassxcAttribute "Applications/clash-verge" "bandwagong-hysteria2-port" }}
+    udp: true
+    skip-cert-verify: false
+    sni: {{ keepassxcAttribute "Applications/clash-verge" "bandwagong-server" }}
+    type: hysteria2
+    up: "1000 Mbps"
+    down: "1000 Mbps"
+    password: {{ keepassxcAttribute "Applications/clash-verge" "bandwagong-password" }}
+  - name: mq-Bandwagong-tuic
+    server: {{ keepassxcAttribute "Applications/clash-verge" "bandwagong-server" }}
+    port: {{ keepassxcAttribute "Applications/clash-verge" "bandwagong-tuic-port" }}
+    type: tuic
+    uuid: {{ keepassxcAttribute "Applications/clash-verge" "bandwagong-password" }}
+    password: {{ keepassxcAttribute "Applications/clash-verge" "bandwagong-password" }}
+    ip: {{ keepassxcAttribute "Applications/clash-verge" "bandwagong-ip" }}
+    congestion_control: bbr
+    alpn: [h3]
+    disable-sni: true
+    reduce-rtt: true
+    request-timeout: 8000
+    udp-relay-mode: native
+  - name: mq-ProxyChain-WebShare
+    type: "socks5"
+    server: {{ keepassxcAttribute "Applications/clash-verge" "webshare-server" }}
+    port: {{ keepassxcAttribute "Applications/clash-verge" "webshare-port" }}
+    username: {{ keepassxcAttribute "Applications/clash-verge" "webshare-username" | printf "%q" }}
+    password: {{ keepassxcAttribute "Applications/clash-verge" "webshare-password" | printf "%q" }}
+    udp: true
+    dialer-proxy: "MQ - Select"
+
+
+
