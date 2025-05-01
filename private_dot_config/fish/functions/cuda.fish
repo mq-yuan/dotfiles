@@ -1,4 +1,3 @@
-{{ if eq .chezmoi.os "linux" }}
 # ~/.config/fish/functions/cuda.fish
 function cuda --description 'Switch between CUDA versions'
     # 默认 CUDA 版本
@@ -130,6 +129,3 @@ function cuda --description 'Switch between CUDA versions'
         return 1
     end
 end
-{{ else }}
-{{ empty }}
-{{ end }}

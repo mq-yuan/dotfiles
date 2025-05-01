@@ -1,4 +1,3 @@
-{{ if eq .chezmoi.os "linux" }}
 # ~/.config/fish/functions/scripts_python.fish
 function scripts_python -d "Run Python scripts with uv"
     set script_name $argv[1]
@@ -14,6 +13,3 @@ function scripts_python -d "Run Python scripts with uv"
     end
     uv run --no-project --python="$python_path" "$SCRIPTS_HOME/$script_name.py" $script_args
 end
-{{ else }}
-{{ empty }}
-{{ end }}

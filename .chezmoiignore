@@ -1,7 +1,25 @@
+# Mac
 {{ if ne .chezmoi.os "darwin" }}
-Library/Application Support/App/file.conf
+# clash-verge-rev
+Library/Application Support/io.github.clash-verge-rev.clash-verge-rev/profiles/LPBr50uDNvag.yaml
+Library/Application Support/io.github.clash-verge-rev.clash-verge-rev/profiles/Script.js
 {{ end }}
+
+# Linux
 {{ if ne .chezmoi.os "linux" }}
-.local/share/io.github.clash-verge-rev.clash-verge-rev/profiles/LfoXeuET2QoQ.yaml
-.local/share/io.github.clash-verge-rev.clash-verge-rev/profiles/Script.js
+# clash-verge-rev
+.local/share/io.github.clash-verge-rev.clash-verge-rev/
+.local/share/io.github.clash-verge-rev.clash-verge-rev/
+
+# cuda
+.config/fish/completions/cuda.fish
+.config/fish/functions/cuda.fish
+
+# scripts_python
+.config/fish/completions/scripts_python.fish
+.config/fish/functions/scripts_python.fish
+
+# install_deb
+.config/fish/functions/install_deb.fish
+
 {{ end }}

@@ -1,4 +1,3 @@
-{{ if eq .chezmoi.os "linux" }}
 # $HOME/.config/fish/functions/install_deb.fish
 
 function install_deb -d "Safely install a .deb package with validation, cleanup, and optional original file deletion"
@@ -116,6 +115,3 @@ function install_deb -d "Safely install a .deb package with validation, cleanup,
     echo "Successfully installed $deb_file"
     return 0
 end
-{{ else }}
-{{ empty }}
-{{ end }}
