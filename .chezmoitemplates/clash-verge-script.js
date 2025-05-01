@@ -1192,6 +1192,7 @@ function getRules() {
         "DOMAIN-KEYWORD,hf-mirror",
         "DOMAIN,public.boxcloud.com",
         "DOMAIN-SUFFIX,aowu.tv",
+        "DOMAIN,anime.girigirilove.com",
         // "DOMAIN,www.latexlive.com",
         // "DOMAIN-SUFFIX,latexlive.com",
       ],
