@@ -1,8 +1,7 @@
 # Mac
 {{ if ne .chezmoi.os "darwin" }}
 # clash-verge-rev
-Library/Application Support/io.github.clash-verge-rev.clash-verge-rev/profiles/LPBr50uDNvag.yaml
-Library/Application Support/io.github.clash-verge-rev.clash-verge-rev/profiles/Script.js
+Library/
 {{ end }}
 
 # Linux
