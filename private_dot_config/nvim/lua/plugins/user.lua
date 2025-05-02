@@ -51,6 +51,23 @@ return {
   -- golf
   { 'vuciv/golf' },
 
+  -- typst-preview.nvim for preview 
+  {
+    "chomosuke/typst-preview.nvim",
+    cmd = { "TypstPreview", "TypstPreviewToggle", "TypstPreviewUpdate" },
+    build = function() require("typst-preview").update() end,
+    opts = {
+      dependencies_bin = {
+        tinymist = "tinymist",
+      },
+    },
+  },
+  -- typst.vim for syntax
+  {
+    "kaarmu/typst.vim",
+    ft = { "typst" }
+  },
+
   -- == Users of Overriding Plugins ==
 
   -- == Examples of Adding Plugins ==

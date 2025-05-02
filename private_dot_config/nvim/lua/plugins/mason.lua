@@ -16,6 +16,7 @@ return {
         "rust-analyzer",
         "basedpyright",
         "clangd",
+        "tinymist",
 
         -- install formatters
         "stylua",
