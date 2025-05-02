@@ -98,7 +98,7 @@ function install_deb -d "Safely install a .deb package with validation, cleanup,
         end
     else if test "$skip_delete" = false
         read -P "Do you want to delete the original file '$deb_file'? [y/N] " response
-        if string match -qi '^y$' "$response"
+        if string match -qir '^y$' "$response"
             rm -f "$deb_file"
             if test $status -eq 0
                 echo "Deleted original file $deb_file"
