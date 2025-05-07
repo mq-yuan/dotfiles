@@ -5,7 +5,7 @@ Library/
 {{ end }}
 
 # Linux
-{{ if ne .chezmoi.os "linux" }}
+{{ if (or (ne .chezmoi.os "linux") (ne .chezmoi.hostname "ymq-ubuntu")) }}
 # clash-verge-rev
 .local/share/io.github.clash-verge-rev.clash-verge-rev/
 .local/share/io.github.clash-verge-rev.clash-verge-rev/
@@ -21,4 +21,9 @@ Library/
 # install_deb
 .config/fish/functions/install_deb.fish
 
+{{ end }}
+
+# WSL
+{{ if eq .chezmoi.hostname "LAPTOP-6037VQ4M"}}
+.config/fish/conf.d/13_rustup.fish
 {{ end }}
