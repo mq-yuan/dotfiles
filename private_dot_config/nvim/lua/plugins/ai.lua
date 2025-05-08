@@ -71,7 +71,7 @@ return {
     config = function ()
         local tools = require("llm.tools")
         require("llm").setup({
-            -- enable_trace = true,
+            enable_trace = false,
 
             -- set temperature and assistant
             temperature = 0.3,
@@ -377,10 +377,10 @@ return {
                     handler = tools.completion_handler,
                     opts = {
                         fetch_key = function()
-                            return vim.env.DEEPSEEK_API_KEY
+                            return vim.env.GEMINI_API_KEY
                         end,
-                        url = "https://api.deepseek.com/beta/completions",
-                        model = "deepseek-chat",
+                        url = "https://aihubmix.com/v1",
+                        model = "gpt-4o-mini",
                         api_type = "openai",
 
                         n_completions = 1,
@@ -395,7 +395,8 @@ return {
                         default_filetype_enabled = false,
                         auto_trigger = true,
                         only_trigger_by_keywords = true,
-                        style = "blink.cmp",
+                        -- style = "blink.cmp",
+                        style = "virtual_text",
                         keymap = {
                             virtual_text = {
                                 accept = {
