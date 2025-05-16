@@ -1,11 +1,12 @@
-# Mac
+# Only Mac
 {{ if ne .chezmoi.os "darwin" }}
 # clash-verge-rev
 Library/
 {{ end }}
 
-# Linux
-{{ if (or (ne .chezmoi.os "linux") (ne .chezmoi.hostname "ymq-ubuntu")) }}
+
+# Only Linux
+{{ if ne .chezmoi.os "linux" }}
 # clash-verge-rev
 .local/share/io.github.clash-verge-rev.clash-verge-rev/
 .local/share/io.github.clash-verge-rev.clash-verge-rev/
@@ -21,9 +22,28 @@ Library/
 # install_deb
 .config/fish/functions/install_deb.fish
 
+# keyboard
+.config/fish/conf.d/14_keyboard.fish
 {{ end }}
 
-# WSL
-{{ if eq .chezmoi.hostname "LAPTOP-6037VQ4M"}}
+
+# Only WSL
+{{ if (or (ne .chezmoi.hostname "LAPTOP-6037VQ4M") (ne .chezmoi.os "linux")) }}
+{{ end }}
+
+
+
+
+# Not Mac
+{{ if eq .chezmoi.os "darwin" }}
+{{ end }}
+
+# Not Linux
+{{ if eq .chezmoi.os "linux" }}
+{{ end }}
+
+# Not WSL
+{{ if (and (eq .chezmoi.hostname "LAPTOP-6037VQ4M") (eq .chezmoi.os "linux")) }}
 .config/fish/conf.d/13_rustup.fish
+.config/fish/conf.d/14_keyboard.fish
 {{ end }}
