@@ -40,28 +40,41 @@ proxy-providers:
   
 proxies:
   - name: mq-Bandwagong-hysteria2
+    type: hysteria2
     server: {{ keepassxcAttribute "Applications/clash-verge" "bandwagong-server" }}
     port: {{ keepassxcAttribute "Applications/clash-verge" "bandwagong-hysteria2-port" }}
-    udp: true
-    skip-cert-verify: false
+    password: {{ keepassxcAttribute "Applications/clash-verge" "bandwagong-password" }}
+    alpn:
+      - h3
     sni: {{ keepassxcAttribute "Applications/clash-verge" "bandwagong-server" }}
-    type: hysteria2
     up: "1000 Mbps"
     down: "1000 Mbps"
-    password: {{ keepassxcAttribute "Applications/clash-verge" "bandwagong-password" }}
+    udp: true
+    skip-cert-verify: false
   - name: mq-Bandwagong-tuic
+    type: tuic
     server: {{ keepassxcAttribute "Applications/clash-verge" "bandwagong-server" }}
     port: {{ keepassxcAttribute "Applications/clash-verge" "bandwagong-tuic-port" }}
-    type: tuic
     uuid: {{ keepassxcAttribute "Applications/clash-verge" "bandwagong-password" }}
     password: {{ keepassxcAttribute "Applications/clash-verge" "bandwagong-password" }}
-    ip: {{ keepassxcAttribute "Applications/clash-verge" "bandwagong-ip" }}
+    alpn:
+      - h3
     congestion_control: bbr
-    alpn: [h3]
     disable-sni: true
     reduce-rtt: true
+    ip: {{ keepassxcAttribute "Applications/clash-verge" "bandwagong-ip" }}
     request-timeout: 8000
     udp-relay-mode: native
+  - name: mq-Bandwagong-VLESS-Vision
+    type: vless
+    server: {{ keepassxcAttribute "Applications/clash-verge" "bandwagong-server" }}
+    port: {{ keepassxcAttribute "Applications/clash-verge" "bandwagong-vless-vision-port" }}
+    uuid: {{ keepassxcAttribute "Applications/clash-verge" "bandwagong-password" }}
+    network: tcp
+    tls: true
+    udp: true
+    flow: xtls-rprx-vision
+    client-fingerprint: chrome
   - name: mq-ProxyChain-WebShare
     type: "socks5"
     server: {{ keepassxcAttribute "Applications/clash-verge" "webshare-server" }}
@@ -70,6 +83,3 @@ proxies:
     password: {{ keepassxcAttribute "Applications/clash-verge" "webshare-password" | printf "%q" }}
     udp: true
     dialer-proxy: "MQ - Select"
-
-
-
