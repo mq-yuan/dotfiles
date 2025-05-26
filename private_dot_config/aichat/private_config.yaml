@@ -1,29 +1,29 @@
 # see https://github.com/sigoden/aichat/blob/main/config.example.yaml
 
-model: xai:grok-3-beta
+model: gemini:gemini-2.0-flash
 clients:
   - type: openai-compatible
     name: xai
     api_base: https://api.x.ai/v1
     models:
-    - name: grok-3-beta
+    - name: grok-3
       max_input_tokens: 128000
       max_output_tokens: 16384
       input_price: 3
       output_price: 15
       supports_function_calling: true
-    - name: grok-3-mini-beta
+    - name: grok-3-mini
       max_input_tokens: 128000
       max_output_tokens: 16384
       input_price: 0.3
       output_price: 0.5
       supports_function_calling: true
-    - name: grok-2-latest
+    - name: grok-2-1212
       max_input_tokens: 131072
       input_price: 2
       output_price: 10
       supports_function_calling: true
-    - name: grok-2-vision-latest
+    - name: grok-2-vision-1212
       max_input_tokens: 32768
       input_price: 2
       output_price: 10

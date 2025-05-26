@@ -81,16 +81,6 @@ return {
             -- set models
             models = {
                 {
-                    name = "grok-3",
-                    fetch_key = function()
-                        return vim.env.XAI_API_KEY
-                    end,
-                    url = "https://api.x.ai/v1/chat/completions",
-                    model = "grok-3-beta",
-                    api_type = "openai",
-                    max_tokens = 128000,
-                },
-                {
                     name = "gemini-2.0-flash",
                     url = "https://aihubmix.com/v1/chat/completions",
                     model = "gemini-2.0-flash",
@@ -99,6 +89,16 @@ return {
                         return vim.env.GEMINI_API_KEY
                     end,
                     max_tokens = 1048576
+                },
+                {
+                    name = "grok-3",
+                    fetch_key = function()
+                        return vim.env.XAI_API_KEY
+                    end,
+                    url = "https://api.x.ai/v1/chat/completions",
+                    model = "grok-3",
+                    api_type = "openai",
+                    max_tokens = 128000,
                 },
                 {
                     name = "gemini-2.5-flash",
