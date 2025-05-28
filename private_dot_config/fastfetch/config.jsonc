@@ -138,11 +138,13 @@
         {
             "type": "disk",
             "key": "│ ├   (disk)",
+            "format": "{20} -> {1} / {2} ({size-percentage}) - {9}",            
             "keyColor": "33",
         },
         {
             "type": "physicaldisk",
             "key": "│ ├ 󰋊  (disk)",
+            "format": "{2} -> {1} [{physical-type}, {interconnect}]",            
             "keyColor": "33",
         },
         {

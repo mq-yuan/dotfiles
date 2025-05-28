@@ -11,5 +11,18 @@
     ui = auto  # 启用彩色输出
 [push]
     default = simple  # 推送到匹配的分支
+[rebase]
+    updateRefs = true
+[merge]
+    conflictstyle = zdiff3
 [init]
     defaultBranch = main  # 新仓库默认分支为 main
+[column]
+    ui = auto # git branch 更直观
+[branch]
+    sort = -committerdate # git branch 使用commit时间排序
+[diff]
+    algorithm = histogram # 更加直观清晰的diff信息
+    colorMoved = plain # diff可以识别move，并设置颜色
+    renames = true # diff 可以识别rename
+
