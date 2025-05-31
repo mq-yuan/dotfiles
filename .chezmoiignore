@@ -24,6 +24,8 @@ Library/
 
 # keyboard
 .config/fish/conf.d/14_keyboard.fish
+
+.xprofile
 {{ end }}
 
 
@@ -46,4 +48,5 @@ Library/
 {{ if (and (eq .chezmoi.hostname "LAPTOP-6037VQ4M") (eq .chezmoi.os "linux")) }}
 .config/fish/conf.d/13_rustup.fish
 .config/fish/conf.d/14_keyboard.fish
+.xprofile
 {{ end }}
