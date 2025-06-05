@@ -25,6 +25,9 @@ Library/
 # keyboard
 .config/fish/conf.d/14_keyboard.fish
 
+# onedrive
+.config/onedrive/
+
 .xprofile
 {{ end }}
 
