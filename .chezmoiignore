@@ -28,6 +28,9 @@ Library/
 # onedrive
 .config/onedrive/
 
+# mpv
+.config/mpv/
+
 .xprofile
 {{ end }}
 
