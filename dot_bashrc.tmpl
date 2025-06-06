@@ -9,7 +9,7 @@ case $- in
 esac
 
 {{ if eq .chezmoi.os "linux" }}
-exec /home/linuxbrew/.linuxbrew/bin/fish
+exec /usr/bin/fish
 {{ else if eq .chezmoi.os "darwin" }}
 exec /opt/homebrew/bin/fish
 {{ end }}
