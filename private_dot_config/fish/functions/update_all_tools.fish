@@ -72,6 +72,15 @@ function update_all_tools
         end
     end
 
+    function update_cargo
+        print_header "正在更新 Cargo Install Package"
+        if type -q cargo-install-update
+            log_command "cargo-install-update install-update --all" 
+        else
+            echo "未安装 cargo-install-update，跳过更新。" | tee -a $UPDATE_LOG_FILE
+        end
+    end
+
     function update_asdf
         print_header "正在更新 asdf 和插件"
         if type -q asdf
@@ -103,11 +112,11 @@ function update_all_tools
     # 定义工具列表和状态
     set -l os (uname)
     if test $os = "Darwin"
-        set tools "Homebrew (brew)" "Rust 和 Cargo (rustup, cargo)" "asdf 和插件" "Fisher 插件" "Conda 和包"
-        set tool_selected 0 0 0 0 0 
+        set tools "Homebrew (brew)" "Rust (rustup)" "asdf 和插件" "Fisher 插件" "Conda 和包" "Cargo (cargo)"
+        set tool_selected 0 0 0 0 0 0
     else if test $os = "Linux"
-        set tools "apt" "Flatpak" "Snap" "Homebrew (brew)" "Rust 和 Cargo (rustup, cargo)" "asdf 和插件" "Fisher 插件" "Conda 和包"
-        set tool_selected 0 0 0 0 0 0 0 0 
+        set tools "apt" "Flatpak" "Snap" "Homebrew (brew)" "Rust(rustup)" "asdf 和插件" "Fisher 插件" "Conda 和包" "Cargo (cargo)"
+        set tool_selected 0 0 0 0 0 0 0 0 0
     end
 
     function show_menu --no-scope-shadowing
@@ -172,6 +181,8 @@ function update_all_tools
                                     update_fisher
                                 case 5
                                     update_conda
+                                case 6
+                                    update_cargo
                             end
                         else if test $os = "Linux"
                             switch $i
@@ -191,6 +202,8 @@ function update_all_tools
                                     update_fisher
                                 case 8
                                     update_conda
+                                case 9
+                                    update_cargo
                             end
                         end
                     end
