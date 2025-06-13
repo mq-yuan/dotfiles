@@ -14,7 +14,7 @@
 #azure_tenant_id = ""
 
 ## This config option allows the disabling of preserving local data by renaming the local file in the event of data conflict. If this is enabled, you will experience data loss on your local data as the local file will be over-written with data from OneDrive online. Use with care and caution.
-bypass_data_preservation = "true"
+# bypass_data_preservation = "true"
 
 ## This config option is useful to prevent application startup & ongoing use in 'Monitor Mode' if the configured 'sync_dir' is a separate disk that is being mounted by your system.
 #check_nomount = "false"
@@ -195,3 +195,6 @@ bypass_data_preservation = "true"
 
 ## Write xattr metadata fields (createdBy, lastModifiedBy) to synced files.
 #write_xattr_data = "false"
+#
+force_session_upload = "true"
+delay_inotify_processing = "true"
