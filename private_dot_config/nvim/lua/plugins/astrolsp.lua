@@ -84,10 +84,10 @@ return {
 			},
 			-- tinymist
 			tinymist = {
-			  settings = {
-			    formatterMode = "typestyle",
-			    exportPdf = "never",
-			  },
+			  	settings = {
+			    	formatterMode = "typestyle",
+			    	exportPdf = "never",
+			  	},
 			},
 		},
 		-- customize how language servers are attached
