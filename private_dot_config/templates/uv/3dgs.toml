@@ -1,0 +1,38 @@
+[project]
+name = "gaussian-splatting"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "diff-gaussian-rasterization",
+    "simple-knn",
+    "fused-ssim",
+    "joblib>=1.5.1",
+    "numpy<2.3.1",
+    "opencv-python>=4.11.0.86",
+    "plyfile>=1.1.2",
+    "setuptools>=80.9.0",
+    "torch==2.1.2",
+    "torchaudio==2.1.2",
+    "torchvision==0.16.2",
+    "tqdm>=4.67.1",
+]
+
+[tool.uv.sources]
+torch = [
+  { index = "pytorch-cu118-nju", marker = "sys_platform == 'linux'" },
+]
+torchvision = [
+  { index = "pytorch-cu118-nju", marker = "sys_platform == 'linux'" },
+]
+diff-gaussian-rasterization = { path = "submodules/diff-gaussian-rasterization" }
+simple-knn = { path = "submodules/simple-knn" }
+fused-ssim = { path = "submodules/fused-ssim"}
+
+[[tool.uv.index]]
+name = "pytorch-cu118-nju"
+url = "https://mirrors.nju.edu.cn/pytorch/whl/cu118/"
+explicit = true
+
+
