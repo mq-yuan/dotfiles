@@ -8,6 +8,7 @@ dependencies = [
     "matplotlib>=3.10.3",
     "ninja>=1.11.1.4",
     "opencv-python>=4.11.0.86",
+    "setuptools>=80.9.0",
     "torch==2.4.1",
     "torchvision==0.19.1",
     "xformers==0.0.28.post1",
