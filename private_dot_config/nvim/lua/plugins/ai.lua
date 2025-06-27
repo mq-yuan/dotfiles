@@ -86,7 +86,7 @@ return {
                     model = "gemini-2.0-flash",
                     api_type = "openai",
                     fetch_key = function()
-                        return vim.env.GEMINI_API_KEY
+                        return vim.env.AIHUBMIX_API_KEY
                     end,
                     max_tokens = 1048576
                 },
@@ -106,7 +106,7 @@ return {
                     model = "gemini-2.5-flash-preview-04-17-nothink",
                     api_type = "openai",
                     fetch_key = function()
-                        return vim.env.GEMINI_API_KEY
+                        return vim.env.AIHUBMIX_API_KEY
                     end,
                     max_tokens = 128000,
                 },
@@ -116,7 +116,7 @@ return {
                     model = "gemini-2.5-flash-preview-04-17",
                     api_type = "openai",
                     fetch_key = function()
-                        return vim.env.GEMINI_API_KEY
+                        return vim.env.AIHUBMIX_API_KEY
                     end,
                     max_tokens = 128000,
                 },
@@ -126,7 +126,7 @@ return {
                     model = "gemini-2.5-pro-preview-03-25",
                     api_type = "openai",
                     fetch_key = function()
-                        return vim.env.GEMINI_API_KEY
+                        return vim.env.AIHUBMIX_API_KEY
                     end,
                     max_tokens = 128000,
                 },
@@ -156,7 +156,7 @@ return {
                     model = "tngtech/DeepSeek-R1T-Chimera",
                     api_type = "openai",
                     fetch_key = function()
-                        return vim.env.GEMINI_API_KEY
+                        return vim.env.AIHUBMIX_API_KEY
                     end,
                     max_tokens = 128000,
                 },
@@ -286,7 +286,7 @@ return {
                     prompt = prompts.WordTranslate,
                     opts = {
                         fetch_key = function()
-                            return vim.env.OPENAI_API_KEY
+                            return vim.env.AIHUBMIX_API_KEY
                         end,
                         url = "https://aihubmix.com/v1/chat/completions",
                         model = "gemini-2.0-flash",
@@ -299,7 +299,7 @@ return {
                     handler = tools.qa_handler,
                     opts = {
                         fetch_key = function()
-                            return vim.env.OPENAI_API_KEY
+                            return vim.env.AIHUBMIX_API_KEY
                         end,
                         url = "https://aihubmix.com/v1/chat/completions",
                         model = "gemini-2.0-flash",
@@ -377,7 +377,7 @@ return {
                     handler = tools.completion_handler,
                     opts = {
                         fetch_key = function()
-                            return vim.env.GEMINI_API_KEY
+                            return vim.env.AIHUBMIX_API_KEY
                         end,
                         url = "https://aihubmix.com/v1",
                         model = "gpt-4o-mini",
