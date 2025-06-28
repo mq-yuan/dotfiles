@@ -1,0 +1,11 @@
+items:
+  - id: Profiles
+    name: Profiles.yaml
+    type: local
+    substore: false
+    interval: 0
+    override:
+      - Script
+    useProxy: false
+    updated: 1751084595711
+current: Profiles
