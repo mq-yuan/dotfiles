@@ -1,0 +1,56 @@
+core: mihomo
+updateChannel: stable
+silentStart: true
+appTheme: dark
+useWindowFrame: false
+proxyInTray: true
+maxLogDays: 7
+proxyCols: auto
+connectionDirection: asc
+connectionOrderBy: time
+useSubStore: false
+proxyDisplayMode: simple
+proxyDisplayOrder: default
+autoCheckUpdate: true
+autoCloseConnection: true
+controlDns: false
+controlSniff: false
+hosts: []
+siderOrder:
+  - sysproxy
+  - tun
+  - dns
+  - sniff
+  - proxy
+  - connection
+  - profile
+  - mihomo
+  - rule
+  - resource
+  - override
+  - log
+  - substore
+siderWidth: 250
+sysProxy:
+  enable: false
+  mode: manual
+disableLoopbackDetector: false
+disableEmbedCA: false
+disableSystemCA: false
+disableNftables: false
+safePaths: []
+disableGPU: true
+networkDetection: true
+customTheme: homohub.css
+showFloatingWindow: false
+disableTray: false
+disableAnimation: true
+displayIcon: false
+substoreCardStatus: hidden
+sniffCardStatus: hidden
+dnsCardStatus: hidden
+diffWorkDir: true
+webdavUrl: https://dav.jianguoyun.com/dav/
+webdavUsername: dearyuanmengqi@gmail.com
+webdavPassword: {{ keepassxcAttribute "Applications/clash-verge" "webdavPassword" }}
+webdavDir: sparkle
