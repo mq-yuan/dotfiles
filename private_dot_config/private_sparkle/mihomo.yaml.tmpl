@@ -1,0 +1,54 @@
+external-controller: 127.0.0.1:{{ keepassxcAttribute "Applications/clash-verge" "mixed-port" }}
+external-ui: ui
+external-ui-url: https://github.com/MetaCubeX/metacubexd/archive/refs/heads/gh-pages.zip
+external-controller-cors:
+  allow-origins:
+    - https://metacubex.github.io
+    - https://board.zash.run.place
+  allow-private-network: false
+ipv6: false
+mode: rule
+mixed-port: {{ keepassxcAttribute "Applications/clash-verge" "mixed-port" }}
+socks-port: 0
+port: 0
+redir-port: 0
+tproxy-port: 0
+allow-lan: true
+unified-delay: true
+tcp-concurrent: true
+log-level: warning
+find-process-mode: always
+bind-address: "*"
+lan-allowed-ips:
+  - 0.0.0.0/0
+  - ::/0
+lan-disallowed-ips: []
+authentication: []
+skip-auth-prefixes:
+  - 127.0.0.1/32
+tun:
+  enable: true
+  device: Mihomo
+  stack: system
+  auto-route: true
+  auto-redirect: true
+  auto-detect-interface: true
+  dns-hijack:
+    - any:53
+    - tcp://any:53
+  route-exclude-address:
+    - 192.168.194.0/24
+  mtu: 1500
+  strict-route: true
+profile:
+  store-selected: true
+  store-fake-ip: true
+geo-auto-update: true
+geo-update-interval: 24
+geodata-mode: false
+geox-url:
+  geoip: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.dat
+  geosite: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat
+  mmdb: https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip.metadb
+  asn: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/GeoLite2-ASN.mmdb
+secret: {{ keepassxcAttribute "Applications/clash-verge" "Web-Secret" -}}
