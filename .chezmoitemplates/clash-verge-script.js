@@ -30,7 +30,7 @@ function overwriteBasicOtherOptions(params) {
     "allow-lan": true,
     mode: "rule",
     "log-level": "warning",
-    ipv6: true,
+    ipv6: false,
     "find-process-mode": "strict",
     profile: {
       "store-selected": true,
