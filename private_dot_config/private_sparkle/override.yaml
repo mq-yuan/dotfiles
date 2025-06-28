@@ -1,0 +1,7 @@
+items:
+  - id: Script
+    name: Script.js
+    type: local
+    ext: js
+    global: false
+    updated: 1751084595711
