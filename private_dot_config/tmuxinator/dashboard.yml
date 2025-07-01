@@ -1,0 +1,11 @@
+# ~/.config/tmuxinator/dashboard.yml
+
+name: dashboard
+root: ~/
+
+windows:
+  - monitor:
+      layout: even-horizontal
+      panes:
+        - btop
+        - nvtop
