@@ -1,4 +1,4 @@
-# ~/.config/fish/conf.d/12_asdf.fish
+# ~/.config/fish/conf.d/82_asdf.fish
 # ASDF configuration code
 if test -z $ASDF_DATA_DIR
     set --global _asdf_shims "$HOME/.asdf/shims"
