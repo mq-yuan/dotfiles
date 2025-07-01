@@ -24,6 +24,15 @@ function update_all_tools
     # 在脚本开始时记录时间
     echo "=== Update started at "(date)" ===" >> $UPDATE_LOG_FILE
 
+    function update_pnpm_global
+        print_header "正在更新 pnpm 全局包"
+        if type -q pnpm
+            log_command "pnpm update -g"
+        else
+            echo "未安装 pnpm，跳过更新。" | tee -a $UPDATE_LOG_FILE
+        end
+    end
+
     function update_apt
         print_header "正在更新 apt 包"
         if type -q apt
@@ -115,8 +124,8 @@ function update_all_tools
         set tools "Homebrew (brew)" "Rust (rustup)" "asdf 和插件" "Fisher 插件" "Conda 和包" "Cargo (cargo)"
         set tool_selected 0 0 0 0 0 0
     else if test $os = "Linux"
-        set tools "apt" "Flatpak" "Snap" "Homebrew (brew)" "Rust(rustup)" "asdf 和插件" "Fisher 插件" "Conda 和包" "Cargo (cargo)"
-        set tool_selected 0 0 0 0 0 0 0 0 0
+        set tools "apt" "Flatpak" "Snap" "Homebrew (brew)" "Rust(rustup)" "asdf 和插件" "Fisher 插件" "Conda 和包" "Cargo (cargo)" "pnpm 全局包"
+        set tool_selected 0 0 0 0 0 0 0 0 0 0
     end
 
     function show_menu --no-scope-shadowing
@@ -204,6 +213,8 @@ function update_all_tools
                                     update_conda
                                 case 9
                                     update_cargo
+                                case 10
+                                    update_pnpm_global
                             end
                         end
                     end
