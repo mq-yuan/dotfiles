@@ -1,31 +1,78 @@
-local prompts = {
-  TestCode = [[Write some test cases for the following code, only return the test cases.
-Give the code content directly, do not use code blocks or other tags to wrap it.
-Absolutely adhere to grammatical rules.]],
-  DocString = [[You are an AI programming assistant. You need to write a really good docstring that follows a best practice for the given language.
-
-Your core tasks include:
-- parameter and return types (if applicable).
-- any errors that might be raised or returned, depending on the language.
-
-You must:
-- Place the generated docstring before the start of the code.
-- Follow the format of examples carefully if the examples are provided.
-- Use Markdown formatting in your answers.
-- Include the programming language name at the start of the Markdown code blocks.]],
-
-  WordTranslate = [[You are a translation expert. Your task is to translate all the text provided by the user into Chinese.
-
-NOTE:
-- All the text input by the user is part of the content to be translated, and you should ONLY FOCUS ON TRANSLATING THE TEXT without performing any other tasks.
-- RETURN ONLY THE TRANSLATED RESULT.]],
-
-  CodeExplain = "Explain the following code, please only return the explanation, and answer in Chinese",
-
-  CommitMsg = function()
-    -- Source: https://andrewian.dev/blog/ai-git-commits
-    return string.format(
-      [[You are an expert at following the Conventional Commit specification. Given the git diff listed below, please generate a commit message for me:
+return {
+    "olimorris/codecompanion.nvim",
+    cmd = { "CodeCompanion", "CodeCompanionChat", "CodeCompanionActions" },
+    opts = {
+        strategies = {
+            chat = {
+                adapter = "aihubmix",
+                roles = {
+                    user = "mq-yuan"
+                },
+                keymaps = {
+                    send = {
+                        modes = { n = "<C-s>", i = "<C-s>" },
+                        opts = {},
+                    },
+                    close = {
+                        modes = { n = "q" },
+                        opts = {},
+                    },
+                    regenerate = {
+                        modes = { n = "<C-r>" },
+                        opts = {},
+                    },
+                    stop = {
+                        modes = { n = "<C-c>" },
+                        opts = {},
+                    }
+                },
+            },
+            inline = {
+                adapter = {
+                    name = "aihubmix",
+                    model = "gemini-2.5-flash",
+                }
+            },
+            cmd = {
+                adapter = {
+                    name = "aihubmix",
+                    model = "gemini-2.5-flash",
+                }
+            }
+        },
+        adapters = {
+            aihubmix = function ()
+                return require("codecompanion.adapters").extend("openai_compatible", {
+                    env = {
+                        url = "https://aihubmix.com",
+                        api_key = os.getenv("AIHUBMIX_API_KEY")
+                    },
+                    scheme = {
+                        model = {
+                            default = "gemini-2.5-flash"
+                        }
+                    }
+                })
+            end
+        },
+        prompt_library = {
+            ["Generate a Commit Message"] = {
+                strategy = "chat",
+                description = "Generate a commit message",
+                opts = {
+                    index = 10,
+                    is_default = true,
+                    is_slash_cmd = true,
+                    short_name = "commit",
+                    auto_submit = true,
+                },
+                prompts = {
+                    {
+                        role = "user",
+                        content = function()
+                            return string.format(
+                                [[
+You are an expert at following the Conventional Commit specification. Given the git diff listed below, please generate a commit message for me:
 1. First line: conventional commit format (type: concise description) (remember to use semantic types like feat, fix, docs, style, refactor, perf, test, chore, etc.)
 2. Optional bullet points if more context helps:
    - Keep the second line blank
@@ -59,425 +106,187 @@ Based on this format, generate appropriate commit messages. Respond with message
 %s
 ```
 ]],
-      vim.fn.system("git diff --no-ext-diff --staged")
-    )
-  end,
-}
-
-return {
-    "Kurama622/llm.nvim",
-    dependencies = { "nvim-lua/plenary.nvim", "MunifTanjim/nui.nvim" },
-    cmd = { "LLMSessionToggle", "LLMSelectedTextHandler", "LLMAppHandler" },
-    config = function ()
-        local tools = require("llm.tools")
-        require("llm").setup({
-            enable_trace = false,
-
-            -- set temperature and assistant
-            temperature = 0.3,
-            top_p = 0.7,
-            prompt = "You are a helpful chinese assistant.",
-
-            -- set models
-            models = {
-                {
-                    name = "gemini-2.0-flash",
-                    url = "https://aihubmix.com/v1/chat/completions",
-                    model = "gemini-2.0-flash",
-                    api_type = "openai",
-                    fetch_key = function()
-                        return vim.env.AIHUBMIX_API_KEY
-                    end,
-                    max_tokens = 1048576
-                },
-                {
-                    name = "grok-3",
-                    fetch_key = function()
-                        return vim.env.XAI_API_KEY
-                    end,
-                    url = "https://api.x.ai/v1/chat/completions",
-                    model = "grok-3",
-                    api_type = "openai",
-                    max_tokens = 128000,
-                },
-                {
-                    name = "gemini-2.5-flash",
-                    url = "https://aihubmix.com/v1/chat/completions",
-                    model = "gemini-2.5-flash-preview-04-17-nothink",
-                    api_type = "openai",
-                    fetch_key = function()
-                        return vim.env.AIHUBMIX_API_KEY
-                    end,
-                    max_tokens = 128000,
-                },
-                {
-                    name = "gemini-2.5-flash-thinking",
-                    url = "https://aihubmix.com/v1/chat/completions",
-                    model = "gemini-2.5-flash-preview-04-17",
-                    api_type = "openai",
-                    fetch_key = function()
-                        return vim.env.AIHUBMIX_API_KEY
-                    end,
-                    max_tokens = 128000,
-                },
-                {
-                    name = "gemini-2.5-pro",
-                    url = "https://aihubmix.com/v1/chat/completions",
-                    model = "gemini-2.5-pro-preview-03-25",
-                    api_type = "openai",
-                    fetch_key = function()
-                        return vim.env.AIHUBMIX_API_KEY
-                    end,
-                    max_tokens = 128000,
-                },
-                {
-                    name = "deepseek-chat",
-                    fetch_key = function()
-                        return vim.env.DEEPSEEK_API_KEY
-                    end,
-                    url = "https://api.deepseek.com/chat/completions",
-                    model = "deepseek-chat",
-                    api_type = "openai",
-                    max_tokens = 800000,
-                },
-                {
-                    name = "deepseek-R1",
-                    fetch_key = function()
-                        return vim.env.DEEPSEEK_API_KEY
-                    end,
-                    url = "https://api.deepseek.com/chat/completions",
-                    model = "deepseek-reasoner",
-                    api_type = "openai",
-                    max_tokens = 800000,
-                },
-                {
-                    name = "deepseek-R1T",
-                    url = "https://aihubmix.com/v1/chat/completions",
-                    model = "tngtech/DeepSeek-R1T-Chimera",
-                    api_type = "openai",
-                    fetch_key = function()
-                        return vim.env.AIHUBMIX_API_KEY
-                    end,
-                    max_tokens = 128000,
-                },
-            },
-
-            -- set ui
-            spinner = {
-                text = {
-                    "󰧞󰧞",
-                    "󰧞󰧞",
-                    "󰧞󰧞",
-                    "󰧞󰧞",
-                },
-                hl = "Title",
-            },
-            prefix = {
-                -- 
-                user = { text = "😃 ", hl = "Title" },
-                assistant = { text = "  ", hl = "Added" },
-            },
-            display = {
-                diff = {
-                    layout = "vertical", -- vertical|horizontal split for default provider
-                    opts = { "internal", "filler", "closeoff", "algorithm:patience", "followwrap", "linematch:120" },
-                    provider = "default", -- default|mini_diff
-                },
-            },
-            -- history_path = "/tmp/llm-history",
-            save_session = true,
-            max_history = 15,
-            max_history_name_length = 20,
-
-            -- stylua: ignore
-            -- popup window options
-            popwin_opts = {
-                relative = "cursor", enter = true,
-                focusable = true, zindex = 50,
-                position = { row = -7, col = 15, },
-                size = { height = 15, width = "50%", },
-                border = { style = "single",
-                    text = { top = " Explain ", top_align = "center" },
-                },
-                win_options = {
-                    winblend = 0,
-                    winhighlight = "Normal:Normal,FloatBorder:FloatBorder",
-                },
-            },
-
-            -- stylua: ignore
-            keys = {
-                -- The keyboard mapping for the input window.
-                ["Input:Submit"]      = { mode = {"n", "i"}, key = "<C-s>" },
-                ["Input:Cancel"]      = { mode = {"n", "i"}, key = "<C-c>" },
-                ["Input:Resend"]      = { mode = {"n", "i"}, key = "<C-r>" },
-
-                -- only works when "save_session = true"
-                ["Input:HistoryNext"] = { mode = {"n", "i"}, key = "<C-j>" },
-                ["Input:HistoryPrev"] = { mode = {"n", "i"}, key = "<C-k>" },
-                ["Input:ModelsNext"] = { mode = {"n", "i"}, key = "<C-h>" },
-                ["Input:ModelsPrev"] = { mode = {"n", "i"}, key = "<C-l>" },
-
-                -- The keyboard mapping for the output window in "split" style.
-                ["Output:Ask"]        = { mode = "n", key = "i" },
-                ["Output:Cancel"]     = { mode = "n", key = "<C-c>" },
-                ["Output:Resend"]     = { mode = "n", key = "<C-r>" },
-
-                -- The keyboard mapping for the output and input windows in "float" style.
-                ["Session:Close"]     = { mode = "n", key = {"<esc>", "q"} },
-
-                -- Focus
-                ["Focus:Input"]       = { mode = "n", key = {"i", "<C-w>"} },
-                ["Focus:Output"]      = { mode = { "n", "i" }, key = "<C-w>" },
-            },
-
-            app_handler = {
-                -- ====================================
-                -- ============ Code ==================
-                -- ====================================
-                OptimizeCode = {
-                    handler = tools.side_by_side_handler,
-                    opts = {
-                        left = {
-                            focusable = false,
-                        },
-                    },
-                },
-                OptimCompare = {
-                    handler = tools.action_handler,
-                    opts = {
-                        language = "Chinese",
-                    },
-                },
-                TestCode = {
-                    handler = tools.side_by_side_handler,
-                    prompt = prompts.TestCode,
-                    opts = {
-                        right = {
-                            title = " Test Cases ",
-                        },
-                    },
-                },
-                CodeExplain = {
-                    handler = tools.flexi_handler,
-                    prompt = prompts.CodeExplain,
-                    opts = {
-                        enter_flexible_window = true,
-                    },
-                },
-                DocString = {
-                    prompt = prompts.DocString,
-                    handler = tools.action_handler,
-                    opts = {
-                        only_display_diff = true,
-                        templates = {
-                            lua = [[- For the Lua language, you should use the LDoc style.
-- Start all comment lines with "---".]],
-                            python = [[- For the python language, you should use the numpy style.]],
-                        },
-                    },
-                },
-
-                -- ====================================
-                -- ============ Translate =============
-                -- ====================================
-                WordTranslate = {
-                    handler = tools.flexi_handler,
-                    prompt = prompts.WordTranslate,
-                    opts = {
-                        fetch_key = function()
-                            return vim.env.AIHUBMIX_API_KEY
+                                vim.fn.system("git diff --no-ext-diff --staged")
+                            )
                         end,
-                        url = "https://aihubmix.com/v1/chat/completions",
-                        model = "gemini-2.0-flash",
-                        api_type = "openai",
-                        exit_on_move = false,
-                        enter_flexible_window = true,
+                        opts = {
+                            contains_code = true,
+                        },
                     },
                 },
-                Translate = {
-                    handler = tools.qa_handler,
-                    opts = {
-                        fetch_key = function()
-                            return vim.env.AIHUBMIX_API_KEY
+            },
+            ["Generate Docs"] = {
+                strategy = "inline",
+                description = "Generate documentation for the selected code",
+                opts = {
+                    modes = { "v" },
+                    placement = "above",
+                    auto_submit = true,
+                    user_prompt = false,
+                    stop_context_insertion = true,
+                },
+                prompts = {
+                    {
+                        role = "system",
+                        content = [[
+You are an expert programmer specializing in writing clear and concise documentation. Your task is to generate a professional docstring or comment block for the given code snippet.
+- First, identify the programming language of the code.
+- Adhere to the standard documentation style for that language (e.g., Google Style for Python as in the user's example, JSDoc for JavaScript/TypeScript, Doxygen for C++, etc.).
+- The documentation must describe the function's purpose, its arguments (Args), and what it returns or yields (Returns/Yields).
+- CRITICAL RULE: You must only return the raw docstring or comment block itself. DO NOT include the original function, any surrounding markdown code blocks (like ```python), or any explanatory text.
+                        ]],
+                    },
+                    {
+                        role = "user",
+                        content = function(context)
+                            local code = require("codecompanion.helpers.actions").get_code(context.start_line, context.end_line)
+                                return string.format(
+                                    [[
+[EXAMPLE START]
+INPUT CODE (python):
+```python
+def my_function(param1: int, param2: str) -> bool:
+    # A function that does something.
+    if param1 > 0 and param2 == "start":
+        return True
+    return False
+```
+OUTPUT DOCSTRING:
+"""Does something based on parameters.
+
+Args:
+param1 (int): The first parameter.
+param2 (str): The second parameter.
+
+Returns:
+bool: True if conditions are met, otherwise False.
+"""
+[EXAMPLE END]
+
+[TASK START]
+INPUT CODE (%s):
+```%s
+%s
+```
+OUTPUT DOCSTRING:
+]],
+                                context.filetype,
+                                context.filetype,
+                                code
+                            )
                         end,
-                        url = "https://aihubmix.com/v1/chat/completions",
-                        model = "gemini-2.0-flash",
-                        api_type = "openai",
-
-                        component_width = "60%",
-                        component_height = "50%",
-                        query = {
-                            title = " 󰊿 Trans ",
-                            hl = { link = "Define" },
-                        },
-                        input_box_opts = {
-                            size = "15%",
-                            win_options = {
-                                winhighlight = "Normal:Normal,FloatBorder:FloatBorder",
-                            },
-                        },
-                        preview_box_opts = {
-                            size = "85%",
-                            win_options = {
-                                winhighlight = "Normal:Normal,FloatBorder:FloatBorder",
-                            },
-                        },
+                        opts = { contains_code = true },
                     },
                 },
-
-                -- ====================================
-                -- ============== Chat ================
-                -- ====================================
-                AttachToChat = {
-                    handler = tools.attach_to_chat_handler,
-                    opts = {
-                        is_codeblock = true,
-                        inline_assistant = true,
-                        language = "Chinese",
-                    },
+            },
+            ["Translate Comments to English"] = {
+                strategy = "inline",
+                description = "Translate Chinese comments to English within a code block",
+                opts = {
+                    modes = { "v" },
+                    -- Replace the entire selected block with the modified block
+                    placement = "replace",
+                    auto_submit = true,
+                    user_prompt = false,
+                    stop_context_insertion = true,
                 },
+                prompts = {
+                    {
+                        role = "system",
+                        content = [[
+You are an advanced, code-aware translation assistant. Your task is to process a block of code that contains a mix of source code, Chinese comments, and existing English comments.
 
-                -- ====================================
-                -- ============== Git =================
-                -- ====================================
-                CommitMsg = {
-                    handler = tools.flexi_handler,
-                    prompt = prompts.CommitMsg,
-                    opts = {
-                        enter_flexible_window = true,
-                        apply_visual_selection = false,
-                        win_opts = {
-                            relative = "editor",
-                            position = "50%",
-                            zindex = 100,
-                        },
-                        accept = {
-                            mapping = {
-                                mode = "n",
-                                keys = "<cr>",
-                            },
-                            action = function()
-                                local contents = vim.api.nvim_buf_get_lines(0, 0, -1, true)
-                                vim.api.nvim_command(string.format('!git commit -m "%s"', table.concat(contents, '" -m "')))
+Your one and only objective is to translate ALL Chinese comments into professional, idiomatic English, and leave everything else untouched.
 
-                                -- just for lazygit
-                                vim.schedule(function()
-                                    vim.api.nvim_command("LazyGit")
-                                end)
-                            end,
-                        },
+Follow these rules strictly:
+1.  You MUST NOT alter the source code in any way.
+2.  You MUST NOT alter existing English comments.
+3.  You MUST perfectly preserve the original indentation, spacing, and formatting.
+4.  Your output MUST be the complete, reconstructed code block with only the Chinese comments replaced by their English translations.
+                        ]],
                     },
-                },
+                    {
+                        role = "user",
+                        content = function(context)
+                            local code = require("codecompanion.helpers.actions").get_code(context.start_line, context.end_line)
+                            return string.format(
+                                [[
+[EXAMPLE START]
+INPUT CODE BLOCK:
+```python
+# This is an existing English comment, do not touch it.
+def calculate_score(data, weight):
+    # 这是一个中文注释，计算最终分数。
+    score = 0
+    for item in data: # 根据权重累加
+        score += item * weight
+    return score
+```
+EXPECTED OUTPUT:
+```python
+# This is an existing English comment, do not touch it.
+def calculate_score(data, weight):
+    # This is a Chinese comment, calculating the final score.
+    score = 0
+    for item in data: # Accumulate according to weight
+        score += item * weight
+    return score
+```
+[EXAMPLE END]
 
-                -- ====================================
-                -- ============ Completion ============
-                -- ====================================
-                Completion = {
-                    handler = tools.completion_handler,
-                    opts = {
-                        fetch_key = function()
-                            return vim.env.AIHUBMIX_API_KEY
+[TASK START]
+Please process the following code block according to the rules and example above.
+
+INPUT CODE BLOCK:
+```%s
+%s
+```
+EXPECTED OUTPUT:
+]],
+
+                                context.filetype,
+                                context.filetype,
+                                code
+                            )
                         end,
-                        url = "https://aihubmix.com/v1",
-                        model = "gpt-4o-mini",
-                        api_type = "openai",
-
-                        n_completions = 1,
-                        context_window = 16000,
-                        max_tokens = 256,
-                        keep_alive = -1,
-                        filetypes = {
-                            sh = false,
-                            zsh = false,
-                        },
-                        timeout = 10,
-                        default_filetype_enabled = false,
-                        auto_trigger = true,
-                        only_trigger_by_keywords = true,
-                        -- style = "blink.cmp",
-                        style = "virtual_text",
-                        keymap = {
-                            virtual_text = {
-                                accept = {
-                                    mode = "i",
-                                    keys = "<C-c>",
-                                },
-                                next = {
-                                    mode = "i",
-                                    keys = "<tab>",
-                                },
-                                prev = {
-                                    mode = "i",
-                                    keys = "<S-tab>",
-                                },
-                                toggle = {
-                                    mode = "n",
-                                    keys = "<leader>cp",
-                                },
-                            },
-                        },
-                    },
+                        opts = { contains_code = true },
+                    }
                 },
-            }
-        })
-    end,
+            },
+        }
+    },
+    dependencies = {
+        "nvim-lua/plenary.nvim",
+        "nvim-treesitter/nvim-treesitter",
+    },
     specs = {
         {
             "AstroNvim/astrocore",
             opts = {
                 mappings = {
                     n = {
-                        ["<Leader>ag"] = { "<CMD>LLMSessionToggle<CR>", desc = "Toggle LLM.nvim session" },
-                        ["<Leader>at"] = { "<CMD>LLMAppHandler Translate<CR>", desc = "Toggle LLM.nvim Translate session" },
-                        ["<Leader>gm"] = { "<CMD>LLMAppHandler CommitMsg<CR>", desc = "Generate AI Commit Message by LLM.nvim" },
-                    },
-                    x = {
-                        ["<Leader>tc"] = { "<CMD>LLMAppHandler TestCode<CR>", desc = "Generate test code based your selected code by LLM.nvim" },
-                        ["<Leader>ts"] = { "<CMD>LLMAppHandler WordTranslate<CR>", desc = "Translate visual region by LLM.nvim" },
-                        ["<Leader>ao"] = { "<CMD>LLMAppHandler OptimCompare<CR>", desc = "Optim the selected code by LLM.nvim" },
+                        ["<C-a>"] = { "<cmd>CodeCompanionActions<CR>", desc = "Open the action palette" },
+                        ["<Leader>ag"] = { "<cmd>CodeCompanionChat Toggle<CR>", desc = "Toggle a chat buffer" },
+                        ["<Leader>gm"] = { function ()
+                            require("codecompanion").prompt("commit")
+                        end, desc = "Generate AI Commit Message" },
                     },
                     v = {
-                        ["<Leader>ce"] = { "<CMD>LLMAppHandler CodeExplain<CR>", desc = "Explain visual selected code by LLM.nvim" },
-                        ["<Leader>cd"] = { "<CMD>LLMAppHandler DocString<CR>", desc = "Generate AI Doc String by LLM.nvim" },
-                        ["<Leader>aa"] = { "<CMD>LLMAppHandler AttachToChat<CR>", desc = "Ask selected Code in session by LLM.nvim" },
+                        ["<C-a>"] = { "<cmd>CodeCompanionActions<CR>", desc = "Open the action palette" },
+                        ["<Leader>aa"] = { "<cmd>CodeCompanionChat Add<CR>", desc = "Add code to a chat buffer" },
+                        ["<Leader>ce"] = { function ()
+                            require("codecompanion").prompt("explain")
+                        end, desc = "Explain visual selected code" },
+                        ["<Leader>ad"] = { function()
+                            require("codecompanion").prompt("Generate Docs")
+                        end,  desc = "AI Generate Docs" },
+                        ["<Leader>at"] = { function()
+                            require("codecompanion").prompt("Translate Comments to English")
+                        end,  desc = "AI Translate Comments to English" },
+
                     },
                 },
             },
         },
-        -- -- close completion
-        -- {
-        --     "Saghen/blink.cmp",
-        --     opts = {
-        --         completion = {
-        --             trigger = {
-        --                 prefetch_on_insert = false,
-        --                 -- allow triggering by white space
-        --                 show_on_blocked_trigger_characters = {},
-        --             },
-        --         },
-        --
-        --         keymap = {
-        --             ["<C-y>"] = {
-        --                 function(cmp)
-        --                     cmp.show({ providers = { "llm" } })
-        --                 end,
-        --             },
-        --         },
-        --
-        --         sources = {
-        --             default = { "llm" },
-        --             providers = {
-        --                 llm = {
-        --                     name = "llm",
-        --                     module = "llm.common.completion.frontends.blink",
-        --                     timeout_ms = 10000,
-        --                     score_offset = 100,
-        --                     async = true,
-        --                 }
-        --             }
-        --         }
-        --     }
-        -- }
     }
 }
