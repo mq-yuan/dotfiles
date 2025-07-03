@@ -121,8 +121,8 @@ function update_all_tools
     # 定义工具列表和状态
     set -l os (uname)
     if test $os = "Darwin"
-        set tools "Homebrew (brew)" "Rust (rustup)" "asdf 和插件" "Fisher 插件" "Conda 和包" "Cargo (cargo)"
-        set tool_selected 0 0 0 0 0 0
+        set tools "Homebrew (brew)" "Rust (rustup)" "asdf 和插件" "Fisher 插件" "Conda 和包" "Cargo (cargo)" "pnpm 全局包"
+        set tool_selected 0 0 0 0 0 0 0
     else if test $os = "Linux"
         set tools "apt" "Flatpak" "Snap" "Homebrew (brew)" "Rust(rustup)" "asdf 和插件" "Fisher 插件" "Conda 和包" "Cargo (cargo)" "pnpm 全局包"
         set tool_selected 0 0 0 0 0 0 0 0 0 0
@@ -158,96 +158,98 @@ function update_all_tools
         read -l choice
 
         switch $choice
-            case q
-                echo "退出脚本" | tee -a $UPDATE_LOG_FILE
-                echo "=== Update finished at "(date)" ===" >> $UPDATE_LOG_FILE
-                return 0
-            case a
-                # 全选
-                for i in (seq (count $tools))
-                    set tool_selected[$i] 1
-                end
-            case c
-                # 清除所有选择
-                for i in (seq (count $tools))
-                    set tool_selected[$i] 0
-                end
-            case r
-                # 运行更新
-                set -l has_selection 0
-                for i in (seq (count $tools))
-                    if test $tool_selected[$i] -eq 1
-                        set has_selection 1
-                        if test $os = "Darwin"
-                            switch $i
-                                case 1
-                                    update_homebrew
-                                case 2
-                                    update_rust
-                                case 3
-                                    update_asdf
-                                case 4
-                                    update_fisher
-                                case 5
-                                    update_conda
-                                case 6
-                                    update_cargo
-                            end
-                        else if test $os = "Linux"
-                            switch $i
-                                case 1
-                                    update_apt
-                                case 2
-                                    update_flatpak
-                                case 3
-                                    update_snap
-                                case 4
-                                    update_homebrew
-                                case 5
-                                    update_rust
-                                case 6
-                                    update_asdf
-                                case 7
-                                    update_fisher
-                                case 8
-                                    update_conda
-                                case 9
-                                    update_cargo
-                                case 10
-                                    update_pnpm_global
-                            end
+        case q
+            echo "退出脚本" | tee -a $UPDATE_LOG_FILE
+            echo "=== Update finished at "(date)" ===" >> $UPDATE_LOG_FILE
+            return 0
+        case a
+            # 全选
+            for i in (seq (count $tools))
+                set tool_selected[$i] 1
+            end
+        case c
+            # 清除所有选择
+            for i in (seq (count $tools))
+                set tool_selected[$i] 0
+            end
+        case r
+            # 运行更新
+            set -l has_selection 0
+            for i in (seq (count $tools))
+                if test $tool_selected[$i] -eq 1
+                    set has_selection 1
+                    if test $os = "Darwin"
+                        switch $i
+                        case 1
+                            update_homebrew
+                        case 2
+                            update_rust
+                        case 3
+                            update_asdf
+                        case 4
+                            update_fisher
+                        case 5
+                            update_conda
+                        case 6
+                            update_cargo
+                        case 7
+                            update_pnpm_global
+                        end
+                    else if test $os = "Linux"
+                        switch $i
+                        case 1
+                            update_apt
+                        case 2
+                            update_flatpak
+                        case 3
+                            update_snap
+                        case 4
+                            update_homebrew
+                        case 5
+                            update_rust
+                        case 6
+                            update_asdf
+                        case 7
+                            update_fisher
+                        case 8
+                            update_conda
+                        case 9
+                            update_cargo
+                        case 10
+                            update_pnpm_global
                         end
                     end
                 end
+            end
 
-                if test $has_selection -eq 0
-                    echo "没有选择任何工具，请先选择要更新的工具。" | tee -a $UPDATE_LOG_FILE
-                    sleep 2
-                else
-                    echo "" | tee -a $UPDATE_LOG_FILE
-                    print_header "所有更新已完成！"
-                    echo "按回车键返回菜单..." | tee -a $UPDATE_LOG_FILE
-                    read
-                end
-            case '*'
-                # 检查是否为数字
-                if string match -rq '^[0-9]+$' -- $choice
-                    set -l idx (math $choice)
-                    if test $idx -ge 1 -a $idx -le (count $tools)
-                        # 切换选中状态
-                        if test $tool_selected[$idx] -eq 0
-                            set tool_selected[$idx] 1
-                        else
-                            set tool_selected[$idx] 0
-                        end
+            if test $has_selection -eq 0
+                echo "没有选择任何工具，请先选择要更新的工具。" | tee -a $UPDATE_LOG_FILE
+                sleep 2
+            else
+                echo "" | tee -a $UPDATE_LOG_FILE
+                print_header "所有更新已完成！"
+                echo "按回车键返回菜单..." | tee -a $UPDATE_LOG_FILE
+                read
+            end
+        case '*'
+            # 检查是否为数字
+            if string match -rq '^[0-9]+$' -- $choice
+                set -l idx (math $choice)
+                if test $idx -ge 1 -a $idx -le (count $tools)
+                    # 切换选中状态
+                    if test $tool_selected[$idx] -eq 0
+                        set tool_selected[$idx] 1
                     else
-                        echo "无效选项，请输入 1-"(count $tools)" 之间的数字。" | tee -a $UPDATE_LOG_FILE
-                        sleep 1
+                        set tool_selected[$idx] 0
                     end
                 else
-                    echo "无效选项，请重试。" | tee -a $UPDATE_LOG_FILE
+                    echo "无效选项，请输入 1-"(count $tools)" 之间的数字。" | tee -a $UPDATE_LOG_FILE
                     sleep 1
                 end
+            else
+                echo "无效选项，请重试。" | tee -a $UPDATE_LOG_FILE
+                sleep 1
+            end
         end
     end
 end
