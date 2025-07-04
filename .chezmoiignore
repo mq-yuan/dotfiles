@@ -2,7 +2,6 @@
 readme.md
 # Only Mac
 {{ if ne .chezmoi.os "darwin" }}
-# clash-verge-rev
 Library/
 {{ end }}
 
