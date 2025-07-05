@@ -124,6 +124,7 @@ Based on this format, generate appropriate commit messages. Respond with message
                     auto_submit = true,
                     user_prompt = false,
                     stop_context_insertion = true,
+                    short_name = "docs",
                 },
                 prompts = {
                     {
@@ -189,6 +190,7 @@ OUTPUT DOCSTRING:
                     auto_submit = true,
                     user_prompt = false,
                     stop_context_insertion = true,
+                    short_name = "translate_comments_to_english",
                 },
                 prompts = {
                     {
@@ -253,6 +255,44 @@ EXPECTED OUTPUT:
                     }
                 },
             },
+            ["Translate to Chinese"] = {
+                -- Use the 'chat' strategy to display the result without modifying the code
+                strategy = "chat",
+                description = "Translate selected text to Chinese in a chat window",
+                opts = {
+                    modes = { "v" },
+                    auto_submit = true,
+                    user_prompt = false,
+                    stop_context_insertion = true,
+                    short_name = "translate_to_chinese",
+                },
+                prompts = {
+                    {
+                        role = "system",
+                        content = [[
+You are a professional translator specializing in technical and programming-related content. Your task is to accurately translate the user-provided English text into simplified Chinese.
+
+Follow these critical rules:
+1.  You MUST preserve specific English proper nouns, acronyms, technical terms, and code-related identifiers in their original English form.
+2.  For example, terms like 'Neovim', 'Python', 'CUDA', '3dgs', 'BERT', 'Transformer', variable names like `my_var`, and function names like `calculate_score()` should NOT be translated.
+3.  Translate the surrounding explanatory text accurately and fluently into Chinese.
+4.  Your final output should ONLY be the translated Chinese text, without any extra explanations or formatting.
+                        ]],
+                    },
+                    {
+                        role = "user",
+                        content = function(context)
+                            local text = require("codecompanion.helpers.actions").get_code(context.start_line, context.end_line)
+                            return string.format(
+                                [[Please translate the following text to Chinese, keeping in mind the rules about preserving technical terms:\n\n%s]],
+                                text
+                            )
+                        end,
+                        -- Although it might be plain text, treating it as containing code helps with formatting preservation.
+                        opts = { contains_code = true },
+                    },
+                },
+            },
         }
     },
     dependencies = {
@@ -278,11 +318,14 @@ EXPECTED OUTPUT:
                             require("codecompanion").prompt("explain")
                         end, desc = "Explain visual selected code" },
                         ["<Leader>ad"] = { function()
-                            require("codecompanion").prompt("Generate Docs")
+                            require("codecompanion").prompt("docs")
                         end,  desc = "AI Generate Docs" },
                         ["<Leader>at"] = { function()
-                            require("codecompanion").prompt("Translate Comments to English")
+                            require("codecompanion").prompt("translate_comments_to_english")
                         end,  desc = "AI Translate Comments to English" },
+                        ["<Leader>aT"] = { function()
+                            require("codecompanion").prompt("translate_to_chinese")
+                        end,  desc = "AI Translate to Chinese (Chat)" },
 
                     },
                 },
