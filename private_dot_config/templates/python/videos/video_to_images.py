@@ -62,13 +62,13 @@ def extract_frames_professional(
     # --- 计算需要提取的帧索引 ---
     if fps_to_extract:
         if video_fps <= 0:
-            print(f"\n🔴 错误: 无法读取源视频的FPS信息，无法使用 --fps 模式。")
+            print("\n🔴 错误: 无法读取源视频的FPS信息，无法使用 --fps 模式。")
             cap.release()
             return
         frame_step = video_fps / fps_to_extract
         frame_indices = np.arange(0, video_total_frames, frame_step).astype(int)
     elif total_frames:
-        frame_indices = np.linspace(0, video_total_frames - 1, total_frames, dtype=int)
+        frame_indices = np.round(np.linspace(0, video_total_frames - 1, total_frames)).astype(int)
     else:
         print("\n🔴 错误: 必须指定一个抽帧模式 (--fps 或 --frames)。")
         cap.release()
