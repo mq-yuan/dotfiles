@@ -6,8 +6,6 @@
 return {
   "AstroNvim/astrocommunity",
   { import = "astrocommunity.motion.flash-nvim" },
-  { import = "astrocommunity.color.transparent-nvim" },
-  { import = "astrocommunity.colorscheme.kanagawa-nvim" },
   { import = "astrocommunity.pack.cpp" },
   -- import/override with your plugins folder
 }

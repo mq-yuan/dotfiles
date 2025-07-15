@@ -11,7 +11,7 @@
 * **Neovim 配置**: 基于 [AstroNvim v5](https://astronvim.com/) 框架，并集成了大量插件以优化开发体验，例如：
     * LSP: `basedpyright`, `clangd`, `rust-analyzer`, `tinymist` 等
     * AI 编程助手: `llm.nvim`，集成了 `gemini`, `grok`, `deepseek` 等多种模型
-    * UI & 主题: 使用 `kanagawa-wave` 主题和 `transparent.nvim`
+    * UI & 主题: 使用 `catppuccin` 主题的变体，来自[tribhuwan-kumar](https://github.com/catppuccin/nvim/discussions/323#discussioncomment-5287724)
     * 工具: `lazygit`, `yazi` 文件管理器, `aerial` 代码大纲等
 * **Clash Verge 配置**: 通过 `chezmoi` 模板和 JavaScript 脚本 (`clash-verge-script.js`) 动态生成复杂的代理规则和节点组。
     * **动态节点分组**: 自动根据节点名称中的地区关键词（如 HK, TW, SG, US 等）创建 `url-test`, `load-balance` 和 `select` 分组。
