@@ -7,5 +7,6 @@ return {
   "AstroNvim/astrocommunity",
   { import = "astrocommunity.motion.flash-nvim" },
   { import = "astrocommunity.pack.cpp" },
+  { import = "astrocommunity.markdown-and-latex.render-markdown-nvim"}
   -- import/override with your plugins folder
 }
