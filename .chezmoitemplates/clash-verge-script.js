@@ -1228,7 +1228,9 @@ function getRules() {
       rules: [
         "DOMAIN,ghcr.io",
         "DOMAIN,cas-bridge-direct.xethub.hf.co",
-        "DOMAIN,cas-bridge.xethub.hf.co"
+        "DOMAIN,cas-bridge.xethub.hf.co",
+        "DOMAIN,transfer.xethub.hf.co",
+        "DOMAIN,cdn-lfs.hf.co"
       ],
       action: "ProxyDownload",
     },
