@@ -17,20 +17,6 @@ return {
     },
   },
 
-  -- hlchunk
-  {
-    "shellRaining/hlchunk.nvim",
-    event = { "BufReadPre", "BufNewFile" },
-    opts = {
-      chunk = {
-        enable = true
-      },
-      indent = {
-        enable = true
-      }
-    }
-  },
-
   -- lazygit
   {
     "kdheepak/lazygit.nvim",
