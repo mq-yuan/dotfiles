@@ -1226,11 +1226,15 @@ function getRules() {
     },
     ProxyDownload: {
       rules: [
+        // brew install
         "DOMAIN,ghcr.io",
+        "DOMAIN,pkg-containers.githubusercontent.com",
+        // hugging face
         "DOMAIN,cas-bridge-direct.xethub.hf.co",
         "DOMAIN,cas-bridge.xethub.hf.co",
         "DOMAIN,transfer.xethub.hf.co",
         "DOMAIN,cdn-lfs.hf.co",
+        // ubuntu
         "DOMAIN,cn.archive.ubuntu.com"
       ],
       action: "ProxyDownload",
