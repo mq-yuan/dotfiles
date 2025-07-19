@@ -17,7 +17,9 @@ set --global --export GTK_IM_MODULE "fcitx"
 set --global --export SCRIPTS_HOME "$HOME/Project/scripts"
 {{ end }}
 
-# load env config
+# set claude code env
+set --global --export ANTHROPIC_BASE_URL "https://api.moonshot.cn/anthropic"
+# load api config
 if test -f $HOME/.config/fish/.env.fish
     source $HOME/.config/fish/.env.fish
 end
