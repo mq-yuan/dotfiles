@@ -1230,7 +1230,8 @@ function getRules() {
         "DOMAIN,cas-bridge-direct.xethub.hf.co",
         "DOMAIN,cas-bridge.xethub.hf.co",
         "DOMAIN,transfer.xethub.hf.co",
-        "DOMAIN,cdn-lfs.hf.co"
+        "DOMAIN,cdn-lfs.hf.co",
+        "DOMAIN,cn.archive.ubuntu.com"
       ],
       action: "ProxyDownload",
     },
