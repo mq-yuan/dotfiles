@@ -12,10 +12,6 @@ Library/
 .config/fish/completions/cuda.fish
 .config/fish/functions/cuda.fish
 
-# scripts_python
-.config/fish/completions/scripts_python.fish
-.config/fish/functions/scripts_python.fish
-
 # install_deb
 .config/fish/functions/install_deb.fish
 
