@@ -2,7 +2,6 @@
 abbr lg "lazygit"
 abbr yy "yazi"
 abbr ag "aichat"
-abbr scrpy "scripts_python"
 abbr czz "chezmoi cd"
 abbr czd "chezmoi diff"
 abbr cza "chezmoi apply"
