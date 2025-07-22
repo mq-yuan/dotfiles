@@ -24,6 +24,9 @@ Library/
 # mpv
 .config/mpv/
 
+# rime
+.local/share/fcitx5/
+
 .xprofile
 {{ end }}
 
