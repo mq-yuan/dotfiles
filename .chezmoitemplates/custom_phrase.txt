@@ -7,10 +7,14 @@
 522024710016	info	60
 18322413903	info	56
 #第一列的文本支持格式化：换行:\n, 制表符：\t, 回车符：\r, 空格：\s
-吧	ba	50     
-实验	uiyj	50
 姚遥	ycyc	64
+姚遥	yy	64
 袁萌启	yrmgqi	64
+袁萌启	ymq	64
+佟鑫宇	tsxbyu	64
+佟鑫宇	txy	64
+佟子	tszi	64
+实验	uiyj	50
 几何	jihe	50
 几何重建	jiheisjm	50
 自阴影	ziybyk	50
@@ -23,6 +27,7 @@
 越大的	ytdade	50
 指定	vidk	50
 泛化	fjhx	50
+视锥体	uivvti	50
 
 
 

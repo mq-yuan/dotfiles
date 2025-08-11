@@ -97,16 +97,16 @@ function install_deb -d "Safely install a .deb package with validation, cleanup,
             echo "Warning: Failed to delete $deb_file"
         end
     else if test "$skip_delete" = false
-        read -P "Do you want to delete the original file '$deb_file'? [y/N] " response
-        if string match -qir '^y$' "$response"
+        read -P "Do you want to delete the original file '$deb_file'? [Y/n] " response
+        if string match -qir '^n$' "$response"
+            echo "Original file $deb_file preserved"
+        else
             rm -f "$deb_file"
             if test $status -eq 0
                 echo "Deleted original file $deb_file"
             else
                 echo "Warning: Failed to delete $deb_file"
             end
-        else
-            echo "Original file $deb_file preserved"
         end
     else
         echo "Skipping deletion of $deb_file due to -n option"
