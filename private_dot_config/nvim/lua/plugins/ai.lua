@@ -70,44 +70,51 @@ return {
                     {
                         role = "user",
                         content = function()
-                            return string.format(
-                                [[
-You are an expert at following the Conventional Commit specification. Given the git diff listed below, please generate a commit message for me:
-1. First line: conventional commit format (type: concise description) (remember to use semantic types like feat, fix, docs, style, refactor, perf, test, chore, etc.)
-2. Optional bullet points if more context helps:
-   - Keep the second line blank
-   - Keep them short and direct
-   - Focus on what changed
-   - Always be terse
-   - Don't overly explain
-   - Drop any fluffy or formal language
-
-Return ONLY the commit message - no introduction, no explanation, no quotes around it.
-
-Examples:
-feat: add user auth system
-
-- Add JWT tokens for API auth
-- Handle token refresh for long sessions
-
-fix: resolve memory leak in worker pool
-
-- Clean up idle connections
-- Add timeout for stale workers
-
-Simple change example:
-fix: typo in README.md
-
-Very important: Do not respond with any of the examples. Your message must be based off the diff that is about to be provided, with a little bit of styling informed by the recent commits you're about to see.
-
-Based on this format, generate appropriate commit messages. Respond with message only. DO NOT format the message in Markdown code blocks, DO NOT use backticks:
-
+                            local branch_name = vim.fn.trim(vim.fn.system("git rev-parse --abbrev-ref HEAD"))
+                            local changed_files = vim.fn.trim(vim.fn.system("git diff --name-only --staged"))
+                            local staged_diff = vim.fn.system("git diff --no-ext-diff --staged")
+                            local template = [[
+You are an expert at writing Conventional Commits. Your task is to generate a concise and accurate commit message by analyzing the provided context.
+**Analyze the following information:**
+1.  **Branch Name:** This often contains the primary goal or feature name.
+    `%s`
+2.  **Changed Files:** This provides an overview of the components affected.
+```files
+%s
+```
+3.  **Staged Diff:** These are the specific code changes. Pay attention to the actual additions and deletions, not just the surrounding context lines.
 ```diff
 %s
 ```
-]],
-                                vim.fn.system("git diff --no-ext-diff --staged")
-                            )
+**Your instructions:**
+
+1.  **Infer Intent:** First, use the **Branch Name** and **Changed Files** to understand the high-level purpose (the WHAT and WHY) of this commit.
+2.  **Analyze Details:** Next, examine the **Staged Diff** to understand the implementation details (the HOW).
+3.  **Generate Message:** Based on your analysis, generate the commit message following these strict rules:
+    - **Line 1:** Use the Conventional Commit format (`type(scope): concise description`). Use semantic types like `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`. The scope is optional.
+    - **Body (Optional):**
+        - Leave the second line blank.
+        - Use bullet points (`-`) for further explanation if needed.
+        - Focus on what changed and why. Keep it brief and direct.
+
+**Output Rules:**
+- Return ONLY the raw commit message.
+- No introductory phrases, no explanations, no yapping.
+- DO NOT wrap the message in quotes or Markdown code blocks.
+
+**Example Output 1 (Feature):**
+feat(auth): implement password reset endpoint
+
+- Add a new route `/api/auth/reset-password`.
+- Implement token generation and email service for password reset.
+
+**Example Output 2 (Simple Fix):**
+fix: correct typo in page title
+
+Now, based on the provided branch name, file list, and diff, generate the commit message.
+
+]]
+                            return string.format(template, branch_name, changed_files, staged_diff)
                         end,
                         opts = {
                             contains_code = true,
