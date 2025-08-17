@@ -1177,6 +1177,12 @@ function getRuleProviders() {
 function getRules() {
   // custom Rules
   const customRulesDict = {
+    Reject: {
+      rules: [
+        "AND,((PROCESS-NAME,rustdesk),(DST-PORT,21114))",
+      ],
+      action: "REJECT",
+    },
     School: {
       rules: [
         "DOMAIN-KEYWORD,tju",
