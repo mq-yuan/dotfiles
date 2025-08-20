@@ -25,17 +25,17 @@ function switch_claude_code --description "Switches ANTHROPIC environment variab
             set -gx ANTHROPIC_API_KEY $AIHUBMIX_API_KEY
             set -gx ANTHROPIC_BASE_URL $AIHUBMIX_BASE_URL
             echo -e "✓ ANTHROPIC_API_KEY set to aihubmix key."
-            echo -e "✓ ANTHROPIC_BASE_URL set to (e[32m]$AIHUBMIX_BASE_URL(e[0m)."
+            echo -e "✓ ANTHROPIC_BASE_URL set to $AIHUBMIX_BASE_URL."
 
         case "KIMI"
             echo "Switching to Anthropic -> (KIMI) service..."
             set -gx ANTHROPIC_API_KEY $KIMI_API_KEY
             set -gx ANTHROPIC_BASE_URL $KIMI_BASE_URL_FOR_ANTHROPIC
             echo -e "✓ ANTHROPIC_API_KEY set to KIMI key."
-            echo -e "✓ ANTHROPIC_BASE_URL set to (e[32m]$KIMI_BASE_URL_FOR_ANTHROPIC(e[0m)."
+            echo -e "✓ ANTHROPIC_BASE_URL set to $KIMI_BASE_URL_FOR_ANTHROPIC."
 
         case "off" "disable" "clear"
-            echo -e "(e[31m]Disabling(e[0m) Anthropic environment variables..."
+            echo -e "Disabling Anthropic environment variables..."
             set -e ANTHROPIC_API_KEY
             set -e ANTHROPIC_BASE_URL
             echo "✓ Anthropic variables have been cleared."
@@ -45,14 +45,14 @@ function switch_claude_code --description "Switches ANTHROPIC environment variab
             echo ""
             echo "Current Status:"
             if set -q ANTHROPIC_BASE_URL
-                echo -e "  URL:  (e[32m]$ANTHROPIC_BASE_URL(e[0m)"
+                echo -e "  URL:  $ANTHROPIC_BASE_URL"
             else
-                echo -e "  URL:  (e[31mNot Set(e[0m)"
+                echo -e "  URL:  Not Set"
             end
             if set -q ANTHROPIC_API_KEY
                 echo -e "  KEY:  Set"
             else
-                echo -e "  KEY:  (e[31mNot Set(e[0m)"
+                echo -e "  KEY:  Not Set"
             end
             return 1 # 返回非零状态码，表示没有执行成功切换
     end
