@@ -1,3 +1,11 @@
+# /// script
+# requires-python = ">=3.11"
+# dependencies = [
+#     "numpy",
+#     "opencv-python",
+#     "tqdm",
+# ]
+# ///
 import os
 import argparse
 import time
