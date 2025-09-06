@@ -28,6 +28,8 @@
 指定	vidk	50
 泛化	fjhx	50
 视锥体	uivvti	50
+位姿	wwzi	50
+相机位姿	xljiwwzi	50
 
 
 
