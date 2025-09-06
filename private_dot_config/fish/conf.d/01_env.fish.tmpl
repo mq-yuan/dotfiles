@@ -7,6 +7,11 @@ set --global --export UPDATE_LOG_FILE "$HOME/.log/update.log" # set update_log_f
 set --global --export XDG_CONFIG_HOME "$HOME/.config"
 set --global --export fisher_path "$HOME/.config/fisher"
 
+# Load sercet env
+if test -f $HOME/.config/fish/.env.fish
+    source $HOME/.config/fish/.env.fish
+end
+
 {{ if eq .chezmoi.os "linux" }}
 # set env in Linux
 # set IM
