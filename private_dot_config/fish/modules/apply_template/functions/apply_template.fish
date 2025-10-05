@@ -1,4 +1,4 @@
-# ~/.config/fish/functions/apply_template.fish
+# ~/.config/fish/modules/apply_template/functions/apply_template.fish
 
 function apply_template --description "Applies a project template from ~/.config/templates"
     # --- Color variables for pretty output ---

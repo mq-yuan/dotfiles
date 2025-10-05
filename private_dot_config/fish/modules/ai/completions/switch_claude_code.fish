@@ -1,4 +1,4 @@
-# ~/.config/fish/completions/switch_claude_code.fish
+# ~/.config/fish/modules/ai/completions/switch_claude_code.fish
 #
 # Fish shell completions for the 'switch_claude_code' function.
 # This script dynamically reads providers from the function file.
