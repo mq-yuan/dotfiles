@@ -1,94 +1,126 @@
 # $HOME/.config/fish/modules/font_install/functions/font_install.fish
 
-function install_font -d "Install a font from a local ZIP file"
+function font_install -d "Install a font from a local ZIP file"
 
-    # --- 1. 参数解析 ---
-    # -n/--name: 可选，用于指定字体目录名
-    # -d/--delete-source: 可选，一个开关标志，用于在安装成功后删除源 zip 文件
-    # 剩下的 argv[1] 将被视为必须的本地 zip 文件路径
+    # --- 1. Argument Parsing ---
     argparse 'n/name=' 'd/delete-source' -- $argv
-    if test $status -ne 0
-        return 1
-    end
+    or return 1
 
     set -l zip_path $argv[1]
 
-    # --- 2. 输入验证 ---
+    # --- 2. Input Validation ---
     if test -z "$zip_path"
-        echo (set_color red)"错误：你必须提供一个本地字体 ZIP 文件的路径。"(set_color normal)
-        echo "用法: install_font [--name <名称>] [--delete-source] <文件路径>"
+        echo "Error: You must provide a path to a local font ZIP file." >&2
+        echo "Usage: font_install [--name <name>] [--delete-source] <filepath>" >&2
         return 1
     end
 
     if not test -f "$zip_path"
-        echo (set_color red)"错误：文件不存在于 '$zip_path'。"(set_color normal)
+        echo "Error: File not found at '$zip_path'." >&2
         return 1
     end
 
-    # 使用 -i 忽略大小写，兼容 .zip 和 .ZIP
     if not string match -qi "*.zip" "$zip_path"
-        echo (set_color red)"错误：提供的文件 '$zip_path' 不是一个 ZIP 文件。"(set_color normal)
+        echo "Error: Provided file '$zip_path' is not a ZIP file." >&2
         return 1
     end
 
-    # --- 3. 智能变量派生 ---
+    # --- 3. Variable Derivation ---
     set -l zip_name (basename "$zip_path")
     set -l font_dir_name
 
     if set -q _flag_name
         set font_dir_name "$_flag_name"
-        echo "  -> 使用了自定义字体名称：'$font_dir_name'"
+        echo "Info: Using custom font name: '$font_dir_name'"
     else
         set font_dir_name (string replace -r '(?i)[\-_]?(?:nerd|nf|font|v[0-9].*|[0-9.]+)\.zip$' '' "$zip_name")
-        echo "  -> 智能识别字体名称为：'$font_dir_name'"
+        echo "Info: Auto-detected font name as: '$font_dir_name'"
     end
 
     set -l dest_dir "$HOME/.local/share/fonts/$font_dir_name"
 
-    # --- 4. 健壮性与幂等性检查 ---
+    # --- 4. Prerequisite & Idempotency Checks ---
     if not command -v unzip >/dev/null
-        echo (set_color red)"错误：此脚本需要 'unzip'。请先安装它。"(set_color normal)
+        echo "Error: This script requires 'unzip'. Please install it first." >&2
         return 1
     end
 
     if test -d "$dest_dir"
-        echo (set_color yellow)"字体 '$font_dir_name' 似乎已经安装。"(set_color normal)
-        echo "操作已跳过。"
+        echo "Warning: Font '$font_dir_name' appears to be already installed. Skipping." >&2
         return 0
     end
 
-    # --- 5. 核心安装流程 ---
-    echo (set_color blue)"正在从 '$zip_name' 安装字体 '$font_dir_name'..."(set_color normal)
+    # --- 5. Core Installation ---
+    set -l stage_dir (mktemp -d)
+    echo "Info: Created temporary staging directory: $stage_dir"
 
-    echo "  -> 正在解压字体文件到 $dest_dir"
-    mkdir -p "$dest_dir"
-    if not unzip -q "$zip_path" -d "$dest_dir"
-        echo (set_color red)"错误：解压失败。"(set_color normal)
-        rm -rf "$dest_dir" # 清理创建失败的目录
-        return 1
-    end
-
-    # --- 6. 收尾与清理 ---
-    echo "  -> 正在更新系统字体缓存..."
-    fc-cache -f -s
-
-    # 新增功能：如果用户指定了 --delete-source，则删除源文件
-    if set -q _flag_delete_source
-        echo "  -> 正在清理源文件..."
-        if rm "$zip_path"
-            echo "     已成功删除 '$zip_path'"
-        else
-            echo (set_color red)"     警告：未能删除源文件 '$zip_path'。"(set_color normal)
+    function _cleanup
+        if test -d "$stage_dir"
+            echo "Info: Cleaning up staging directory..."
+            rm -rf "$stage_dir"
         end
     end
 
-    # --- 7. 最终验证 ---
+    echo "Info: Unzipping '$zip_name' to staging directory..."
+    if not unzip -q "$zip_path" -d "$stage_dir"
+        echo "Error: Unzip failed." >&2
+        _cleanup
+        return 1
+    end
+
+    # --- 6. Structure Normalization ---
+    set -l source_content_dir "$stage_dir"
+    set -l items_in_stage (ls "$stage_dir")
+    if test (count $items_in_stage) -eq 1
+        set -l single_item_path "$stage_dir/$items_in_stage[1]"
+        if test -d "$single_item_path"
+            echo "Info: Detected a single nested directory; using it as the source."
+            set source_content_dir "$single_item_path"
+        end
+    end
+
+    echo "Info: Installing font '$font_dir_name' from '$zip_name'..."
+    mkdir -p "$dest_dir"
+    if not mv "$source_content_dir"/* "$dest_dir/"
+        echo "Error: Failed to move files from staging to destination." >&2
+        rm -rf "$dest_dir" # Clean up failed destination directory
+        _cleanup
+        return 1
+    end
+
+    # --- 7. Finalization & Cleanup ---
+    _cleanup # Clean up the now-empty staging directory
+
+    echo "Info: Updating system font cache..."
+    fc-cache -f -s
+
+    # --- 8. Source File Cleanup ---
+    if set -q _flag_delete_source
+        echo "Info: Deleting source file as requested by --delete-source flag..."
+        if rm "$zip_path"
+            echo "  Successfully deleted '$zip_path'"
+        else
+            echo "Warning: Failed to delete source file '$zip_path'." >&2
+        end
+    else
+        read -P "Do you want to delete the original source file '$zip_path'? [y/N] " confirm
+        if string match -q -r '^[Yy]$' -- "$confirm"
+            echo "Info: Deleting source file..."
+            if rm "$zip_path"
+                echo "  Successfully deleted '$zip_path'"
+            else
+                echo "Warning: Failed to delete source file '$zip_path'." >&2
+            end
+        end
+    end
+
+    # --- 9. Verification ---
     echo ""
     if fc-list | string match -q --quiet --ignore-case "*$font_dir_name*"
-        echo (set_color green)"🎉 成功！字体 '$font_dir_name' 已成功安装。"(set_color normal)
+        echo "Success: Font '$font_dir_name' was installed successfully."
     else
-        echo (set_color red)"⚠️ 警告：字体文件已安装，但 'fc-list' 未能立即找到它。"(set_color normal)
-        echo "   请尝试重启终端或执行 'fish_reload'。"
+        echo "Warning: Font files were installed, but 'fc-list' could not find the font immediately." >&2
+        echo "  You may need to restart your terminal or run 'fish_reload'." >&2
     end
 
     return 0
