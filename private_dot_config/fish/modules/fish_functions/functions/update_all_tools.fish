@@ -1,4 +1,4 @@
-# ~/.config/fish/functions/update_all_tools.fish
+# $HOME/.config/fish/functions/update_all_tools.fish
 function update_all_tools
     # 定义日志文件路径
     if test -f $UPDATE_LOG_FILE -a (wc -c < $UPDATE_LOG_FILE) -gt 10485760 # 10MB

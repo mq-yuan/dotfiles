@@ -1,4 +1,4 @@
-# ~/.config/fish/modules/ai/functions/switch_claude_code.fish
+# $HOME/.config/fish/modules/ai/functions/switch_claude_code.fish
 # ===============================================
 #
 # A function to switch Anthropic API configurations.

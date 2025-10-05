@@ -1,4 +1,4 @@
-# ~/.config/fish/conf.d/03_abbreviations.fish
+# $HOME/.config/fish/conf.d/03_abbreviations.fish
 abbr lg "lazygit"
 abbr yy "yazi"
 abbr ag "aichat"

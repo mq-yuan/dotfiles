@@ -1,4 +1,4 @@
-# ~/.config/fish/modules/apply_template/completions/apply_template.fish
+# $HOME/.config/fish/modules/apply_template/completions/apply_template.fish
 
 function __fish_get_template_paths
     set -l base_dir $HOME/.config/templates

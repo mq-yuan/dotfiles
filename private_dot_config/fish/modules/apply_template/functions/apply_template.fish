@@ -1,6 +1,6 @@
-# ~/.config/fish/modules/apply_template/functions/apply_template.fish
+# $HOME/.config/fish/modules/apply_template/functions/apply_template.fish
 
-function apply_template --description "Applies a project template from ~/.config/templates"
+function apply_template --description "Applies a project template from $HOME/.config/templates"
     # --- Color variables for pretty output ---
     set -l color_red (set_color red)
     set -l color_green (set_color green)

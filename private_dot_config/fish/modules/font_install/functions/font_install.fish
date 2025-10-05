@@ -1,4 +1,4 @@
-# ~/.config/fish/modules/font_install/functions/font_install.fish
+# $HOME/.config/fish/modules/font_install/functions/font_install.fish
 
 function install_font -d "Install a font from a local ZIP file"
 
