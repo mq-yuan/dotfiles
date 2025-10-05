@@ -1,4 +1,4 @@
-# $HOME/.config/fish/functions/install_deb.fish
+# $HOME/.config/fish/modules/deb_install/functions/deb_install.fish
 
 function install_deb -d "Safely install a .deb package with validation, cleanup, and optional original file deletion"
     # Parse arguments with argparse
