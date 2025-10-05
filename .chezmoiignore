@@ -9,11 +9,13 @@ Library/
 # Only Linux
 {{ if ne .chezmoi.os "linux" }}
 # cuda
-.config/fish/completions/cuda.fish
-.config/fish/functions/cuda.fish
+.config/fish/modules/cuda/
 
-# install_deb
-.config/fish/functions/install_deb.fish
+# deb_install
+.config/fish/modules/deb_install/
+
+# font_install
+.config/fish/modules/font_install/
 
 # keyboard
 .config/fish/conf.d/14_keyboard.fish
