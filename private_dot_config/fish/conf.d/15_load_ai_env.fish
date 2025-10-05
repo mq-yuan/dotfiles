@@ -1,4 +1,4 @@
-# ~/.config/fish/conf.d/01-env.fish
+# $HOME/.config/fish/conf.d/01-env.fish
 
 # set AI tools env
 if test -f $HOME/.config/fish/.api_keys.fish

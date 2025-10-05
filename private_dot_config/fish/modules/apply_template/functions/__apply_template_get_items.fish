@@ -1,4 +1,4 @@
-# ~/.config/fish/modules/apply_template/functions/__apply_template_get_items.fish
+# $HOME/.config/fish/modules/apply_template/functions/__apply_template_get_items.fish
 
 function __apply_template_get_items --description "Lists items in a given template subdirectory"
     set -l base_dir $HOME/.config/templates

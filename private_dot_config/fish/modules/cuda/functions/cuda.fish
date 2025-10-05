@@ -1,4 +1,4 @@
-# ~/.config/fish/modules/cuda/functions/cuda.fish
+# $HOME/.config/fish/modules/cuda/functions/cuda.fish
 
 # ------------------------------------------------------------------------------
 # Main `cuda` function.
