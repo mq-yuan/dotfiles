@@ -1,23 +1,18 @@
 # ~/.config/fish/functions/apply_template.fish
 
 function apply_template --description "Applies a project template from ~/.config/templates"
-    # --- 美化输出的颜色变量 ---
+    # --- Color variables for pretty output ---
     set -l color_red (set_color red)
     set -l color_green (set_color green)
     set -l color_yellow (set_color yellow)
     set -l color_cyan (set_color cyan)
     set -l color_normal (set_color normal)
 
-    # --- 辅助函数：打印建议列表 ---
+    # --- Helper function: Print suggestions ---
     function __print_suggestions --argument-names path
         set -l base_dir $HOME/.config/templates
-        set -l full_path "$base_dir/$path"
 
-        echo # 换行以优化格式
-        if not test -d "$full_path"
-            echo "$color_red Fatal Error: Cannot provide suggestions for non-existent path '$path'.$color_normal" >&2
-            return
-        end
+        echo # Add a newline for better formatting
         
         set -l display_path (string join / (string split / --no-empty $path))
         if [ -z "$display_path" ]
@@ -26,9 +21,16 @@ function apply_template --description "Applies a project template from ~/.config
             echo "$color_yellow Available options under '$display_path/' are:$color_normal"
         end
 
-        for item in "$full_path"/*
-            set -l item_name (basename "$item")
-            if test -d "$item"
+        # Call the unified helper function to get the list of items
+        set -l items (__apply_template_get_items "$path")
+        if test $status -ne 0 -o (count $items) -eq 0
+            echo "  (No templates or subcategories found here)" >&2
+            return
+        end
+
+        for item_name in $items
+            # Check if the item is a directory to apply color
+            if test -d "$base_dir/$path/$item_name"
                 echo "  - $color_cyan$item_name/$color_normal"
             else
                 echo "  - $item_name"
@@ -37,7 +39,7 @@ function apply_template --description "Applies a project template from ~/.config
     end
 
     # ----------------------------------
-    # --- 主函数逻辑开始 ---
+    # --- Main function logic ---
     # ----------------------------------
     set -l base_dir $HOME/.config/templates
 
@@ -51,17 +53,17 @@ function apply_template --description "Applies a project template from ~/.config
     set -l parts (string split / --no-empty $template_path)
     set -l depth (count $parts)
 
-    # 1. 严格检查路径深度
+    # 1. Strictly check the path depth
     if test $depth -ne 3
         echo "$color_red Error: Invalid path. Templates must be applied from the 3rd level.$color_normal" >&2
-        # 寻找最深的有效路径并提供建议
+        # Find the deepest valid path and provide suggestions
         set -l valid_path ""
         for i in (seq 1 $depth)
             set -l current_check (string join / $parts[1..$i])
             if test -d "$base_dir/$current_check"
                 set valid_path $current_check
             else
-                # 在第一个无效路径处停止
+                # Stop at the first invalid path segment
                 break
             end
         end
@@ -69,7 +71,7 @@ function apply_template --description "Applies a project template from ~/.config
         return 1
     end
 
-    # 2. 逐层验证路径的有效性
+    # 2. Validate the path segment by segment
     set -l category_path "$base_dir/$parts[1]"
     set -l subcategory_path "$category_path/$parts[2]"
     set -l source_path "$subcategory_path/$parts[3]"
@@ -90,7 +92,7 @@ function apply_template --description "Applies a project template from ~/.config
         return 1
     end
 
-    # 3. 如果一切无误，执行复制操作
+    # 3. If everything is correct, perform the copy operation
     set -l dest_name (basename "$source_path")
     if test -e "$dest_name"
         read -P "$color_yellow Warning: '$dest_name' already exists. Overwrite? (y/N) $color_normal" -l confirm
