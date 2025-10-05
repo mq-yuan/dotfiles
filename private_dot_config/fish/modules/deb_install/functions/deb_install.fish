@@ -1,13 +1,13 @@
 # $HOME/.config/fish/modules/deb_install/functions/deb_install.fish
 
-function install_deb -d "Safely install a .deb package with validation, cleanup, and optional original file deletion"
+function deb_install -d "Safely install a .deb package with validation, cleanup, and optional original file deletion"
     # Parse arguments with argparse
     argparse 'y/delete-original' 'n/no-delete' -- $argv
     or return 1
 
-    set auto_delete false
-    set skip_delete false
-    set deb_file $argv[1]
+    set -l auto_delete false
+    set -l skip_delete false
+    set -l deb_file $argv[1]
 
     if set -q _flag_y
         set auto_delete true
@@ -18,100 +18,92 @@ function install_deb -d "Safely install a .deb package with validation, cleanup,
 
     # Validate arguments
     if test -z "$deb_file"
-        echo "Usage: install_deb [-y|--delete-original] [-n|--no-delete] <deb-file>"
-        echo "  -y, --delete-original: Automatically delete the original .deb file"
-        echo "  -n, --no-delete: Skip deletion of the original .deb file"
+        echo "Usage: deb_install [-y|--delete-original] [-n|--no-delete] <deb-file>" >&2
+        echo "  -y, --delete-original: Automatically delete the original .deb file" >&2
+        echo "  -n, --no-delete: Skip deletion of the original .deb file" >&2
         return 1
     end
 
     # Validate file existence and extension
     if not test -f "$deb_file"
-        echo "Error: File '$deb_file' does not exist"
+        echo "Error: File '$deb_file' does not exist" >&2
         return 1
     end
     if not string match -q "*.deb" "$deb_file"
-        echo "Error: '$deb_file' is not a .deb file"
+        echo "Error: '$deb_file' is not a .deb file" >&2
         return 1
     end
 
-    # Create temporary directory with permissive permissions
-    set temp_dir (mktemp -d)
+    # Create temporary directory
+    set -l temp_dir (mktemp -d)
     if test $status -ne 0
-        echo "Error: Failed to create temporary directory"
+        echo "Error: Failed to create temporary directory" >&2
         return 1
     end
-    chmod 755 "$temp_dir"
-    echo "Created temporary directory: $temp_dir"
+    echo "Info: Created temporary directory: $temp_dir"
 
-    # Cleanup function
-    function _cleanup 
-        set -l temp_dir $argv[1]
+    # Nested cleanup function for maximum compatibility.
+    function _cleanup
         if test -d "$temp_dir"
-            echo "Attempting to clean up $temp_dir"
+            echo "Info: Cleaning up temporary directory: $temp_dir"
             rm -rf "$temp_dir"
-            if test $status -eq 0
-                echo "Successfully cleaned up $temp_dir"
-            else
-                echo "Warning: Failed to clean up $temp_dir (permission issue?)"
+            if test $status -ne 0
+                echo "Warning: Failed to clean up $temp_dir. Manual deletion may be required." >&2
             end
-        else
-            echo "Temporary directory $temp_dir does not exist, no cleanup needed"
         end
     end
 
     # Copy file to temporary directory
-    set temp_deb "$temp_dir/$(basename "$deb_file")"
+    set -l temp_deb "$temp_dir/"(basename "$deb_file")
     if not cp "$deb_file" "$temp_deb"
-        _cleanup $temp_dir
-        echo "Error: Failed to copy .deb file to temporary directory"
+        echo "Error: Failed to copy .deb file to temporary directory" >&2
+        _cleanup
         return 1
-    else
-        echo "Copied $deb_file to $temp_deb for safe installation"
     end
-    chmod 644 "$temp_deb"
+    echo "Info: Copied $deb_file to $temp_deb for safe installation"
 
     # Verify package integrity
-    if not dpkg -I "$temp_deb" >/dev/null
-        _cleanup $temp_dir
-        echo "Error: Invalid or corrupted .deb file"
+    if not dpkg -I "$temp_deb" >/dev/null 2>&1
+        echo "Error: Invalid or corrupted .deb file" >&2
+        _cleanup
         return 1
     end
 
     # Install package with apt to handle dependencies
-    echo "Installing $deb_file..."
+    echo "Info: Installing $deb_file..."
     if not sudo apt-get install -y "$temp_deb"
-        _cleanup $temp_dir
-        echo "Error: Installation failed"
+        echo "Error: Installation failed" >&2
+        _cleanup
         return 1
     end
 
-    # Clean up temporary directory
-    _cleanup $temp_dir
+    # Final cleanup of temporary directory
+    _cleanup
 
     # Handle original file deletion
     if test "$auto_delete" = true
         rm -f "$deb_file"
         if test $status -eq 0
-            echo "Deleted original file $deb_file"
+            echo "Info: Deleted original file $deb_file"
         else
-            echo "Warning: Failed to delete $deb_file"
+            echo "Warning: Failed to delete $deb_file" >&2
         end
     else if test "$skip_delete" = false
         read -P "Do you want to delete the original file '$deb_file'? [Y/n] " response
-        if string match -qir '^n$' "$response"
-            echo "Original file $deb_file preserved"
+        if string match -qir '^[nN]$' -- "$response"
+            echo "Info: Original file $deb_file preserved"
         else
             rm -f "$deb_file"
             if test $status -eq 0
-                echo "Deleted original file $deb_file"
+                echo "Info: Deleted original file $deb_file"
             else
-                echo "Warning: Failed to delete $deb_file"
+                echo "Warning: Failed to delete $deb_file" >&2
             end
         end
     else
-        echo "Skipping deletion of $deb_file due to -n option"
+        echo "Info: Skipping deletion of $deb_file due to -n option"
     end
 
-    echo "Successfully installed $deb_file"
+    echo "Success: Successfully installed $deb_file"
     return 0
 end
