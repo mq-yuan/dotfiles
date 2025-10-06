@@ -4,26 +4,22 @@
 # It provides the configuration to both the main function and the completion script.
 function __tools_update_get_list
     # Format: Name, Check Command, Update Command, Type, Sudo Required?
+    set -l tools_common \
+        "Homebrew"         "brew"                         "brew update && brew upgrade"                    "user"     "no"  \
+        "ASDF_Plugin"      "asdf"                         "asdf plugin update --all"                       "language" "no"  \
+        "Fisher_Plugin"    "fisher"                       "fisher update"                                  "fish"     "no"  \
+        "Cargo_Update"     "cargo-install-update"         "cargo install-update --all"                     "language" "no"  \
+        "Rustup"           "rustup"                       "rustup update"                                  "language" "no"  \
+        "UV_Tools"         "uv"                           "uv tool upgrade --all"                          "language" "no"
+
+    set -l tools_os \
 {{- if eq .chezmoi.os "linux" }}
-    set -l tools \
-        "Homebrew"         "brew"                 "brew update && brew upgrade"                    "user"     "no"  \
-        "APT"              "apt"                  "sudo apt update && sudo apt upgrade"            "system"   "yes" \
-        "Flatpak"          "flatpak"              "flatpak update -y"                              "user"     "no"  \
-        "ASDF_Plugin"             "asdf"                 "asdf plugin update --all"                       "language" "no"  \
-        "Fisher_Plugin"           "fisher"               "fisher update"                                  "fish"     "no"  \
-        "Snap"             "snap"                 "sudo snap refresh"                              "system"   "yes" \
-        "Cargo_Binaries"   "cargo-install-update" "cargo install-update --all"                     "language" "no"  \
-        "Rustup"           "rustup"               "rustup update"                                  "language" "no"  \
-        "UV_Tools"         "uv"                   "uv tool upgrade --all"                          "language" "no"
-{{- else if eq .chezmoi.os "darwin" }}
-    set -l tools \
-        "Homebrew"         "brew"                 "brew update && brew upgrade"                    "user"     "no"  \
-        "ASDF_Plugin"             "asdf"                 "asdf plugin update --all"                       "language" "no"  \
-        "Fisher_Plugin"           "fisher"               "fisher update"                                  "fish"     "no"  \
-        "Cargo_Binaries"   "cargo-install-update" "cargo install-update --all"                     "language" "no"  \
-        "Rustup"           "rustup"               "rustup update"                                  "language" "no"  \
-        "UV_Tools"         "uv"                   "uv tool upgrade --all"                          "language" "no"
-{{ end }}
+        "APT"              "apt"                          "sudo apt update && sudo apt upgrade"            "system"   "yes" \
+        "Flatpak"          "flatpak"                      "flatpak update -y"                              "user"     "no"  \
+        "Snap"             "snap"                         "sudo snap refresh"                              "system"   "yes"
+{{- end }}
+
+    set -l tools $tools_common $tools_os
 
     # Output the entire list, one element per line.
     for item in $tools
