@@ -1185,8 +1185,8 @@ function getRules() {
     },
     School: {
       rules: [
-        "DOMAIN-KEYWORD,tju",
-        "DOMAIN-KEYWORD,nju",
+        "DOMAIN-SUFFIX,tju.edu.cn",
+        "DOMAIN-SUFFIX,nju.edu.cn",
       ],
       action: "DIRECT",
     },
@@ -1199,8 +1199,6 @@ function getRules() {
         "DOMAIN,public.boxcloud.com",
         "DOMAIN-SUFFIX,aowu.tv",
         "DOMAIN,anime.girigirilove.com",
-        // "DOMAIN,www.latexlive.com",
-        // "DOMAIN-SUFFIX,latexlive.com",
       ],
       action: "DIRECT",
     },
