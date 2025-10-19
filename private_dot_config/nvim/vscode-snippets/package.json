@@ -1,0 +1,29 @@
+{
+    "name": "mq_snippets",
+    "engines": {
+        "vscode": "^1.11.0"
+    },
+    "contributes": {
+        "snippets": [
+            {
+                "language": [
+                    "plaintext",
+                    "markdown",
+                    "tex",
+                    "html",
+                    "global",
+                    "all"
+                ],
+                "path": "./snippets/global.json"
+            },
+            {
+                "language": ["markdown", "rmd"],
+                "path": "./snippets/markdown.json"
+            },
+            {
+                "language": "python",
+                "path": "./snippets/python/python.json"
+            }
+        ]
+    }
+}
