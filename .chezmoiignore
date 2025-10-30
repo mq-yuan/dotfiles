@@ -39,6 +39,10 @@ Library/
 {{ if (or (ne .chezmoi.hostname "LAPTOP-6037VQ4M") (ne .chezmoi.os "linux")) }}
 {{ end }}
 
+# Only Work
+{{ if (or (ne .chezmoi.hostname "ymq-B760M-ubuntu") (ne .chezmoi.os "linux")) }}
+.config/kitty/
+{{ end }}
 
 
 
