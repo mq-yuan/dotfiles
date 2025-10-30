@@ -56,7 +56,17 @@ Library/
 
 # Not WSL
 {{ if (and (eq .chezmoi.hostname "LAPTOP-6037VQ4M") (eq .chezmoi.os "linux")) }}
-.config/fish/conf.d/13_rustup.fish
-.config/fish/conf.d/14_keyboard.fish
-.xprofile
+{{ end }}
+
+# Not Work
+{{ if (and (eq .chezmoi.hostname "ymq-B760M-ubuntu") (eq .chezmoi.os "linux")) }}
+.config/aichat/
+.config/aria2/
+.config/fastfetch/
+.config/ghostty/
+.config/mihomo/
+.config/onedrive/
+.config/sparkle/
+.config/rofi/
+.config/mpv/
 {{ end }}
