@@ -42,6 +42,7 @@ Library/
 # Only Work
 {{ if (or (ne .chezmoi.hostname "ymq-B760M-ubuntu") (ne .chezmoi.os "linux")) }}
 .config/kitty/
+.var/app/org.fcitx.Fcitx5/
 {{ end }}
 
 
@@ -69,4 +70,5 @@ Library/
 .config/sparkle/
 .config/rofi/
 .config/mpv/
+.local/share/fcitx5/
 {{ end }}
