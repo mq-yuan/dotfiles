@@ -40,3 +40,8 @@ model_checkpoints/
 tensorboard/
 runs/
 experiments/
+
+# ai
+GEMINI.md
+AGENTS.md
+CLAUDE.md
