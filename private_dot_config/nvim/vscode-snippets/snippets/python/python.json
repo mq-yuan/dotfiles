@@ -80,5 +80,10 @@
         "prefix": "defs",
         "body": ["def ${1:mname}(self$2):", "\t${3:pass}"],
         "description": "Class method definition"
+    },
+    "device_parameter": {
+        "prefix": "devicearg",
+        "body": "device: Optional[Union[str, torch.device]] = None,$0",
+        "description": "Add a typed torch device argument"
     }
 }
