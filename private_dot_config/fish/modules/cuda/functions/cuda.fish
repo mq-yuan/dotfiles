@@ -75,7 +75,7 @@ end
 # Returns the required GCC version for a given CUDA version.
 function __cuda_get_required_gcc_version --argument-names cuda_version
     set -l GCC_COMPATIBILITY_MAP \
-        "12.8" "14" \
+        "12.8" "13" \
         "12.4" "13" \
         "11.8" "11"
 
