@@ -2,27 +2,27 @@
     name = mq-yuan
     email = dearmengqiyuan@outlook.com
 [core]
-    editor = nvim  # 或者你喜欢的编辑器，如 nano, code
-    autocrlf = input  # 跨平台换行符处理，适合 Linux
-    excludesfile = ~/.config/git/ignore  # 全局忽略文件
+    editor = nvim
+    autocrlf = input
+    excludesfile = ~/.config/git/ignore
 [pull]
-    rebase = true  # 默认使用 rebase 拉取
+    rebase = false
 [color]
-    ui = auto  # 启用彩色输出
+    ui = auto  # color 
 [push]
-    default = simple  # 推送到匹配的分支
+    default = simple
 [rebase]
     updateRefs = true
 [merge]
     conflictstyle = zdiff3
 [init]
-    defaultBranch = main  # 新仓库默认分支为 main
+    defaultBranch = main
 [column]
-    ui = auto # git branch 更直观
+    ui = auto # git branch clear
 [branch]
-    sort = -committerdate # git branch 使用commit时间排序
+    sort = -committerdate # git branch sort by commit time
 [diff]
-    algorithm = histogram # 更加直观清晰的diff信息
-    colorMoved = plain # diff可以识别move，并设置颜色
-    renames = true # diff 可以识别rename
+    algorithm = histogram
+    colorMoved = plain # diff support move
+    renames = true # diff support rename
 
