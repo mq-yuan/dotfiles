@@ -112,7 +112,10 @@ function __cuda_check_and_advise_gcc_switch --argument-names target_version requ
                     echo "Error: Failed to switch GCC. Check sudo permissions or if g++-$required_gcc is installed." >&2
                     return 1
                 end
-                echo "Info: GCC switched successfully to version $required_gcc."
+                set --global --export CC /usr/bin/gcc-$required_gcc
+                set --global --export CXX /usr/bin/g++-$required_gcc
+                echo "Info: GCC and G++ switched successfully to version $required_gcc."
+                echo "Info: CC and CXX switched successfully to path /usr/bin/gcc-$required_gcc and /usr/bin/g++-$required_gcc."
                 return 0 # Continue script
             else
                 echo "Error: Required version gcc-$required_gcc is not installed." >&2
@@ -120,12 +123,16 @@ function __cuda_check_and_advise_gcc_switch --argument-names target_version requ
             end
         else
             echo "Info: Automatic switch declined." >&2
-            echo "Please switch your GCC version manually before proceeding." >&2
+            echo "Please switch your GCC and G++ version manually before proceeding." >&2
             echo "Example command:" >&2
             echo "  sudo update-alternatives --set gcc /usr/bin/gcc-$required_gcc" >&2
+            echo "  sudo update-alternatives --set g++ /usr/bin/g++-$required_gcc" >&2
             return 1 # Exit script
         end
     end
+    set --global --export CC /usr/bin/gcc-$required_gcc
+    set --global --export CXX /usr/bin/g++-$required_gcc
+    echo "Info: CC and CXX switched successfully to path /usr/bin/gcc-$required_gcc and /usr/bin/g++-$required_gcc."
 
     echo "Info: Current GCC version is compatible. No switch needed."
     return 0
@@ -148,7 +155,9 @@ function __cuda_update_environment --argument-names base_dir cuda_version
 
     __clean_var PATH "$base_dir/cuda-*"
     __clean_var LD_LIBRARY_PATH "$base_dir/cuda-*"
+    __clean_var LD_LIBRARY_PATH "$base_dir/cudnn-*"
     __clean_var CPATH "$base_dir/cuda-*"
+    __clean_var CPATH "$base_dir/cudnn-*"
 
     set --global --export CUDA_HOME "$cuda_dir"
     set --global --export PATH "$cuda_dir/bin" $PATH
