@@ -6,8 +6,3 @@ fish_add_path /opt/homebrew/bin
 {{ end }}
 fish_add_path $HOME/bin
 fish_add_path $HOME/.local/bin
-{{ if eq .chezmoi.os "linux" }}
-if status --is-interactive
-cuda 11.8
-end
-{{ end }}

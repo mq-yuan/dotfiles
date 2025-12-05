@@ -71,7 +71,6 @@ return {
 						},
 					},
 				},
-				capabilities = { offsetEncoding = "utf-8" },
 			},
 			-- ruff config
 			ruff = {
@@ -79,6 +78,7 @@ return {
 				init_options = {
 					settings = {
 						logLevel = "info",
+						args = { "--config=~/.config/ruff/ruff.toml" },
 					},
 				},
 			},
