@@ -1,0 +1,70 @@
+# =========================================================
+#  Ruff Global Configuration
+#  Optimized for Modern Python & Data Science
+# =========================================================
+
+# 1. General Settings
+# ---------------------------------------------------------
+
+# Line length (88 is the industry standard from Black)
+line-length = 88
+
+[lint]
+# 2. Rules Selection
+# ---------------------------------------------------------
+select = [
+    "E",   # Pycodestyle (Standard PEP8 errors)
+    "W",   # Pycodestyle (Standard PEP8 warnings)
+    "F",   # Pyflakes (Core logic errors, undefined variables, etc.)
+    "B",   # Flake8-bugbear (Common bugs and design pitfalls)
+    "UP",  # Pyupgrade (Upgrade syntax to modern Python)
+    "N",   # Pep8-naming (Naming conventions)
+    "SIM", # Flake8-simplify (Code simplification hints)
+    "RUF", # Ruff-specific rules
+]
+
+# 3. Global Ignores
+# ---------------------------------------------------------
+ignore = [
+    # E501: Line too long. handled by the formatter, so we don't need linter errors.
+    "E501",
+    
+    # F722: Syntax error in forward annotation.
+    # Ignored to support Jaxtyping (e.g., Float[Tensor, "batch dim"]).
+    "F722", 
+]
+
+# 4. Auto-fix Behavior
+# ---------------------------------------------------------
+# Allow Ruff to fix everything it can
+fixable = ["ALL"]
+unfixable = []
+
+# 5. Docstring Convention
+# ---------------------------------------------------------
+# Enforce Google-style docstrings if "D" rules are enabled in the future.
+[lint.pydocstyle]
+convention = "google"
+
+# 6. Import Sorting (Isort)
+# ---------------------------------------------------------
+[lint.isort]
+# Treat these folders as local/first-party modules
+known-first-party = ["src", "app", "lib"]
+# Force a blank line between import groups
+lines-after-imports = 1
+
+# 7. Formatter Settings
+# ---------------------------------------------------------
+[format]
+# Use double quotes for strings (Python standard)
+quote-style = "double"
+
+# Use spaces for indentation
+indent-style = "space"
+
+# Respect magic trailing commas (keep them if present to avoid collapsing lines)
+skip-magic-trailing-comma = false
+
+# Force standard line endings
+line-ending = "lf"
