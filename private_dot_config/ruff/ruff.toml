@@ -8,6 +8,7 @@
 
 # Line length (88 is the industry standard from Black)
 line-length = 88
+indent-width = 4
 
 [lint]
 # 2. Rules Selection
@@ -17,10 +18,7 @@ select = [
     "W",   # Pycodestyle (Standard PEP8 warnings)
     "F",   # Pyflakes (Core logic errors, undefined variables, etc.)
     "B",   # Flake8-bugbear (Common bugs and design pitfalls)
-    "UP",  # Pyupgrade (Upgrade syntax to modern Python)
-    "N",   # Pep8-naming (Naming conventions)
     "SIM", # Flake8-simplify (Code simplification hints)
-    "RUF", # Ruff-specific rules
 ]
 
 # 3. Global Ignores
@@ -32,6 +30,10 @@ ignore = [
     # F722: Syntax error in forward annotation.
     # Ignored to support Jaxtyping (e.g., Float[Tensor, "batch dim"]).
     "F722", 
+
+    # SIM108: Use binary operator instead of `if`-`else`-block
+    # Ignored for readable
+    "SIM108",
 ]
 
 # 4. Auto-fix Behavior
@@ -49,10 +51,12 @@ convention = "google"
 # 6. Import Sorting (Isort)
 # ---------------------------------------------------------
 [lint.isort]
+combine-as-imports = true
 # Treat these folders as local/first-party modules
 known-first-party = ["src", "app", "lib"]
-# Force a blank line between import groups
-lines-after-imports = 1
+order-by-type = true
+section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
+detect-same-package = true
 
 # 7. Formatter Settings
 # ---------------------------------------------------------
@@ -68,3 +72,6 @@ skip-magic-trailing-comma = false
 
 # Force standard line endings
 line-ending = "lf"
+
+docstring-code-format = true
+docstring-code-line-length = "dynamic"
