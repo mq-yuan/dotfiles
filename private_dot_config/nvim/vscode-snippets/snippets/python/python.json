@@ -85,5 +85,33 @@
         "prefix": "devicearg",
         "body": "device: Optional[Union[str, torch.device]] = None,$0",
         "description": "Add a typed torch device argument"
+    },
+    "get_intrinsic_from_fov": {
+        "prefix": "intr_fov",
+        "body": [
+            "def _build_intrinsics_from_fov(",
+            "    self, fovx_deg: float, fovy_deg: float",
+            ") -> torch.Tensor:",
+            "    \"\"\"Construct pixel intrinsics from horizontal and vertical FoV.",
+            "",
+            "    Args:",
+            "        fovx_deg: Horizontal field of view in degrees.",
+            "        fovy_deg: Vertical field of view in degrees.",
+            "",
+            "    Returns:",
+            "        3x3 camera intrinsics matrix on the configured device and dtype.",
+            "    \"\"\"",
+            "    fx = 0.5 * self.width / math.tan(math.radians(fovx_deg) / 2.0)",
+            "    fy = 0.5 * self.height / math.tan(math.radians(fovy_deg) / 2.0)",
+            "    cx = 0.5 * self.width",
+            "    cy = 0.5 * self.height",
+            "    intr = torch.tensor(",
+            "        [[fx, 0.0, cx], [0.0, fy, cy], [0.0, 0.0, 1.0]],",
+            "        device=self.device,",
+            "        dtype=self.dtype,",
+            "    )",
+            "    return intr$0"
+        ],
+        "description": "Build a 3x3 camera intrinsics matrix from FoV degrees"
     }
 }
