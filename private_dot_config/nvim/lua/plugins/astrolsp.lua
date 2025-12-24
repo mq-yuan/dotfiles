@@ -78,7 +78,6 @@ return {
 				init_options = {
 					settings = {
 						logLevel = "info",
-						args = { "--config=~/.config/ruff/ruff.toml" },
 					},
 				},
 			},

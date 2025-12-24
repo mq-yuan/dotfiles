@@ -13,6 +13,7 @@
 - My default shell is fish. Prefer fish-compatible commands and syntax.
 - My Python projects use uv for dependency and environment management.
 - Run Python commands via uv (e.g., `uv run python -m ...`, `uv run pytest`) instead of calling python/pip directly.
+- Run ruff via uvx (e.g., `uvx ruff`) instead of calling ruff
 
 ## Output constraints
 - Do not place non-English text into generated files.
