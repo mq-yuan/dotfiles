@@ -1,0 +1,20 @@
+model = "gpt-5.2-codex"
+model_reasoning_effort = "high"
+[projects."/home/ymq/Projects/Gaussian2MSI"]
+trust_level = "trusted"
+
+[projects."/home/ymq/.local/share/chezmoi"]
+trust_level = "trusted"
+
+[projects."/home/ymq/Projects/3dgrut"]
+trust_level = "trusted"
+
+[projects."/home/ymq/Projects/FeedForward-GS"]
+trust_level = "trusted"
+
+[notice]
+hide_gpt5_1_migration_prompt = true
+"hide_gpt-5.1-codex-max_migration_prompt" = true
+
+[notice.model_migrations]
+"gpt-5.1-codex-max" = "gpt-5.2-codex"
