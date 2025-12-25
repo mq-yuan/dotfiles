@@ -10,15 +10,47 @@
 line-length = 88
 indent-width = 4
 
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pyenv",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    ".vscode",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "site-packages",
+    "venv",
+    "submodules",
+]
+
 [lint]
 # 2. Rules Selection
 # ---------------------------------------------------------
 select = [
-    "E",   # Pycodestyle (Standard PEP8 errors)
-    "W",   # Pycodestyle (Standard PEP8 warnings)
-    "F",   # Pyflakes (Core logic errors, undefined variables, etc.)
-    "B",   # Flake8-bugbear (Common bugs and design pitfalls)
-    "SIM", # Flake8-simplify (Code simplification hints)
+    "E",      # Pycodestyle (Standard PEP8 errors)
+    "W",      # Pycodestyle (Standard PEP8 warnings)
+    "F",      # Pyflakes (Core logic errors, undefined variables, etc.)
+    "B",      # Flake8-bugbear (Common bugs and design pitfalls)
+    "SIM",    # Flake8-simplify (Code simplification hints)
+    "ARG",    # flake8-unused-arguments
+    "RUF059", # RUF059 the presence of unused variables in unpacked assignments.
 ]
 
 # 3. Global Ignores
