@@ -3,6 +3,13 @@
 -- NOTE: We highly recommend setting up the Lua Language Server (`:LspInstall lua_ls`)
 --       as this provides autocomplete and documentation while editing
 
+local function with_utf16_position_encoding(capabilities)
+  capabilities = capabilities or vim.lsp.protocol.make_client_capabilities()
+  capabilities.general = capabilities.general or {}
+  capabilities.general.positionEncodings = { "utf-16" }
+  return capabilities
+end
+
 ---@type LazySpec
 return {
 	"AstroNvim/astrolsp",
@@ -40,7 +47,7 @@ return {
 		-- customize language server configuration options passed to `lspconfig`
 		---@diagnostic disable: missing-fields
 		config = {
-			clangd = { capabilities = { offsetEncoding = "utf-8" } },
+			clangd = { capabilities = with_utf16_position_encoding() },
 			-- basedpyright config https://docs.basedpyright.com/latest/configuration/config-files/#type-check-diagnostics-settings
 			basedpyright = {
 				before_init = function(_, c)
@@ -60,17 +67,24 @@ return {
 							diagnosticMode = "openFilesOnly",
 							autoImportCompletions = true,
 							diagnosticSeverityOverrides = {
-								reportUnusedImport = "information",
-								reportUnusedFunction = "information",
-								reportUnusedVariable = "information",
+								reportUnusedImport = "none",
+								reportUnusedFunction = "none",
+								reportUnusedVariable = "none",
+								reportUnusedParameter = "none",
 								reportGeneralTypeIssues = "none",
 								reportOptionalMemberAccess = "none",
 								reportOptionalSubscript = "none",
 								reportPrivateImportUsage = "none",
 							},
 						},
+						exclude = {
+							"**/.venv",
+							"**/__pycache__",
+							"submodules",
+						}
 					},
 				},
+				capabilities = with_utf16_position_encoding(),
 			},
 			-- ruff config
 			ruff = {
@@ -80,6 +94,7 @@ return {
 						logLevel = "info",
 					},
 				},
+				capabilities = with_utf16_position_encoding(),
 			},
 			-- tinymist
 			tinymist = {
