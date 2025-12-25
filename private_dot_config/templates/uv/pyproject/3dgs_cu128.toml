@@ -47,9 +47,4 @@ filterwarnings = [
 ]
 
 [tool.ruff]
-src = ["src"]
-
-[tool.ruff.lint.isort]
-combine-as-imports = true
-
-
+extend = "~/.config/ruff/ruff.toml"
