@@ -16,21 +16,6 @@
         ],
         "description": "Tell uv the script dependencies"
     },
-    "self": {
-        "prefix": "s",
-        "body": "self.$0",
-        "description": "Snippet to reference the self property in an object"
-    },
-    "__magic__": {
-        "prefix": "__",
-        "body": "__${1:init}__$0",
-        "description": "Create magic method"
-    },
-    "if __name__ == __main__": {
-        "prefix": "ifmain",
-        "body": ["if __name__ == \"__main__\":", "\t${1:main()}"],
-        "description": "Execute code if the file is executed directly"
-    },
     "import": {
         "prefix": "import",
         "body": "import ${1:datetime}",
@@ -40,6 +25,21 @@
         "prefix": "fromim",
         "body": "from ${1:pathlib} import ${2:Path}",
         "description": "Import individual objects directly into the caller’s symbol table"
+    },
+    "__magic__": {
+        "prefix": "__",
+        "body": "__${1:init}__$0",
+        "description": "Create magic method"
+    },
+    "self": {
+        "prefix": "s",
+        "body": "self.$0",
+        "description": "Snippet to reference the self property in an object"
+    },
+    "if __name__ == __main__": {
+        "prefix": "ifmain",
+        "body": ["if __name__ == \"__main__\":", "\t${1:main()}"],
+        "description": "Execute code if the file is executed directly"
     },
     "if": {
         "prefix": "if",
