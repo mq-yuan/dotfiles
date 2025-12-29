@@ -1,0 +1,13 @@
+# Tmux
+# 1. Catppuccin
+[".config/tmux/plugins/catppuccin/tmux"]
+    type = "git-repo"
+    url = "https://github.com/catppuccin/tmux.git"
+    clone.args = ["-b", "v2.1.0"]
+    refreshPeriod = "168h"
+
+# 2. CPU Plugin
+[".config/tmux/plugins/tmux-plugins/tmux-cpu"]
+    type = "git-repo"
+    url = "https://github.com/tmux-plugins/tmux-cpu"
+    refreshPeriod = "168h"
