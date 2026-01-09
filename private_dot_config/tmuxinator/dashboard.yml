@@ -9,3 +9,8 @@ windows:
       panes:
         - btop
         - nvtop
+  - disk:
+      layout: even-horizontal
+      panes:
+        - gdu-go
+        - duf
