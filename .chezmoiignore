@@ -1,6 +1,7 @@
 # ignore all
 readme.md
 doc/
+.config/bash
 
 # Only Mac
 {{ if ne .chezmoi.os "darwin" }}
