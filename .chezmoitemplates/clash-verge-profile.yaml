@@ -18,25 +18,6 @@ proxy-providers:
       expected-status: 204
     override:
       additional-suffix: "-jsjc"
-  alice:
-    type: http
-    url: {{ keepassxcAttribute "Applications/clash-verge" "alice-token" | printf "\"https://sub.alice.sale/api/v1/client/subscribe?token=%s\"" }}
-    path: ./proxy_providers/alice
-    interval: 3600
-    proxy: PROXY
-    size-limit: 0
-    header:
-      User-Agent:
-      - "mihomo/1.18.3"
-    health-check:
-      enable: true
-      lazy: true
-      url: "https://cp.cloudflare.com"
-      interval: 300
-      timeout: 5000
-      expected-status: 204
-    override:
-      additional-suffix: "-alice"
   
 proxies:
   - name: mq-Bandwagong-hysteria2
