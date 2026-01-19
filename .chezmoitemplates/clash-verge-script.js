@@ -1227,7 +1227,7 @@ function getRules() {
       rules: [
         "AND,((PROCESS-NAME,rustdesk),(DST-PORT,21114))",
       ],
-      action: "REJECT",
+      action: "Advertising",
     },
     School: {
       rules: [
@@ -1324,16 +1324,16 @@ function getRules() {
 
   // reject rules
   const adNonipRules = [
-    "RULE-SET,reject_non_ip,REJECT",
-    "RULE-SET,reject_domainset,REJECT",
-    "RULE-SET,reject_non_ip_drop,REJECT-DROP",
-    "RULE-SET,reject_non_ip_no_drop,REJECT",
-    "RULE-SET,tracking_yyds,REJECT",
-    "RULE-SET,advertising_yyds,REJECT",
+    "RULE-SET,reject_non_ip,Advertising",
+    "RULE-SET,reject_domainset,Advertising",
+    "RULE-SET,reject_non_ip_drop,Advertising",
+    "RULE-SET,reject_non_ip_no_drop,Advertising",
+    "RULE-SET,tracking_yyds,Advertising",
+    "RULE-SET,advertising_yyds,Advertising",
   ];
   const adipRules = [
-    "RULE-SET,reject_ip,REJECT", // Reject IP addresses
-    "RULE-SET,advertising_yyds_ip,REJECT", // Reject IP addresses
+    "RULE-SET,reject_ip,Advertising", // Reject IP addresses
+    "RULE-SET,advertising_yyds_ip,Advertising", // Reject IP addresses
   ];
 
   // cdn rules
@@ -2025,6 +2025,12 @@ function overwriteProxyGroups(params) {
       type: "select",
       proxies: ["DIRECT", proxyName],
       icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/fish.svg",
+    },
+    {
+      name: "Advertising",
+      type: "select",
+      proxies: ["DIRECT", "REJECT", "REJECT-DROP", proxyName],
+      icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/block.svg",
     },
   ];
 
