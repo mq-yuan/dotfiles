@@ -159,12 +159,10 @@ function overwriteDns(params) {
   const defaultNameservers = [
     "system",
     "223.5.5.5", // Ali
-    // "1.12.12.12", // DoT DoH
-    // "119.29.29.29", // Tencent
-    // "180.184.1.1", // 字节
   ];
   const Nameservers = [
     // "system", // System
+    {{ keepassxcAttribute "Applications/clash-verge" "DoH-alidns" | printf "%q" -}},
     "https://223.5.5.5/dns-query",
     "https://doh.pub/dns-query",
   ];
@@ -184,8 +182,8 @@ function overwriteDns(params) {
     "enhanced-mode": "fake-ip",
     "fake-ip-range": "198.18.0.1/16",
     // "default-nameserver": defaultNameservers, // 用于解析其他 DNS 服务器、和节点的域名，必须为 IP, 可为加密 DNS。注意这个只用来解析节点和其他的 dns，其他网络请求不归他管
-    "proxy-server-nameserver": proxyNameservers, // 匹配路由规则后的DNS解析服务器，仅解析代理节点的域名
-    nameserver: Nameservers, // 其他网络请求都归他管
+    "proxy-server-nameserver": proxyNameservers, // 仅解析代理节点的域名
+    nameserver: Nameservers, // 默认 DNS
   };
   params.dns = { ...dnsOptions };
 }
