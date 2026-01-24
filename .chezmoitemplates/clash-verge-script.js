@@ -988,15 +988,6 @@ function getRuleProviders() {
       proxy: proxyName,
       path: "./yyds/private.mrs"
     },
-    lan_non_ip: {
-      type: "http",
-      behavior: "classical",
-      url: "https://ruleset.skk.moe/Clash/non_ip/lan.txt",
-      interval: 43200,
-      format: "text",
-      proxy: proxyName,
-      path: "./sukkaw_ruleset/lan_non_ip.txt"
-    },
     lan_ip: {
       type: "http",
       behavior: "classical",
@@ -1027,24 +1018,6 @@ function getRuleProviders() {
       format: "text",
       proxy: proxyName,
       path: "./sukkaw_ruleset/global_non_ip.txt"
-    },
-    domestic_non_ip: {
-      type: "http",
-      behavior: "classical",
-      url: "https://ruleset.skk.moe/Clash/non_ip/domestic.txt",
-      interval: 43200,
-      format: "text",
-      proxy: proxyName,
-      path: "./sukkaw_ruleset/domestic_non_ip.txt"
-    },
-    direct_non_ip: {
-      type: "http",
-      behavior: "classical",
-      url: "https://ruleset.skk.moe/Clash/non_ip/direct.txt",
-      interval: 43200,
-      format: "text",
-      proxy: proxyName,
-      path: "./sukkaw_ruleset/direct_non_ip.txt"
     },
     domestic_ip: {
       type: "http",
@@ -1417,7 +1390,6 @@ function getRules() {
   const privateNonipRules = [
     // Private rules for non-IP addresses
     "RULE-SET,private_yyds,DIRECT", // Use the proxy for private domains
-    "RULE-SET,lan_non_ip,DIRECT", // Use DIRECT for LAN non-IP addresses
   ];
   const privateIpRules = [
     "RULE-SET,lan_ip,DIRECT", // Use DIRECT for LAN IP addresses
@@ -1428,8 +1400,6 @@ function getRules() {
   const miscNonipRules = [
     // Miscellaneous rules for non-IP addresses
     "RULE-SET,global_non_ip," + proxyName, // Use DIRECT for global non-IP addresses
-    "RULE-SET,domestic_non_ip,DIRECT", // Use DIRECT for domestic non-IP addresses
-    "RULE-SET,direct_non_ip,DIRECT", // Use DIRECT for direct non-IP addresses
   ];
   const miscIpRules = [
     "RULE-SET,domestic_ip,DIRECT", // Use DIRECT for domestic IP addresses
@@ -1512,42 +1482,9 @@ function overwriteRules(params) {
   params["rule-providers"] = rule_providers;
   params["rules"] = rules;
 }
-// Overwrite Other Rules by Rule Providers
-function updateOtherRulesByRuleProviders(params) {
-  // 默认配置
-  const skipRuleProviders = ["domestic_non_ip", "direct_non_ip", "lan_non_ip", "private_domain"];
-  
-  // 获取params中实际存在的规则提供者
-  const availableProviders = [];
-  for (const provider of skipRuleProviders) {
-    if (provider in params["rule-providers"]) {
-      availableProviders.push(provider);
-    }
-  }
-  
-  // 如果没有可用的规则提供者，则直接返回
-  if (availableProviders.length === 0) {
-    return;
-  }
-  
-  // 构建规则集引用字符串
-  const ruleSetRef = `rule-set:${availableProviders.join(',')}`;
-  
-  // 更新sniffer.skip-domain配置
-  params["sniffer"]["skip-domain"] = [
-    ruleSetRef,
-    ...params["sniffer"]["skip-domain"]
-  ];
-  // 更新dns.fake-ip-filter配置
-  params["dns"]["fake-ip-filter"] = [
-    ruleSetRef,
-    ...params["dns"]["fake-ip-filter"]
-  ];
-}
 
 function overwtiteRulesOptions(params) {
   overwriteRules(params); // Overwrite rules and rule providers
-  updateOtherRulesByRuleProviders(params); // Update other rules based on rule providers
 }
 
 // ==============================================================================
