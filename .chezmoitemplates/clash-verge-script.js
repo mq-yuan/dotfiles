@@ -594,76 +594,25 @@ function overwriteDNSOptions(params) {
 function getRuleProviders() {
   // Reject Rules
   const reject_rules = {
-    reject_non_ip_no_drop: {
-      type: "http",
-      behavior: "classical",
-      url: "https://ruleset.skk.moe/Clash/non_ip/reject-no-drop.txt",
-      interval: 43200,
-      format: "text",
-      proxy: proxyName,
-      path: "./sukkaw_ruleset/reject_non_ip_no_drop.txt", 
-    },
-    reject_non_ip_drop: {
-      type: "http",
-      behavior: "classical",
-      url: "https://ruleset.skk.moe/Clash/non_ip/reject-drop.txt",
-      interval: 43200,
-      format: "text",
-      proxy: proxyName,
-      path: "./sukkaw_ruleset/reject_non_ip_drop.txt", 
-    },
-    reject_non_ip: {
-      type: "http",
-      behavior: "classical",
-      url: "https://ruleset.skk.moe/Clash/non_ip/reject.txt",
-      interval: 43200,
-      format: "text",
-      proxy: proxyName,
-      path: "./sukkaw_ruleset/reject_non_ip.txt", 
-    },
-    reject_domainset: {
-      type: "http",
-      behavior: "domain",
-      url: "https://ruleset.skk.moe/Clash/domainset/reject.txt",
-      interval: 43200,
-      format: "text",
-      proxy: proxyName,
-      path: "./sukkaw_ruleset/reject_domainset.txt", 
-    },
-    reject_ip: {
-      type: "http",
-      behavior: "classical",
-      url: "https://ruleset.skk.moe/Clash/ip/reject.txt",
-      interval: 43200,
-      format: "text",
-      proxy: proxyName,
-      path: "./sukkaw_ruleset/reject_ip.txt", 
-    },
     tracking_yyds: {
       type: "http",
       behavior: "domain",
       url: "https://github.com/666OS/rules/raw/refs/heads/release/mihomo/domain/Tracking.mrs",
-      interval: 86400,
       format: "mrs",
-      proxy: proxyName, 
       path: "./yyds/tracking.mrs"
     },
     advertising_yyds: {
       type: "http",
       behavior: "domain",
       url: "https://github.com/666OS/rules/raw/refs/heads/release/mihomo/domain/Advertising.mrs",
-      interval: 86400,
       format: "mrs",
-      proxy: proxyName, 
       path: "./yyds/advertising.mrs"
     },
     advertising_yyds_ip: {
       type: "http",
       behavior: "ipcidr",
       url: "https://github.com/666OS/rules/raw/refs/heads/release/mihomo/ip/Advertising.mrs",
-      interval: 86400,
       format: "mrs",
-      proxy: proxyName, 
       path: "./yyds/advertising_ip.mrs"
     },
   };
@@ -674,17 +623,13 @@ function getRuleProviders() {
       type: "http",
       behavior: "domain",
       url: "https://ruleset.skk.moe/Clash/domainset/cdn.txt",
-      interval: 43200,
       format: "text",
-      proxy: proxyName,
     },
     cdn_non_ip: {
       type: "http",
       behavior: "domain",
       url: "https://ruleset.skk.moe/Clash/non_ip/cdn.txt",
-      interval: 43200,
       format: "text",
-      proxy: proxyName,
     },
   };
 
@@ -694,125 +639,78 @@ function getRuleProviders() {
       type: "http",
       behavior: "domain",
       url: "https://github.com/666OS/rules/raw/refs/heads/release/mihomo/domain/Speedtest.mrs",
-      interval: 43200,
       format: "mrs",
-      proxy: proxyName,
       path: "./yyds/speedtest.txt", 
     },
   };
 
   // stream
   const stream_rules = {
-    stream_non_ip: {
-      type: "http",
-      behavior: "classical",
-      url: "https://ruleset.skk.moe/Clash/non_ip/stream.txt",
-      interval: 43200,
-      format: "text",
-      proxy: proxyName,
-      path: "./sukkaw_ruleset/stream_non_ip.txt"
-    },
-    stream_ip: {
-      type: "http",
-      behavior: "classical",
-      url: "https://ruleset.skk.moe/Clash/ip/stream.txt",
-      interval: 43200,
-      format: "text",
-      proxy: proxyName,
-      path: "./sukkaw_ruleset/stream_ip.txt"
-    },
     youtube_yyds: {
       type: "http",
       behavior: "domain",
       url: "https://github.com/666OS/rules/raw/refs/heads/release/mihomo/domain/YouTube.mrs",
-      interval: 86400,
       format: "mrs",
-      proxy: proxyName,
       path: "./yyds/youtube.mrs"
     },
     spotify_yyds: {
       type: "http",
       behavior: "domain",
       url: "https://github.com/666OS/rules/raw/refs/heads/release/mihomo/domain/Spotify.mrs",
-      interval: 86400,
       format: "mrs",
-      proxy: proxyName,
       path: "./yyds/spotify.mrs"
     },
     netflix_yyds: {
       type: "http",
       behavior: "domain",
       url: "https://github.com/666OS/rules/raw/refs/heads/release/mihomo/domain/Netflix.mrs",
-      interval: 86400,
       format: "mrs",
-      proxy: proxyName, 
       path: "./yyds/netflix.mrs" 
     },
     netflix_yyds_ip: {
       type: "http",
       behavior: "ipcidr",
       url: "https://github.com/666OS/rules/raw/refs/heads/release/mihomo/ip/Netflix.mrs",
-      interval: 86400,
       format: "mrs",
-      proxy: proxyName,
       path: "./yyds/netflix_ip.mrs",
     },
     disney_yyds: {
       type: "http",
       behavior: "domain",
       url: "https://github.com/666OS/rules/raw/refs/heads/release/mihomo/domain/Disney.mrs",
-      interval: 86400,
       format: "mrs",
-      proxy: proxyName,
       path: "./yyds/disney.mrs"
     },
     streaming_yyds: {
       type: "http",
       behavior: "domain",
       url: "https://github.com/666OS/rules/raw/refs/heads/release/mihomo/domain/Streaming.mrs",
-      interval: 86400,
       format: "mrs",
-      proxy: proxyName,
       path: "./yyds/streaming.mrs"
     },
     streaming_yyds_ip: {
       type: "http",
       behavior: "ipcidr",
       url: "https://github.com/666OS/rules/raw/refs/heads/release/mihomo/ip/Streaming.mrs",
-      interval: 86400,
       format: "mrs",
-      proxy: proxyName,
       path: "./yyds/streaming_ip.mrs"
     },
   };
 
   // ai
   const ai_rules = {
-    ai_non_ip: {
-      type: "http",
-      behavior: "classical",
-      url: "https://ruleset.skk.moe/Clash/non_ip/ai.txt",
-      interval: 43200,
-      format: "text",
-      proxy: proxyName,
-      path: "./sukkaw_ruleset/ai_non_ip.txt" 
-    },
     ai_yyds: {
       type: "http",
       behavior: "domain",
       url: "https://github.com/666OS/rules/raw/refs/heads/release/mihomo/domain/AI.mrs",
-      interval: 86400,
       format: "mrs",
-      proxy: proxyName, 
       path: "./yyds/ai.mrs"
     },
     ai_ip_yyds: {
       type: "http",
       behavior: "ipcidr",
       url: "https://github.com/666OS/rules/raw/refs/heads/release/mihomo/ip/AI.mrs",
-      interval: 86400,
       format: "mrs",
-      proxy: proxyName, 
       path: "./yyds/ai_ip.mrs"
     },
   };
@@ -823,38 +721,16 @@ function getRuleProviders() {
       type: "http",
       behavior: "domain",
       url: "https://github.com/666OS/rules/raw/refs/heads/release/mihomo/domain/Telegram.mrs",
-      interval: 86400,
       format: "mrs",
-      proxy: proxyName,
       path: "./yyds/telegram.mrs"
     },
     telegram_yyds_ip: {
       type: "http",
       behavior: "ipcidr",
       url: "https://github.com/666OS/rules/raw/refs/heads/release/mihomo/ip/Telegram.mrs",
-      interval: 86400,
       format: "mrs",
-      proxy: proxyName,
       path: "./yyds/telegram_ip.mrs"
     },
-    telegram_non_ip: {
-      type: "http",
-      behavior: "classical",
-      url: "https://ruleset.skk.moe/Clash/non_ip/telegram.txt",
-      interval: 43200,
-      format: "text",
-      proxy: proxyName,
-      path: "./sukkaw_ruleset/telegram_non_ip.txt"
-    },
-    telegram_ip: {
-      type: "http",
-      behavior: "classical",
-      url: "https://ruleset.skk.moe/Clash/ip/telegram.txt",
-      interval: 43200,
-      format: "text",
-      proxy: proxyName,
-      path: "./sukkaw_ruleset/telegram_ip.txt"
-    }
   };
 
   // apple
@@ -863,47 +739,23 @@ function getRuleProviders() {
       type: "http",
       behavior: "domain",
       url: "https://github.com/666OS/rules/raw/refs/heads/release/mihomo/domain/AppleCN.mrs",
-      interval: 86400,
       format: "mrs",
-      proxy: proxyName,
       path: "./yyds/apple_cn.mrs"
     },
     apple_yyds: {
       type: "http",
       behavior: "domain",
       url: "https://github.com/666OS/rules/raw/refs/heads/release/mihomo/domain/Apple.mrs",
-      interval: 86400,
       format: "mrs",
-      proxy: proxyName,
       path: "./yyds/apple.mrs"
     },
     apple_cdn: {
       type: "http",
       behavior: "domain",
       url: "https://ruleset.skk.moe/Clash/domainset/apple_cdn.txt",
-      interval: 43200,
       format: "text",
-      proxy: proxyName,
       path: "./sukkaw_ruleset/apple_cdn.txt"
     },
-    apple_services: {
-      type: "http",
-      behavior: "classical",
-      url: "https://ruleset.skk.moe/Clash/non_ip/apple_services.txt",
-      interval: 43200,
-      format: "text",
-      proxy: proxyName,
-      path: "./sukkaw_ruleset/apple_services.txt"
-    },
-    apple_cn_non_ip: {
-      type: "http",
-      behavior: "classical",
-      url: "https://ruleset.skk.moe/Clash/non_ip/apple_cn.txt",
-      interval: 43200,
-      format: "text",
-      proxy: proxyName,
-      path: "./sukkaw_ruleset/apple_cn_non_ip.txt"
-    }
   };
 
   // microsoft
@@ -912,67 +764,32 @@ function getRuleProviders() {
       type: "http",
       behavior: "classical",
       url: "https://ruleset.skk.moe/Clash/non_ip/microsoft_cdn.txt",
-      interval: 43200,
       format: "text",
-      proxy: proxyName,
       path: "./sukkaw_ruleset/microsoft_cdn_non_ip.txt"
-    },
-    microsoft_non_ip: {
-      type: "http",
-      behavior: "classical",
-      url: "https://ruleset.skk.moe/Clash/non_ip/microsoft.txt",
-      interval: 43200,
-      format: "text",
-      proxy: proxyName,
-      path: "./sukkaw_ruleset/microsoft_non_ip.txt"
     },
     onedrive_yyds: {
       type: "http",
       behavior: "domain",
       url: "https://github.com/666OS/rules/raw/refs/heads/release/mihomo/domain/OneDrive.mrs",
-      interval: 86400,
       format: "mrs",
-      proxy: proxyName,
       path: "./yyds/onedrive.mrs"
     },
     microsoft_yyds: {
       type: "http",
       behavior: "domain",
       url: "https://github.com/666OS/rules/raw/refs/heads/release/mihomo/domain/Microsoft.mrs",
-      interval: 86400,
       format: "mrs",
-      proxy: proxyName,
       path: "./yyds/microsoft.mrs"
     },
   };
 
   // download
   const download_rules = {
-    download_domainset: {
-      type: "http",
-      behavior: "domain",
-      url: "https://ruleset.skk.moe/Clash/domainset/download.txt",
-      interval: 43200,
-      format: "text",
-      proxy: proxyName,
-      path: "./sukkaw_ruleset/download_domainset.txt", 
-    },
-    download_non_ip: {
-      type: "http",
-      behavior: "classical",
-      url: "https://ruleset.skk.moe/Clash/non_ip/download.txt",
-      interval: 43200,
-      format: "text",
-      proxy: proxyName,
-      path: "./sukkaw_ruleset/download_non_ip.txt", 
-    },
     download_yyds: {
       type: "http",
       behavior: "domain",
       url: "https://github.com/666OS/rules/raw/refs/heads/release/mihomo/domain/Download.mrs",
-      interval: 43200,
       format: "mrs",
-      proxy: proxyName,
       path: "./yyds/download_domainset.mrs", 
     },
   };
@@ -983,52 +800,23 @@ function getRuleProviders() {
       type: "http",
       behavior: "domain",
       url: "https://github.com/666OS/rules/raw/refs/heads/release/mihomo/domain/Private.mrs",
-      interval: 86400,
       format: "mrs",
-      proxy: proxyName,
       path: "./yyds/private.mrs"
     },
     lan_ip: {
       type: "http",
       behavior: "classical",
       url: "https://ruleset.skk.moe/Clash/ip/lan.txt",
-      interval: 43200,
       format: "text",
-      proxy: proxyName,
       path: "./sukkaw_ruleset/lan_ip.txt"
     },
     private_yyds_ip: {
       type: "http",
       behavior: "ipcidr",
       url: "https://github.com/666OS/rules/raw/refs/heads/release/mihomo/ip/Private.mrs",
-      interval: 86400,
       format: "mrs",
-      proxy: proxyName,
       path: "./yyds/private_ip.mrs"
     },
-  };
-
-  // misc
-  const misc_rules = {
-    global_non_ip: {
-      type: "http",
-      behavior: "classical",
-      url: "https://ruleset.skk.moe/Clash/non_ip/global.txt",
-      interval: 43200,
-      format: "text",
-      proxy: proxyName,
-      path: "./sukkaw_ruleset/global_non_ip.txt"
-    },
-    domestic_ip: {
-      type: "http",
-      behavior: "classical",
-      url: "https://ruleset.skk.moe/Clash/ip/domestic.txt",
-      interval: 43200,
-      format: "text",
-      proxy: proxyName,
-      path: "./sukkaw_ruleset/domestic_ip.txt"
-    },
-
   };
 
   // China router
@@ -1037,28 +825,15 @@ function getRuleProviders() {
       type: "http",
       behavior: "domain",
       url: "https://github.com/666OS/rules/raw/refs/heads/release/mihomo/domain/China.mrs",
-      interval: 86400,
       format: "mrs",
-      proxy: proxyName,
       path: "./yyds/china.mrs",
     },
     china_yyds_ip: {
       type: "http",
       behavior: "ipcidr",
       url: "https://github.com/666OS/rules/raw/refs/heads/release/mihomo/ip/China.mrs",
-      interval: 86400,
       format: "mrs",
-      proxy: proxyName,
       path: "./yyds/china_ip.mrs",
-    },
-    china_ip: {
-      type: "http",
-      behavior: "ipcidr",
-      format: "text",
-      interval: 43200,
-      url: "https://ruleset.skk.moe/Clash/ip/china_ip.txt",
-      proxy: proxyName,
-      path: "./sukkaw_ruleset/china_ip.txt"
     },
   };
 
@@ -1068,101 +843,106 @@ function getRuleProviders() {
       type: "http",
       behavior: "domain",
       url: "https://github.com/666OS/rules/raw/refs/heads/release/mihomo/domain/Twitter.mrs",
-      interval: 86400,
       format: "mrs",
-      proxy: proxyName,
       path: "./yyds/twitter.mrs",
     },
     instagram_yyds: {
       type: "http",
       behavior: "domain",
       url: "https://github.com/666OS/rules/raw/refs/heads/release/mihomo/domain/Instagram.mrs",
-      interval: 86400,
       format: "mrs",
-      proxy: proxyName,
       path: "./yyds/instagram.mrs",
     },
     tiktok_yyds: {
       type: "http",
       behavior: "domain",
       url: "https://github.com/666OS/rules/raw/refs/heads/release/mihomo/domain/TikTok.mrs",
-      interval: 86400,
       format: "mrs",
-      proxy: proxyName,
       path: "./yyds/tiktok.mrs",
     },
     github_yyds: {
       type: "http",
       behavior: "domain",
       url: "https://github.com/666OS/rules/raw/refs/heads/release/mihomo/domain/GitHub.mrs",
-      interval: 86400,
       format: "mrs",
-      proxy: proxyName,
       path: "./yyds/github.mrs",
     },
     facebook_yyds: {
       type: "http",
       behavior: "domain",
       url: "https://github.com/666OS/rules/raw/refs/heads/release/mihomo/domain/Facebook.mrs",
-      interval: 86400,
       format: "mrs",
-      proxy: proxyName,
       path: "./yyds/facebook.mrs",
     },
     google_yyds: {
       type: "http",
       behavior: "domain",
       url: "https://github.com/666OS/rules/raw/refs/heads/release/mihomo/domain/Google.mrs",
-      interval: 86400,
       format: "mrs",
-      proxy: proxyName,
       path: "./yyds/google.mrs",
     },
     paypal_yyds: {
       type: "http",
       behavior: "domain",
       url: "https://github.com/666OS/rules/raw/refs/heads/release/mihomo/domain/PayPal.mrs",
-      interval: 86400,
       format: "mrs",
-      proxy: proxyName,
       path: "./yyds/paypal.mrs",
     },
     cloudflare_yyds: {
       type: "http",
       behavior: "domain",
       url: "https://github.com/666OS/rules/raw/refs/heads/release/mihomo/domain/Cloudflare.mrs",
-      interval: 86400,
       format: "mrs",
-      proxy: proxyName,
       path: "./yyds/cloudflare.mrs",
     },
     facebook_yyds_ip: {
       type: "http",
       behavior: "ipcidr",
       url: "https://github.com/666OS/rules/raw/refs/heads/release/mihomo/ip/Facebook.mrs",
-      interval: 86400,
       format: "mrs",
-      proxy: proxyName,
       path: "./yyds/facebook_ip.mrs",
     },
     google_yyds_ip: {
       type: "http",
       behavior: "ipcidr",
       url: "https://github.com/666OS/rules/raw/refs/heads/release/mihomo/ip/Google.mrs",
-      interval: 86400,
       format: "mrs",
-      proxy: proxyName,
       path: "./yyds/google_ip.mrs",
     },
     socialmedia_yyds_ip: {
       type: "http",
       behavior: "ipcidr",
       url: "https://github.com/666OS/rules/raw/refs/heads/release/mihomo/ip/SocialMedia.mrs",
-      interval: 86400,
       format: "mrs",
-      proxy: proxyName,
       path: "./yyds/socialmedia_ip.mrs",
     }
+  };
+
+  const direct_rules = {
+    direct_yyds: {
+      type: "http",
+      behavior: "domain",
+      url: "https://github.com/666OS/rules/raw/refs/heads/release/mihomo/domain/Direct.mrs",
+      format: "mrs",
+      path: "./yyds/Direct.mrs",
+    },
+  };
+
+  const proxy_rules = {
+    proxy_yyds: {
+      type: "http",
+      behavior: "domain",
+      url: "https://github.com/666OS/rules/raw/refs/heads/release/mihomo/domain/Proxy.mrs",
+      format: "mrs",
+      path: "./yyds/proxy.mrs",
+    },
+    proxy_yyds_ip: {
+      type: "http",
+      behavior: "domain",
+      url: "https://github.com/666OS/rules/raw/refs/heads/release/mihomo/ip/Proxy.mrs",
+      format: "mrs",
+      path: "./yyds/proxy_ip.mrs",
+    },
   };
 
   // Combine all rules into a single object
@@ -1179,9 +959,10 @@ function getRuleProviders() {
     microsoft_rules,
     download_rules,
     private_rules,
-    misc_rules,
     china_router_rules,
     global_app_rules,
+    direct_rules,
+    proxy_rules,
   );
   // Update rule_providers to use proxyName for all entries
   Object.keys(rule_providers).forEach((key) => {
@@ -1202,8 +983,7 @@ function getRules() {
     },
     School: {
       rules: [
-        "DOMAIN-SUFFIX,tju.edu.cn",
-        "DOMAIN-SUFFIX,nju.edu.cn",
+        "DOMAIN-SUFFIX,*.edu.cn",
       ],
       action: "DIRECT",
     },
@@ -1230,15 +1010,12 @@ function getRules() {
     },
     AIGC: {
       rules: [
-        "DOMAIN,x.ai",
-        "DOMAIN,grok.com",
-        "DOMAIN,assets.grok.com",
       ],
       action: "AIGC",
     },
     Proxy: {
       rules: [
-        "PROCESS-NAME,aria2c.exe",
+        // "PROCESS-NAME,aria2c.exe",
         "DOMAIN,app.follow.is",
         "DOMAIN,openpanel.follow.is",
         "DOMAIN-KEYWORD,potpieai",
@@ -1295,15 +1072,10 @@ function getRules() {
 
   // reject rules
   const adNonipRules = [
-    "RULE-SET,reject_non_ip,Advertising",
-    "RULE-SET,reject_domainset,Advertising",
-    "RULE-SET,reject_non_ip_drop,Advertising",
-    "RULE-SET,reject_non_ip_no_drop,Advertising",
     "RULE-SET,tracking_yyds,Advertising",
     "RULE-SET,advertising_yyds,Advertising",
   ];
   const adipRules = [
-    "RULE-SET,reject_ip,Advertising", // Reject IP addresses
     "RULE-SET,advertising_yyds_ip,Advertising", // Reject IP addresses
   ];
 
@@ -1327,20 +1099,17 @@ function getRules() {
     "RULE-SET,netflix_yyds,Netflix",
     "RULE-SET,disney_yyds,Disney",
     "RULE-SET,streaming_yyds,Stream",
-    "RULE-SET,stream_non_ip,Stream",
   ];
   const streamIpRules = [
     // Stream rules for IP addresses
     "RULE-SET,netflix_yyds_ip,Netflix",
     "RULE-SET,streaming_yyds_ip,Stream", // Use the proxy for IP stream rules
-    "RULE-SET,stream_ip,Stream", // Use the proxy for IP stream rules
   ];
 
   // ai
   const aiNonipRules = [
     // AI rules for non-IP addresses
     "RULE-SET,ai_yyds,AIGC",
-    "RULE-SET,ai_non_ip,AIGC",
   ];
   const aiIpRules = [
     // ai rules for IP addresses
@@ -1351,11 +1120,9 @@ function getRules() {
   const telegramNonipRules = [
     // Telegram rules for non-IP addresses
     "RULE-SET,telegram_yyds,Telegram", // Use Telegram for domain-based rules
-    "RULE-SET,telegram_non_ip,Telegram", // Use Telegram for non-IP rules
   ];
   const telegramIpRules = [
     // Telegram rules for IP addresses
-    "RULE-SET,telegram_ip,Telegram", // Use Telegram for IP-based rules
     "RULE-SET,telegram_yyds_ip,Telegram", // Use Telegram for IP-based rules
     // Note: This rule should be used to handle Telegram IP addresses
   ];
@@ -1364,10 +1131,8 @@ function getRules() {
   const appleNonipRules = [
     // Apple rules for non-IP addresses
     "RULE-SET,apple_cdn,CDN", // Use the proxy for Apple CDN domains
-    "RULE-SET,apple_services,Apple", // Use the proxy for Apple services
     "RULE-SET,apple_yyds,Apple", // Use Apple for other Apple domains
     "RULE-SET,apple_cn_yyds,DIRECT", // Use DIRECT for apple-cn
-    "RULE-SET,apple_cn_non_ip,DIRECT", // Use DIRECT for apple-cn non-IP
   ];
 
   // microsoft rules
@@ -1375,15 +1140,12 @@ function getRules() {
     "RULE-SET,onedrive_yyds,OneDrive", // Use Microsoft for OneDrive
     "RULE-SET,microsoft_yyds,Microsoft", // Use Microsoft for other Microsoft domains
     "RULE-SET,microsoft_cdn_non_ip,CDN", // Use the proxy for Microsoft CDN domains
-    "RULE-SET,microsoft_non_ip,Microsoft", // Use the proxy for non-IP Microsoft domains
   ];
 
   // download rules
   const downloadNonipRules = [
     // Download rules for non-IP addresses
     "RULE-SET,download_yyds,ProxyDownload", // Use the proxy for download domain sets
-    "RULE-SET,download_domainset,ProxyDownload", // Use the proxy for download domain sets
-    "RULE-SET,download_non_ip,ProxyDownload", // Use the proxy for non-IP download rules
   ];
 
   // private rules
@@ -1396,15 +1158,6 @@ function getRules() {
     "RULE-SET,private_yyds_ip,DIRECT", // Use DIRECT for private IP addresses
   ];
 
-  // misc rules
-  const miscNonipRules = [
-    // Miscellaneous rules for non-IP addresses
-    "RULE-SET,global_non_ip," + proxyName, // Use DIRECT for global non-IP addresses
-  ];
-  const miscIpRules = [
-    "RULE-SET,domestic_ip,DIRECT", // Use DIRECT for domestic IP addresses
-  ];
-
   // china router rules
   const chinaNonipRules = [
     // china rules for non-IP addresses
@@ -1412,7 +1165,6 @@ function getRules() {
   ];
   const chinaRouterIpRules = [
     // China router rules for non-IP addresses
-    "RULE-SET,china_ip,DIRECT", // Use DIRECT for China IP addresses
     "RULE-SET,china_yyds_ip,DIRECT", // Use DIRECT for China IP addresses
   ];
 
@@ -1435,6 +1187,22 @@ function getRules() {
     "RULE-SET,socialmedia_yyds_ip,Twitter", // Use Telegram for Twitter IP
   ];
 
+  // direct
+  const directNonipRules = [
+    // Direct rules for non-IP addresses
+    "RULE-SET,direct_yyds,DIRECT",
+  ];
+
+  // proxy
+  const proxyNonipRules = [
+    // Proxy rules for non-IP addresses
+    "RULE-SET,proxy_yyds," + proxyName,
+  ];
+  const proxyIpRules = [
+    // Proxy rules for IP addresses
+    "RULE-SET,proxy_yyds_ip," + proxyName,
+  ];
+
   const nonipRules = [
     ...adNonipRules,
     ...customRules,
@@ -1447,8 +1215,9 @@ function getRules() {
     ...microsoftNonipRules,
     ...telegramNonipRules,
     ...globalAppNonipRules,
-    ...miscNonipRules,
     ...privateNonipRules,
+    ...directNonipRules,
+    ...proxyNonipRules,
   ];
 
   const ipRules = [
@@ -1456,9 +1225,9 @@ function getRules() {
     ...streamIpRules,
     ...telegramIpRules,
     ...globalAppIpRules,
-    ...miscIpRules,
     ...chinaRouterIpRules,
     ...privateIpRules,
+    ...proxyIpRules,
   ];
 
   const rules = [
@@ -1483,8 +1252,43 @@ function overwriteRules(params) {
   params["rules"] = rules;
 }
 
+// Overwrite Other Rules by Rule Providers
+function updateOtherRulesByRuleProviders(params) {
+  // 默认配置
+  const skipRuleProviders = ["domestic_non_ip", "direct_non_ip", "lan_non_ip", "private_domain"];
+  
+  // 获取params中实际存在的规则提供者
+  const availableProviders = [];
+  for (const provider of skipRuleProviders) {
+    if (provider in params["rule-providers"]) {
+      availableProviders.push(provider);
+    }
+  }
+  
+  // 如果没有可用的规则提供者，则直接返回
+  if (availableProviders.length === 0) {
+    return;
+  }
+  
+  // 构建规则集引用字符串
+  const ruleSetRef = `rule-set:${availableProviders.join(',')}`;
+  
+  // 更新sniffer.skip-domain配置
+  params["sniffer"]["skip-domain"] = [
+    ruleSetRef,
+    ...params["sniffer"]["skip-domain"]
+  ];
+  // 更新dns.fake-ip-filter配置
+  params["dns"]["fake-ip-filter"] = [
+    ruleSetRef,
+    ...params["dns"]["fake-ip-filter"]
+  ];
+}
+
+
 function overwtiteRulesOptions(params) {
   overwriteRules(params); // Overwrite rules and rule providers
+  updateOtherRulesByRuleProviders(params);
 }
 
 // ==============================================================================
