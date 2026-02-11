@@ -1,0 +1,5 @@
+AI-DOCS-TEMPLATE-PROFILE: ai-docs-v1
+AI-DOCS-TEMPLATE-SOURCE: ai-docs-bootstrap
+AI-DOCS-TEMPLATE-BASE: generic-template
+AI-DOCS-TEMPLATE-RECORDED-AT: YYYY-MM-DDTHH:MM:SSZ
+AI-DOCS-TEMPLATE-NOTES: replace placeholders during bootstrap

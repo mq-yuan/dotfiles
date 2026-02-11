@@ -1,0 +1,4 @@
+interface:
+  display_name: "AI Docs Map Updater"
+  short_description: "Incrementally update ai-docs map with template checks"
+  default_prompt: "Use $ai-docs-map-updater to incrementally update ai-docs/map from baseline diffs while enforcing map template consistency."
