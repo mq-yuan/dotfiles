@@ -51,6 +51,7 @@ select = [
     "SIM",    # Flake8-simplify (Code simplification hints)
     "ARG",    # flake8-unused-arguments
     "RUF059", # RUF059 the presence of unused variables in unpacked assignments.
+    "I",      # isort (auto orgnise and sort imports )
 ]
 
 # 3. Global Ignores

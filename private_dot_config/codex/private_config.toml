@@ -1,4 +1,4 @@
-model = "gpt-5.3-codex"
+model = "gpt-5.4"
 model_reasoning_effort = "xhigh"
 personality = "pragmatic"
 [projects."/home/ymq/Projects/Gaussian2MSI"]
@@ -13,9 +13,13 @@ trust_level = "trusted"
 [projects."/home/ymq/Projects/FeedForward-GS"]
 trust_level = "trusted"
 
+[projects."/home/ymq/Projects/ml-sharp"]
+trust_level = "trusted"
+
 [notice]
 hide_gpt5_1_migration_prompt = true
 "hide_gpt-5.1-codex-max_migration_prompt" = true
 
 [notice.model_migrations]
 "gpt-5.1-codex-max" = "gpt-5.2-codex"
+"gpt-5.3-codex" = "gpt-5.4"
