@@ -76,6 +76,7 @@ return {
 
         -- setting a mapping to false will disable it
         -- ["<C-S>"] = false,
+        ["<Leader>gg"] = false,
       },
       v = {
         -- setting clipboard
