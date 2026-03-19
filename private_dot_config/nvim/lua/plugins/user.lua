@@ -8,12 +8,12 @@ return {
 
   -- outline
   {
-    'stevearc/aerial.nvim',
+    "stevearc/aerial.nvim",
     opts = {},
     -- Optional dependencies
     dependencies = {
       "nvim-treesitter/nvim-treesitter",
-      "nvim-tree/nvim-web-devicons"
+      "nvim-tree/nvim-web-devicons",
     },
   },
 
@@ -32,16 +32,54 @@ return {
     dependencies = {
       "nvim-lua/plenary.nvim",
     },
+    -- init for floating window setting
+    init = function()
+      vim.g.lazygit_floating_window_scaling_factor = 1.0
+      vim.g.lazygit_floating_window_use_plenary = 1
+    end,
+    -- LazyGit and focus current file
+    keys = {
+      {
+        "<leader>gg",
+        "<cmd>LazyGit<CR>",
+        desc = "ToggleTerm lazygit",
+      },
+      {
+        "<leader>gf",
+        function()
+          local file = vim.fn.expand("%:t") -- relative path "%:.", file "%:t" / "%:t:r"
+          vim.cmd("LazyGit")
+
+          vim.defer_fn(function()
+            local buf = vim.api.nvim_get_current_buf()
+            local channel = vim.bo[buf].channel
+
+            if file == "" or not channel or channel <= 0 then
+              return
+            end
+
+            vim.fn.chansend(channel, "/" .. file .. "\n")
+          end, 100)
+        end,
+        desc = "LazyGit and focus current file",
+      },
+    },
+    -- set floating window
+    config = function()
+      vim.g.lazygit_floating_window_scaling_factor = 1.0
+    end,
   },
 
   -- golf
-  { 'vuciv/golf' },
+  { "vuciv/golf" },
 
-  -- typst-preview.nvim for preview 
+  -- typst-preview.nvim for preview
   {
     "chomosuke/typst-preview.nvim",
     cmd = { "TypstPreview", "TypstPreviewToggle", "TypstPreviewUpdate" },
-    build = function() require("typst-preview").update() end,
+    build = function()
+      require("typst-preview").update()
+    end,
     opts = {
       dependencies_bin = {
         tinymist = "tinymist",
@@ -51,7 +89,7 @@ return {
   -- typst.vim for syntax
   {
     "kaarmu/typst.vim",
-    ft = { "typst" }
+    ft = { "typst" },
   },
 
   -- yazi
@@ -62,7 +100,7 @@ return {
     dependencies = {
       -- check the installation instructions at
       -- https://github.com/folke/snacks.nvim
-      "folke/snacks.nvim"
+      "folke/snacks.nvim",
     },
     keys = {
       -- 👇 in this section, choose your own keymappings!
@@ -107,7 +145,9 @@ return {
   {
     "ray-x/lsp_signature.nvim",
     event = "BufRead",
-    config = function() require("lsp_signature").setup() end,
+    config = function()
+      require("lsp_signature").setup()
+    end,
   },
 
   -- == Examples of Overriding Plugins ==
@@ -156,26 +196,26 @@ return {
   {
     "windwp/nvim-autopairs",
     config = function(plugin, opts)
-      require "astronvim.plugins.configs.nvim-autopairs"(plugin, opts) -- include the default astronvim config that calls the setup call
+      require("astronvim.plugins.configs.nvim-autopairs")(plugin, opts) -- include the default astronvim config that calls the setup call
       -- add more custom autopairs configuration such as custom rules
-      local npairs = require "nvim-autopairs"
-      local Rule = require "nvim-autopairs.rule"
-      local cond = require "nvim-autopairs.conds"
+      local npairs = require("nvim-autopairs")
+      local Rule = require("nvim-autopairs.rule")
+      local cond = require("nvim-autopairs.conds")
       npairs.add_rules(
         {
           Rule("$", "$", { "tex", "latex" })
-            -- don't add a pair if the next character is %
-            :with_pair(cond.not_after_regex "%%")
-            -- don't add a pair if  the previous character is xxx
-            :with_pair(
-              cond.not_before_regex("xxx", 3)
-            )
-            -- don't move right when repeat character
-            :with_move(cond.none())
-            -- don't delete if the next character is xx
-            :with_del(cond.not_after_regex "xx")
-            -- disable adding a newline when you press <cr>
-            :with_cr(cond.none()),
+          -- don't add a pair if the next character is %
+              :with_pair(cond.not_after_regex("%%"))
+          -- don't add a pair if  the previous character is xxx
+              :with_pair(
+                cond.not_before_regex("xxx", 3)
+              )
+          -- don't move right when repeat character
+              :with_move(cond.none())
+          -- don't delete if the next character is xx
+              :with_del(cond.not_after_regex("xx"))
+          -- disable adding a newline when you press <cr>
+              :with_cr(cond.none()),
         },
         -- disable for .vim files, but it work for another filetypes
         Rule("a", "a", "-vim")
@@ -185,7 +225,6 @@ return {
 
   {
     "lukas-reineke/indent-blankline.nvim",
-    enabled = false
+    enabled = false,
   },
-
 }
