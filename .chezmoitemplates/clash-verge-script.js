@@ -1206,10 +1206,10 @@ function getRules() {
   const nonipRules = [
     ...adNonipRules,
     ...customRules,
+    ...aiNonipRules,
     ...cdnNonipRules,
     ...speedtestNonipRules,
     ...downloadNonipRules,
-    ...aiNonipRules,
     ...streamNonipRules,
     ...appleNonipRules,
     ...microsoftNonipRules,
@@ -1222,6 +1222,7 @@ function getRules() {
 
   const ipRules = [
     ...adipRules,
+    ...aiIpRules,
     ...streamIpRules,
     ...telegramIpRules,
     ...globalAppIpRules,
