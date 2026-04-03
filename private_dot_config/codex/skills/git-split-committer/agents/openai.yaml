@@ -1,0 +1,4 @@
+interface:
+  display_name: "Git Split Committer"
+  short_description: "Split staged work into atomic commits safely"
+  default_prompt: "Use $git-split-committer to analyze staged changes, split mixed work into atomic commits, and execute the commits safely."
