@@ -7,6 +7,8 @@
 ***	info	60
 ***	info	56
 #第一列的文本支持格式化：换行:\n, 制表符：\t, 回车符：\r, 空格：\s
+
+# name
 ***	ycyc	64
 ***	yy	64
 ***	yrmgqi	64
@@ -14,6 +16,12 @@
 ***	tsxbyu	64
 ***	txy	64
 ***	tszi	64
+***    xnrv    64
+***    rvjp    64
+
+# other
+GS      gs      50
+纪要    jiyc    50
 实验	uiyj	50
 几何	jihe	50
 几何重建	jiheisjm	50
