@@ -938,7 +938,7 @@ function getRuleProviders() {
     },
     proxy_yyds_ip: {
       type: "http",
-      behavior: "domain",
+      behavior: "ip",
       url: "https://github.com/666OS/rules/raw/refs/heads/release/mihomo/ip/Proxy.mrs",
       format: "mrs",
       path: "./yyds/proxy_ip.mrs",
