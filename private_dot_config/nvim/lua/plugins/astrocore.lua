@@ -1,3 +1,5 @@
+if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
+
 -- AstroCore provides a central place to modify mappings, vim options, autocommands, and more!
 -- Configuration documentation can be found with `:h astrocore`
 -- NOTE: We highly recommend setting up the Lua Language Server (`:LspInstall lua_ls`)
@@ -22,7 +24,9 @@ return {
       virtual_text = true,
       underline = true,
     },
+    -- passed to `vim.filetype.add`
     filetypes = {
+      -- see `:h vim.filetype.add` for usage
       extension = {
         hlsl = "glsl",
         foo = "fooscript",
@@ -41,12 +45,17 @@ return {
         number = true, -- sets vim.opt.number
         spell = false, -- sets vim.opt.spell
         signcolumn = "yes", -- sets vim.opt.signcolumn to yes
-        wrap = true, -- sets vim.opt.wrap
+        wrap = false, -- sets vim.opt.wrap
 
         expandtab = true, -- sets vim.opt.expandtab: <tab> to <space>
         tabstop = 4, -- sets vim.opt.tabstop: <tab> show 4 <space>
         softtabstop = 4, -- sets vim.opt.softtabstop: <tab> show 4 <space> in insert mode
         shiftwidth = 4, -- sets vim.opt.shiftwidth: shift show 4 <sapce>
+      },
+      g = { -- vim.g.<key>
+        -- configure global vim variables (vim.g)
+        -- NOTE: `mapleader` and `maplocalleader` must be set in the AstroNvim opts or before `lazy.setup`
+        -- This can be found in the `lua/lazy_setup.lua` file
       },
     },
     -- Mappings can be configured through AstroCore as well.
@@ -80,21 +89,7 @@ return {
       },
       v = {
         -- setting clipboard
-        ["<Leader>y"] = {"+y", desc = "Copy to clipboard"},
-      }
-    },
-    -- Configuration table of session options for AstroNvim's session management powered by Resession
-    sessions = {
-      -- Configure auto saving
-      autosave = {
-        last = true, -- auto save last session
-        cwd = true, -- auto save session for each working directory
-      },
-      -- Patterns to ignore when saving sessions
-      ignore = {
-        dirs = {}, -- working directories to ignore sessions in
-        filetypes = { "gitcommit", "gitrebase" }, -- filetypes to ignore sessions
-        buftypes = {}, -- buffer types to ignore sessions
+        ["<Leader>y"] = { "+y", desc = "Copy to clipboard" },
       },
     },
   },
