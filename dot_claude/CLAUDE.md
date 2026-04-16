@@ -23,6 +23,12 @@
 - Comments must be in English.
 - Prefer `logging` over `print` for non-trivial runtime output.
 - For Hydra/OmegaConf structured configs, use `enum.StrEnum` (or `enum.Enum`) for categorical fields — avoid `typing.Literal` which causes OmegaConf validation errors.
+- **Fail-fast over silent recovery**: this is a research codebase — bugs must surface immediately, not be swallowed. Follow these rules strictly:
+  - **Do not use bare `except:` or `except Exception:`** to suppress or hide errors.
+  - **Avoid `try/except` blocks** unless you are handling a *specific*, *expected*, *recoverable* exception (e.g. `FileNotFoundError` when a missing file is a valid code path). In every such case add a comment explaining why the exception is caught and what the recovery is.
+  - **Never wrap exploratory, experimental, or diagnostic code in `try/except`**. Research code is often temporary; hidden failures make root-cause analysis impossible and create hard-to-remove technical debt.
+  - Prefer explicit assertions (`assert condition, "message"`) or direct attribute access over defensive guards that mask bugs.
+  - If cleanup is needed, use `with` statements (context managers) or `try/finally` — **not** `except` — so exceptions still propagate.
 
 
 ## Shell and Tooling
