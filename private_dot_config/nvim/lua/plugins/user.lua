@@ -53,6 +53,11 @@ return {
 
       -- include the default astronvim config that calls the setup call
       require "astronvim.plugins.configs.luasnip"(plugin, opts)
+
+      -- load custom VSCode-style snippets from ~/.config/nvim/vscode-snippets
+      require("luasnip.loaders.from_vscode").lazy_load {
+        paths = { vim.fn.stdpath "config" .. "/vscode-snippets" },
+      }
     end,
   },
 
