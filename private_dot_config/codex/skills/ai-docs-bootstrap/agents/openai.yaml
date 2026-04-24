@@ -1,4 +1,0 @@
-interface:
-  display_name: "AI Docs Bootstrap"
-  short_description: "Bootstrap ai-docs from generic templates"
-  default_prompt: "Use $ai-docs-bootstrap to create or refresh ai-docs end-to-end from generic templates with no project-specific residue."
