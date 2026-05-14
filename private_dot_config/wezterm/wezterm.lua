@@ -11,8 +11,37 @@ config.font = wezterm.font_with_fallback({
 })
 config.font_size = 11.0
 
--- Color scheme.
-config.color_scheme = "Catppuccin Mocha"
+-- Color scheme: ghostty's default dark palette (GruvboxDark), inlined so we
+-- don't depend on a particular WezTerm built-in scheme matching exactly.
+config.colors = {
+    foreground = "#ebdbb2",
+    background = "#282828",
+    cursor_bg = "#ebdbb2",
+    cursor_border = "#ebdbb2",
+    cursor_fg = "#282828",
+    selection_bg = "#ebdbb2",
+    selection_fg = "#282828",
+    ansi = {
+        "#282828", -- black
+        "#cc241d", -- red
+        "#98971a", -- green
+        "#d79921", -- yellow
+        "#458588", -- blue
+        "#b16286", -- magenta
+        "#689d6a", -- cyan
+        "#a89984", -- white
+    },
+    brights = {
+        "#928374",
+        "#fb4934",
+        "#b8bb26",
+        "#fabd2f",
+        "#83a598",
+        "#d3869b",
+        "#8ec07c",
+        "#ebdbb2",
+    },
+}
 
 -- Cursor: smooth blinking block as a built-in stand-in for ghostty's smear shader.
 config.default_cursor_style = "SteadyBlock"
