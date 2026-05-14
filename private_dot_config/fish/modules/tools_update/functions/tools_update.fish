@@ -5,12 +5,14 @@ function tools_update --description "Updates various development tools."
 
     # --- 1. Configuration & Tool Definitions ---
     # The tool list is now fetched from the helper function, establishing a Single Source of Truth.
+    # Each tool is a 6-field tuple; see __tools_update_get_list for the schema.
     set -l tools (__tools_update_get_list)
 
     # --- 2. Command-Line Argument Parsing ---
     # Provides a flexible and powerful CLI.
     set -l options (fish_opt --short=h --long=help)
     set -l options $options (fish_opt --short=a --long=all)
+    set -l options $options (fish_opt --short=A --long=aggressive)
     set -l options $options (fish_opt --short=t --long=type --required-val)
     set -l options $options (fish_opt --short=e --long=exclude --required-val --multiple-vals)
     argparse $options -- $argv
@@ -20,6 +22,11 @@ function tools_update --description "Updates various development tools."
     if set -q _flag_h
         __tools_update_print_help
         return 0
+    end
+
+    set -l aggressive_mode "no"
+    if set -q _flag_A
+        set aggressive_mode "yes"
     end
 
     # --- 3. Tool Selection Logic ---
@@ -32,12 +39,12 @@ function tools_update --description "Updates various development tools."
             while test $i -le (count $tools)
                 set -l name (string lower $tools[$i])
                 if string match -q -- "$requested_tool" "$name"
-                    # Append the 5 fields for the found tool
-                    set -a selected_tools $tools[$i] $tools[(math $i + 1)] $tools[(math $i + 2)] $tools[(math $i + 3)] $tools[(math $i + 4)]
+                    # Append the 6 fields for the found tool
+                    set -a selected_tools $tools[$i] $tools[(math $i + 1)] $tools[(math $i + 2)] $tools[(math $i + 3)] $tools[(math $i + 4)] $tools[(math $i + 5)]
                     set found true
                     break
                 end
-                set i (math $i + 5)
+                set i (math $i + 6)
             end
             if not $found
                 echo (set_color red)"Error: Tool '$requested_tool' not found."(set_color normal) >&2
@@ -61,17 +68,18 @@ function tools_update --description "Updates various development tools."
             set -l update_cmd $tools[(math $i + 2)]
             set -l type $tools[(math $i + 3)]
             set -l sudo_req $tools[(math $i + 4)]
+            set -l aggressive_cmd $tools[(math $i + 5)]
 
             if contains -- "$name" $excluded_tools
-                set i (math $i + 5)
+                set i (math $i + 6)
                 continue
             end
 
             if contains -- "$type" $included_types
-                set -a selected_tools $tools[$i] $check_cmd $update_cmd $type $sudo_req
+                set -a selected_tools $tools[$i] $check_cmd $update_cmd $type $sudo_req $aggressive_cmd
             end
-            
-            set i (math $i + 5)
+
+            set i (math $i + 6)
         end
     end
 
@@ -82,30 +90,42 @@ function tools_update --description "Updates various development tools."
 
     # --- 4. Sequential Execution Engine ---
     echo "Starting update for selected tools..."
+    if test "$aggressive_mode" = "yes"
+        echo (set_color yellow)"Aggressive mode enabled — using upstream/unstable upgrade variants where available."(set_color normal)
+    end
     echo
 
     # Use a robust `while` loop to process the list of tools.
     set -l i 1
     while test $i -le (count $selected_tools)
-        # Take the next 5 elements as the current tool
+        # Take the next 6 elements as the current tool
         set -l name $selected_tools[$i]
         set -l check_cmd $selected_tools[(math $i + 1)]
         set -l update_cmd $selected_tools[(math $i + 2)]
         set -l type $selected_tools[(math $i + 3)]
         set -l sudo_req $selected_tools[(math $i + 4)]
+        set -l aggressive_cmd $selected_tools[(math $i + 5)]
 
-        # Move to the next tool (5 elements forward)
-        set i (math $i + 5)
+        # Move to the next tool (6 elements forward)
+        set i (math $i + 6)
 
-        # Check if the command exists (either as executable or Fish function)
-        if not command -v $check_cmd >/dev/null 2>&1; and not type -q $check_cmd
+        # `type -q` covers executables, functions, builtins, and abbreviations.
+        if not type -q $check_cmd
             echo (set_color yellow)"Skipping $name (command '$check_cmd' not found)."(set_color normal)
             echo
             continue
         end
 
+        # Pick aggressive variant only when both the flag is set and a variant exists.
+        # System-level tools (APT, Snap) intentionally leave aggressive_cmd empty so
+        # `-A` never escalates them — a host-system safety boundary.
+        set -l effective_cmd $update_cmd
+        if test "$aggressive_mode" = "yes"; and test -n "$aggressive_cmd"
+            set effective_cmd $aggressive_cmd
+        end
+
         # Run the update directly (allows interactive prompts like sudo)
-        __tools_update_run_single "$name" "$update_cmd" "$sudo_req"
+        __tools_update_run_single "$name" "$effective_cmd" "$sudo_req"
         echo
     end
 
@@ -121,10 +141,11 @@ function __tools_update_run_single --argument-names name command sudo_required
     set_color green
     echo "Executing: $command"
     set_color normal
-    
-    # Directly execute the command. Fish will handle the interactive sudo prompt.
+
+    # `eval` is required because command strings contain shell operators (&&, sudo).
+    # Safe here only because the list in __tools_update_get_list is fully trusted.
     eval $command
-    
+
     set -l exit_code $status
     if test $exit_code -eq 0
         echo "Finished update for $name successfully."
@@ -147,12 +168,17 @@ function __tools_update_print_help
     echo
     echo "OPTIONS:"
     echo "  -a, --all                Update all defined tools, including system tools."
+    echo "  -A, --aggressive         Use upstream/unstable upgrade variants where available."
+    echo "                           System-level tools never escalate (APT, Snap stay stable)."
     echo "  -t, --type <TYPE>        Update all tools of a specific type (e.g., 'language', 'system')."
     echo "  -e, --exclude <NAME>     Exclude a specific tool from the update. Can be used multiple times."
     echo "  -h, --help               Show this help message."
     echo
     echo "AVAILABLE TOOLS:"
-    
+    echo "  (Tool names are matched case-insensitively against the 'Name' column below."
+    echo "   A trailing [+A] marks tools that have an aggressive variant.)"
+    echo
+
     # Dynamically generate the tools list from __tools_update_get_list
     set -l tools (__tools_update_get_list)
     set -l i 1
@@ -160,13 +186,19 @@ function __tools_update_print_help
         set -l name $tools[$i]
         set -l check_cmd $tools[(math $i + 1)]
         set -l type $tools[(math $i + 3)]
-        
-        # Format: Name (type) - check_cmd
-        printf "  %-20s [%s] - %s\n" "$name" "$type" "$check_cmd"
-        
-        set i (math $i + 5)
+        set -l aggressive_cmd $tools[(math $i + 5)]
+
+        set -l marker ""
+        if test -n "$aggressive_cmd"
+            set marker " [+A]"
+        end
+
+        # Format: Name (type) - check_cmd [+A]
+        printf "  %-20s [%s] - %s%s\n" "$name" "$type" "$check_cmd" "$marker"
+
+        set i (math $i + 6)
     end
-    
+
     echo
     echo "TOOL TYPES:"
     echo "  user     - User-level package managers (no sudo required)"

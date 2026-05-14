@@ -5,8 +5,8 @@ function __tools_update_get_tool_names_for_completion
     # Call the single source of truth
     set -l full_list (__tools_update_get_list)
     
-    # Extract only the first item of every 5 (the tool's name)
-    for i in (seq 1 5 (count $full_list))
+    # Extract only the first item of every 6 (the tool's name)
+    for i in (seq 1 6 (count $full_list))
         string lower -- $full_list[$i]
     end
 end
@@ -16,6 +16,7 @@ complete -c tools_update -n "__fish_is_first_arg" -f -a '(__tools_update_get_too
 
 # Command-line flags
 complete -c tools_update -s a -l all -d "Update all tools, including system-level"
+complete -c tools_update -s A -l aggressive -d "Use upstream/unstable upgrade variants (never escalates system tools)"
 complete -c tools_update -s h -l help -d "Show help message"
 
 # Flags with required values
