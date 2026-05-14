@@ -6,8 +6,10 @@ local config = wezterm.config_builder()
 
 -- Font: match the ghostty setup (Maple Mono NF CN family).
 config.font = wezterm.font_with_fallback({
-    { family = "Maple Mono NF CN", weight = "Regular" },
+    { family = "Maple Mono NF CN", weight = "Medium" },
+    { family = "Noto Sans Symbols2" }, -- solid media-control glyphs (U+23F4-U+23FA) matching macOS
     { family = "Noto Color Emoji" },
+    { family = "DejaVu Sans" }, -- last-resort coverage
 })
 config.font_size = 11.0
 
