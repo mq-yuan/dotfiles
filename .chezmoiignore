@@ -1,7 +1,6 @@
 # ignore all
 readme.md
 doc/
-.config/bash
 
 # Only Mac
 {{ if ne .chezmoi.os "darwin" }}
@@ -11,65 +10,36 @@ Library/
 
 # Only Linux
 {{ if ne .chezmoi.os "linux" }}
-# cuda
+.config/aria2/
+.config/direnv/
 .config/fish/modules/cuda/
-
-# deb_install
-.config/fish/modules/deb_install/
-
-# font_install
 .config/fish/modules/font_install/
-
-# keyboard
-.config/fish/conf.d/14_keyboard.fish
-
-# onedrive
-.config/onedrive/
-
-# mpv
 .config/mpv/
-
-# rime
+.config/onedrive/
 .local/share/fcitx5/
-
 .xprofile
 {{ end }}
 
 
-# Only WSL
-{{ if (or (ne .chezmoi.hostname "LAPTOP-6037VQ4M") (ne .chezmoi.os "linux")) }}
-{{ end }}
-
-# Only Work
+# Only Work (current Ubuntu workstation — fcitx5 installed via Flatpak here)
 {{ if (or (ne .chezmoi.hostname "ymq-B760M-ubuntu") (ne .chezmoi.os "linux")) }}
-.config/kitty/
 .var/app/org.fcitx.Fcitx5/
 {{ end }}
 
 
-
-# Not Mac
-{{ if eq .chezmoi.os "darwin" }}
-{{ end }}
-
-# Not Linux
-{{ if eq .chezmoi.os "linux" }}
-{{ end }}
-
-# Not WSL
-{{ if (and (eq .chezmoi.hostname "LAPTOP-6037VQ4M") (eq .chezmoi.os "linux")) }}
-{{ end }}
-
-# Not Work
+# Not Work — paths that should NOT land on the current Ubuntu workstation.
+# TODO(school-machine): when the school Ubuntu is back in rotation, replace the
+# hostname check with a proper chezmoi tag (e.g. `.school`) so onedrive/native
+# fcitx5/fastfetch can be targeted by intent instead of by hostname.
+# Note(fcitx5): rime/custom_phrase.txt has THREE delivery stubs (one-liner
+# .tmpl files) for the three install layouts — Mac (~/Library/Rime/), Linux
+# native (~/.local/share/fcitx5/rime/), Linux Flatpak
+# (~/.var/app/org.fcitx.Fcitx5/data/fcitx5/rime/). All three reference the
+# single source at .chezmoitemplates/custom_phrase.txt, so edits stay in one
+# place. The OS/host gating below picks which stub actually lands.
 {{ if (and (eq .chezmoi.hostname "ymq-B760M-ubuntu") (eq .chezmoi.os "linux")) }}
-.config/aichat/
-.config/aria2/
 .config/fastfetch/
-.config/ghostty/
-.config/mihomo/
 .config/onedrive/
 .config/sparkle/
-.config/rofi/
-.config/mpv/
 .local/share/fcitx5/
 {{ end }}
