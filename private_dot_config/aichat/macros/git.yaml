@@ -1,3 +1,0 @@
-steps:
-  - .role __git 
-  - .file '`git diff --no-ext-diff --staged`'
