@@ -23,3 +23,10 @@ set --global --export GTK_IM_MODULE "fcitx"
 set --global --export SCRIPTS_HOME "$HOME/Project/scripts"
 {{ end }}
 
+{{ if (and (eq .chezmoi.hostname "ymq-B760M-ubuntu") (eq .chezmoi.os "linux")) }}
+# Set PROXY
+set --global --export ALL_PROXY "127.0.0.1:6355"
+set --global --export HTTPS_PROXY "http://127.0.0.1:6355"
+set --global --export HTTP_PROXY "http://127.0.0.1:6355"
+set --global --export NO_PROXY "localhost,.local,127.0.0.1/8,192.168.0.0/16,10.0.0.0/8,172.16.0.0/12,::1"
+{{ end }}
