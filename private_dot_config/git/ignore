@@ -28,6 +28,7 @@ env/
 .env/
 virtualenv/
 python_env/
+.envrc
 
 # checkpoint
 *.ckpt
