@@ -1,3 +1,66 @@
+# Per-project CUDA activation. Mirrors the fish `cuda` function so a project
+# can pin its toolchain via `use cuda 12.8` (or `use cuda latest`) in .envrc.
+#
+# Differences from the fish version: no sudo, no interactive prompts, no nvcc
+# verification — direnv reloads on every cd, so we keep this hot path cheap.
+# PATH / LD_LIBRARY_PATH / CPATH are managed via direnv's path helpers so the
+# values are unwound automatically when leaving the directory.
+use_cuda() {
+    local cuda_base="$HOME/cuda"
+    local target="${1:-12.4}"
+
+    if [[ "$target" == "latest" ]]; then
+        local latest_dir
+        latest_dir="$(ls -d "$cuda_base"/cuda-* 2>/dev/null | sort -V | tail -n 1)"
+        if [[ -z "$latest_dir" ]]; then
+            log_error "use cuda: no CUDA installations found in $cuda_base"
+            return 1
+        fi
+        target="$(basename "$latest_dir" | sed 's/^cuda-//')"
+    fi
+
+    local cuda_dir="$cuda_base/cuda-$target"
+    if [[ ! -d "$cuda_dir" ]]; then
+        log_error "use cuda: CUDA version '$target' not found at $cuda_dir"
+        return 1
+    fi
+
+    # GCC compatibility map — keep in sync with fish cuda.fish.
+    local required_gcc=""
+    case "$target" in
+        12.8*|12.4*) required_gcc=13 ;;
+        11.8*) required_gcc=11 ;;
+    esac
+    if [[ -n "$required_gcc" && -x "/usr/bin/gcc-$required_gcc" ]]; then
+        export CC="/usr/bin/gcc-$required_gcc"
+        export CXX="/usr/bin/g++-$required_gcc"
+    fi
+
+    export CUDA_HOME="$cuda_dir"
+    PATH_add "$cuda_dir/bin"
+    if [[ -d "$cuda_dir/lib64" ]]; then
+        path_add LD_LIBRARY_PATH "$cuda_dir/lib64"
+    elif [[ -d "$cuda_dir/lib" ]]; then
+        path_add LD_LIBRARY_PATH "$cuda_dir/lib"
+    fi
+
+    # Pick the newest cuDNN matching the CUDA major version.
+    local cuda_major="${target%%.*}"
+    local cudnn_dir
+    cudnn_dir="$(ls -d "$cuda_base"/cudnn-*_cuda-"$cuda_major" 2>/dev/null | sort -V | tail -n 1)"
+    if [[ -n "$cudnn_dir" ]]; then
+        if [[ -d "$cudnn_dir/lib" ]]; then
+            path_add LD_LIBRARY_PATH "$cudnn_dir/lib"
+        elif [[ -d "$cudnn_dir/lib64" ]]; then
+            path_add LD_LIBRARY_PATH "$cudnn_dir/lib64"
+        fi
+        [[ -d "$cudnn_dir/include" ]] && path_add CPATH "$cudnn_dir/include"
+        log_status "cuda $target + cudnn $(basename "$cudnn_dir" | sed -E 's/cudnn-(.*)_cuda-.*/\1/')"
+    else
+        log_status "cuda $target (no matching cudnn for cuda-$cuda_major)"
+    fi
+}
+
 layout_uv() {
     if [[ -d ".venv" ]]; then
         VIRTUAL_ENV="$(pwd)/.venv"

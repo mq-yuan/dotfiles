@@ -36,9 +36,12 @@ Library/
 # Tag semantics:
 #   personal — my personal desktops (home + school). Adds fastfetch + sparkle.
 #   school   — the school Ubuntu workstation. Adds onedrive sync config.
+#   work     — the company workstation. Adds the fish direnv hook (the
+#              direnvrc itself stays available everywhere on Linux, so
+#              `use_cuda` etc. are usable on any Linux host that installs
+#              direnv on its own).
 #
-# Machines with no tags (e.g. company workstation, remote GPU hosts) get the
-# minimal base config.
+# Machines with no tags (e.g. remote GPU hosts) get the minimal base config.
 #
 # Note(rime): rime/custom_phrase.txt has TWO delivery stubs — Mac
 # (~/Library/Rime/) and Linux native (~/.local/share/fcitx5/rime/). Both
@@ -55,4 +58,8 @@ Library/
 
 {{- if not (has "school" $tags) }}
 .config/onedrive/
+{{- end }}
+
+{{- if not (has "work" $tags) }}
+.config/fish/conf.d/16_direnv.fish
 {{- end }}

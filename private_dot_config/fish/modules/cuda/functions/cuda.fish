@@ -9,8 +9,32 @@ function cuda --description 'Switch between CUDA versions and manage dependencie
     set -l default_version "12.4"
     set -l cuda_base_dir "$HOME/cuda"
 
-    # --- Execution ---
-    set -l target_version (__cuda_resolve_version "$default_version" $argv)
+    # --- Parse flags ---
+    # --quiet: silence stdout and skip interactive prompts. Intended for shell
+    # startup where blocking on `read` would hang the session. Stderr still
+    # surfaces real problems.
+    set -l quiet 0
+    set -l positional
+    for a in $argv
+        switch $a
+            case --quiet -q
+                set quiet 1
+            case '*'
+                set -a positional $a
+        end
+    end
+
+    if test $quiet -eq 1
+        __cuda_run $cuda_base_dir $default_version $quiet $positional >/dev/null
+        return $status
+    end
+    __cuda_run $cuda_base_dir $default_version $quiet $positional
+end
+
+function __cuda_run --argument-names cuda_base_dir default_version quiet
+    set -l positional $argv[4..]
+
+    set -l target_version (__cuda_resolve_version "$default_version" $positional)
     if test $status -ne 0
         return 1
     end
@@ -20,7 +44,7 @@ function cuda --description 'Switch between CUDA versions and manage dependencie
         return 1
     end
 
-    if not __cuda_check_and_advise_gcc_switch "$target_version" "$required_gcc_version"
+    if not __cuda_check_and_advise_gcc_switch "$target_version" "$required_gcc_version" "$quiet"
         return 1
     end
 
@@ -95,12 +119,25 @@ function __cuda_get_required_gcc_version --argument-names cuda_version
 end
 
 # Checks the current GCC version and advises the user to switch if necessary.
-function __cuda_check_and_advise_gcc_switch --argument-names target_version required_gcc
+function __cuda_check_and_advise_gcc_switch --argument-names target_version required_gcc quiet
     set -l current_gcc_version (gcc --version | head -n 1 | string match -r '[0-9]+')
     echo "Info: Current GCC major version is $current_gcc_version."
     echo "Info: CUDA $target_version requires GCC $required_gcc."
 
     if test "$current_gcc_version" != "$required_gcc"
+        # In quiet mode (e.g. shell startup) never prompt and never sudo. Just
+        # set CC/CXX to the required compiler if it is already installed; the
+        # caller can still run `cuda` interactively later to do the alternatives
+        # switch.
+        if test "$quiet" = "1"
+            if test -e "/usr/bin/gcc-$required_gcc"
+                set --global --export CC /usr/bin/gcc-$required_gcc
+                set --global --export CXX /usr/bin/g++-$required_gcc
+                return 0
+            end
+            echo "Warning: GCC $required_gcc not installed; system gcc is $current_gcc_version. Run `cuda` interactively to fix." >&2
+            return 0
+        end
         echo "Warning: GCC version mismatch detected." >&2
         read -P "Attempt to switch GCC version automatically? (y/N) " -l confirm
 

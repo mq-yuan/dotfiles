@@ -1,0 +1,9 @@
+{{ if eq .chezmoi.os "linux" -}}
+# Default-activate CUDA 12.4 on every interactive fish so PATH / LD_LIBRARY_PATH
+# / CUDA_HOME / cuDNN match the state `cuda` would produce when run manually.
+# --quiet keeps stdout silent and skips the interactive GCC prompt so startup
+# never blocks; real errors still hit stderr.
+if test -d $HOME/cuda/cuda-12.4
+    cuda --quiet
+end
+{{- end }}
