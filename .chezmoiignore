@@ -21,7 +21,7 @@ Library/
 .config/fish/modules/cuda/
 .config/fish/modules/font_install/
 .config/mpv/
-.config/tmuxinator/dashboard.yml
+.config/tmuxinator/
 .config/wezterm/
 .local/share/fcitx5/
 .xprofile
