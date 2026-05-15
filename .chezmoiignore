@@ -1,6 +1,5 @@
 # ignore all
 readme.md
-doc/
 
 # Only Mac
 {{ if ne .chezmoi.os "darwin" }}
@@ -15,31 +14,36 @@ Library/
 .config/fish/modules/cuda/
 .config/fish/modules/font_install/
 .config/mpv/
-.config/onedrive/
 .local/share/fcitx5/
 .xprofile
 {{ end }}
 
 
-# Only Work (current Ubuntu workstation — fcitx5 installed via Flatpak here)
-{{ if (or (ne .chezmoi.hostname "ymq-B760M-ubuntu") (ne .chezmoi.os "linux")) }}
-.var/app/org.fcitx.Fcitx5/
-{{ end }}
+# Tag-gated content. Tags are set per-host in ~/.config/chezmoi/chezmoi.toml:
+#
+#   [data]
+#   tags = ["personal", "school"]   # pick any subset
+#
+# Tag semantics:
+#   personal — my personal desktops (home + school). Adds fastfetch + sparkle.
+#   school   — the school Ubuntu workstation. Adds onedrive sync config.
+#
+# Machines with no tags (e.g. company workstation, remote GPU hosts) get the
+# minimal base config.
+#
+# Note(rime): rime/custom_phrase.txt has TWO delivery stubs — Mac
+# (~/Library/Rime/) and Linux native (~/.local/share/fcitx5/rime/). Both
+# reference the single source at .chezmoitemplates/custom_phrase.txt, so edits
+# stay in one place. The Flatpak stub was removed when this host switched to
+# the APT-installed fcitx5.
+{{- $tags := list }}
+{{- if hasKey . "tags" }}{{ $tags = .tags }}{{ end }}
 
-
-# Not Work — paths that should NOT land on the current Ubuntu workstation.
-# TODO(school-machine): when the school Ubuntu is back in rotation, replace the
-# hostname check with a proper chezmoi tag (e.g. `.school`) so onedrive/native
-# fcitx5/fastfetch can be targeted by intent instead of by hostname.
-# Note(fcitx5): rime/custom_phrase.txt has THREE delivery stubs (one-liner
-# .tmpl files) for the three install layouts — Mac (~/Library/Rime/), Linux
-# native (~/.local/share/fcitx5/rime/), Linux Flatpak
-# (~/.var/app/org.fcitx.Fcitx5/data/fcitx5/rime/). All three reference the
-# single source at .chezmoitemplates/custom_phrase.txt, so edits stay in one
-# place. The OS/host gating below picks which stub actually lands.
-{{ if (and (eq .chezmoi.hostname "ymq-B760M-ubuntu") (eq .chezmoi.os "linux")) }}
+{{- if not (has "personal" $tags) }}
 .config/fastfetch/
-.config/onedrive/
 .config/sparkle/
-.local/share/fcitx5/
-{{ end }}
+{{- end }}
+
+{{- if not (has "school" $tags) }}
+.config/onedrive/
+{{- end }}
