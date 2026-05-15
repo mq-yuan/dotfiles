@@ -4,6 +4,8 @@ readme.md
 # Only Mac
 {{ if ne .chezmoi.os "darwin" }}
 Library/
+.config/fish/conf.d/16_fnm.fish
+.config/nvim/lua/plugins/latex.lua
 {{ end }}
 
 
