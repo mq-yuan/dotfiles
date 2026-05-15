@@ -1,6 +1,10 @@
 # ignore all
 readme.md
 
+# Lazy.nvim plugin lock file — each host manages its own; use :Lazy restore
+# to roll back instead of pinning via chezmoi.
+.config/nvim/lazy-lock.json
+
 # Only Mac
 {{ if ne .chezmoi.os "darwin" }}
 Library/
@@ -12,10 +16,12 @@ Library/
 # Only Linux
 {{ if ne .chezmoi.os "linux" }}
 .config/aria2/
+.config/btop/
 .config/direnv/
 .config/fish/modules/cuda/
 .config/fish/modules/font_install/
 .config/mpv/
+.config/tmuxinator/dashboard.yml
 .config/wezterm/
 .local/share/fcitx5/
 .xprofile

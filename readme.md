@@ -32,18 +32,14 @@
     *   **模块化配置**: 通过 `conf.d` 目录结构实现清晰、有组织的配置管理。
     *   **插件管理**: 使用 `fisher` 管理插件生态。
     *   **智能补全与缩写**: 为常用命令和 Git 工作流设置了丰富的缩写，大幅提升效率。
-*   **[Tmuxinator](https://github.com/tmuxinator/tmuxinator)**: 轻松创建和管理 `tmux` 会话。预设了如 `dashboard` (`btop` + `nvtop`) 等会话，提供即时系统监控视图。
-*   **[Fastfetch](https://github.com/fastfetch-cli/fastfetch)**: 高度定制化且美观的系统信息展示工具。
-*   **[Rofi](https://github.com/davatorium/rofi)**: 一个功能强大、主题丰富的应用启动器和窗口切换器。
+*   **[Tmuxinator](https://github.com/tmuxinator/tmuxinator)**: 轻松创建和管理 `tmux` 会话。预设的 `dashboard` (`btop` + `nvtop` / `gdu-go` + `duf`) 通过 `.chezmoiignore` 限定在 Linux 主机分发。
+*   **[Fastfetch](https://github.com/fastfetch-cli/fastfetch)**: 高度定制化且美观的系统信息展示工具，仅在标记 `personal` 的主机上分发。
 
 ### 🚀 Neovim: 一个现代化的 IDE
 
 Neovim 配置基于优秀的 [AstroNvim](https://astronvim.com/) 框架，并将其扩展为一个功能完备的集成开发环境。
 
-*   **AI 驱动开发**:
-    *   **`aichat.nvim`**: 集成了由 `aichat` 驱动的聊天界面，允许在编辑器内直接与多个大语言模型（LLM）进行交互。
-    *   **代码生成与补全**: 通过 AI 增强了代码生成和自动补全的能力。
-*   **丰富的语言支持**: 通过 LSP 为多种语言提供开箱即用的支持，包括 `basedpyright` (Python), `clangd` (C/C++), `rust-analyzer` (Rust) 和 `tinymist` (Typst) 等。
+*   **丰富的语言支持**: 通过 LSP 为多种语言提供开箱即用的支持，包括 `basedpyright` (Python), `clangd` (C/C++), `rust-analyzer` (Rust) 和 `tinymist` (Typst) 等。LSP/formatter/debugger 由 `mason-tool-installer` 自动安装，列表见 `private_dot_config/nvim/lua/plugins/mason.lua`。
 *   **深度集成工具**:
     *   **[LazyGit](https://github.com/jesseduffield/lazygit)**: 只需一次按键即可访问的 `git` 终端 UI。
     *   **[Yazi](https://github.com/sxyazi/yazi)**: 一款速度极快、支持图片预览的终端文件管理器。
@@ -90,6 +86,6 @@ Neovim 配置基于优秀的 [AstroNvim](https://astronvim.com/) 框架，并将
     启动 `fish`，插件将自动安装。您也可以手动运行 `fisher install` 来安装。
 
 3.  **安装 Neovim 插件**:
-    启动 `nvim`。 [Lazy.nvim](https://github.com/folke/lazy.nvim) 将自动同步插件。您也可以随时运行 `:Lazy sync` 来确保所有插件都已更新。
+    启动 `nvim`。 [Lazy.nvim](https://github.com/folke/lazy.nvim) 将自动同步插件。也可以随时运行 `:Lazy sync` 来更新所有插件。注意：`lazy-lock.json` **未**纳入 chezmoi 管理，每台主机自行维护本机的版本快照；需要回滚到已知好的状态时使用 `:Lazy restore`。
 
 现在，请尽情享受您全新的、高效的开发环境！
