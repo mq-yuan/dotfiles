@@ -12,7 +12,6 @@
 function __tools_update_get_list
     set -l tools_common \
         "Homebrew"         "brew"                         "brew update && brew upgrade"                    "user"     "no"   "brew update && brew upgrade --greedy"        \
-        "ASDF_Plugin"      "asdf"                         "asdf plugin update --all"                       "language" "no"   ""                                            \
         "Fisher_Plugin"    "fisher"                       "fisher update"                                  "fish"     "no"   ""                                            \
         "Cargo_Update"     "cargo-install-update"         "cargo install-update --all"                     "language" "no"   "cargo install-update --all --git"            \
         "Rustup"           "rustup"                       "rustup update"                                  "language" "no"   "rustup self update && rustup update"         \
