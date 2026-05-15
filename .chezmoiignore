@@ -5,6 +5,7 @@ readme.md
 {{ if ne .chezmoi.os "darwin" }}
 Library/
 .config/fish/conf.d/16_fnm.fish
+.config/fish/conf.d/17_chezmoi_keychain.fish
 .config/nvim/lua/plugins/latex.lua
 {{ end }}
 
