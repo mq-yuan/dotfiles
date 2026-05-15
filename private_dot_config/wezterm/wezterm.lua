@@ -78,4 +78,9 @@ config.audible_bell = "Disabled"
 -- Default shell: respect $SHELL (fish on this host).
 config.default_prog = { os.getenv("SHELL") or "/usr/bin/fish", "-l" }
 
+-- IME: wezterm defaults to use_ime=false on X11/Wayland, which silently drops
+-- IME key events (Ctrl+Space never reaches fcitx5). Must be enabled explicitly.
+config.use_ime = true
+config.xim_im_name = "fcitx"
+
 return config
