@@ -13,6 +13,8 @@ Library/
 {{ if ne .chezmoi.os "linux" }}
 .config/aria2/
 .config/direnv/
+.config/fish/conf.d/81_asdf.fish
+.config/fish/modules/asdf/
 .config/fish/modules/cuda/
 .config/fish/modules/font_install/
 .config/mpv/
