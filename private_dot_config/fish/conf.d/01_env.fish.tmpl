@@ -15,7 +15,10 @@ end
 
 {{ if eq .chezmoi.os "linux" }}
 # set env in Linux
-# set IM
+# IM env vars are also exported from ~/.xprofile at X11 session start, but
+# xprofile only runs once at login — shells launched outside that session
+# (ssh, detached tmux server, systemd --user units) inherit nothing. Re-export
+# here so every interactive fish has them regardless of how it was spawned.
 set --global --export XMODIFIERS "@im=fcitx"
 set --global --export QT_IM_MODULE "fcitx"
 set --global --export GTK_IM_MODULE "fcitx"
