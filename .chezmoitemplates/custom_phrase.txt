@@ -1,23 +1,13 @@
 ## 置顶词与自定义词组在这个文件里指定 排序原则上语气词 动词 形容词>名词
 ## 格式：文本-输入码-权重，其间用 Tab 符分隔。
 ## 如要添加新的，可以复制已有的行，然后在其基础上修改。
-## 置顶字词 
+## 置顶字词
 ## 注意最后的数字控制优先级，希望排在前面的要设置得大一些
-***	info	64
-***	info	60
-***	info	56
 #第一列的文本支持格式化：换行:\n, 制表符：\t, 回车符：\r, 空格：\s
 
-# name
-***	ycyc	64
-***	yy	64
-***	yrmgqi	64
-***	ymq	64
-***	tsxbyu	64
-***	txy	64
-***	tszi	64
-***    xnrv    64
-***    rvjp    64
+# Private entries (names / IDs / phone) live in KeepassXC entry
+# "Notes/custom_phrase" and are injected at apply time.
+{{ (keepassxc "Notes/custom_phrase").Notes }}
 
 # other
 GS      gs      50
@@ -39,8 +29,3 @@ GS      gs      50
 位姿	wwzi	50
 相机位姿	xljiwwzi	50
 伪影	wwyk	50
-
-
-
-
-
