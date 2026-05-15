@@ -1,9 +1,7 @@
-# $HOME/.config/fish/conf.d/01-env.fish
+# $HOME/.config/fish/conf.d/15_load_ai_env.fish
+# Source the KeepassXC-rendered AI provider env file. The file itself lives
+# outside conf.d (so fish does not autoload it) and exports its own vars.
 
-# set AI tools env
 if test -f $HOME/.config/fish/.api_keys.fish
     source $HOME/.config/fish/.api_keys.fish
 end
-
-# -- AI Hub Mix --
-set --global --export AIHUBMIX_API_KEY $AIHUBMIX_API_KEY

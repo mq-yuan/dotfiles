@@ -19,6 +19,7 @@ Library/
 .config/fish/modules/cuda/
 .config/fish/modules/font_install/
 .config/mpv/
+.config/wezterm/
 .local/share/fcitx5/
 .xprofile
 {{ end }}

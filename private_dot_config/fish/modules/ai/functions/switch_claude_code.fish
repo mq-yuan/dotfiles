@@ -3,7 +3,7 @@
 #
 # A function to switch Anthropic API configurations.
 # Usage:
-#   switch_claude_code <provider>  - Switch to a specific provider (e.g., AIHUBMIX, KIMI).
+#   switch_claude_code <provider>  - Switch to a specific provider (e.g., AIHUBMIX).
 #   switch_claude_code off         - Disable Anthropic variables.
 #   switch_claude_code             - Show current status and usage.
 
@@ -11,7 +11,7 @@ function switch_claude_code --description "Switches ANTHROPIC environment variab
     # --- Configuration ---
     # Add new providers here.
     # Format: "PROVIDER_NAME;API_KEY_VARIABLE_NAME;BASE_URL_VARIABLE_NAME"
-    set -l providers "AIHUBMIX;AIHUBMIX_API_KEY;AIHUBMIX_BASE_URL" "KIMI;KIMI_API_KEY;KIMI_BASE_URL_FOR_ANTHROPIC"
+    set -l providers "AIHUBMIX;AIHUBMIX_API_KEY;AIHUBMIX_BASE_URL"
 
     # --- Colors ---
     set -l color_green (set_color green)
