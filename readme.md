@@ -52,12 +52,13 @@ Neovim 配置基于优秀的 [AstroNvim](https://astronvim.com/) 框架，并将
 
 ### 🌐 动态网络与代理配置
 
-网络层由 [Clash Verge](https://github.com/clash-verge-rev/clash-verge-rev) 管理，其配置方式尤为强大和动态。
+网络层使用 [Mihomo](https://github.com/MetaCubeX/mihomo) 作为内核，由 [Mihomo Party (Sparkle)](https://github.com/mihomo-party-org/mihomo-party) 提供 GUI；所有节点、规则和密钥都通过 `chezmoi` 模板从 KeepassXC 注入，仓库本身不包含明文凭据。
 
-*   **零接触配置**: 整套 `clash-verge` 配置文件由一个 JavaScript 模板 (`.chezmoitemplates/clash-verge-script.js`) 以编程方式动态生成。
-*   **动态节点分组**: 根据代理节点的名称（如 HK, US, SG）自动创建 `url-test`, `load-balance` 和 `select` 分组。
-*   **高级路由规则**: 集成了来自 `sukkaw` 和 `YYDS` 的规则集，能够智能分流广告、流媒体、AI 服务以及国内外网站的流量。
-*   **DNS 优化**: 采用 Fake-IP 模式，并为国内外域名指定不同的 DNS 服务器，以提升解析速度和可靠性。
+*   **零接触配置**: Sparkle 的 `Profiles.yaml` 与 `override/Script.js` 是 chezmoi stub，分别引用 `.chezmoitemplates/clash-verge-profile.yaml`（节点）和 `.chezmoitemplates/clash-verge-script.js`（运行时改写逻辑）。订阅 token、Hysteria2/TUIC/VLESS 端口、Webdav 密码等敏感字段全部来自 KeepassXC 的 `Applications/clash-verge` 条目。
+*   **动态节点分组**: 脚本根据节点名（HK / US / SG / JP …）自动生成 `url-test`、`load-balance`、`select` 三类分组。
+*   **高级路由规则**: 集成 `sukkaw` 与 `YYDS` 规则集，分流广告、流媒体、AI 服务以及国内外站点。
+*   **DNS 优化**: Fake-IP 模式，国内外域名走不同的上游 DNS，兼顾解析速度和可达性。
+*   **历史注记**: `.chezmoitemplates/clash-verge-*` 的命名沿用早期使用 Clash Verge 时的名字 —— 切到 Mihomo Party 后内容仍然兼容，因此保留了文件名以减少 diff 噪音。
 
 ### 🔒 安全的秘密管理
 

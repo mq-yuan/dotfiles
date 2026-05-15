@@ -1,15 +1,15 @@
-# 基本设置
+# Basic RPC settings
 enable-rpc=true
 rpc-listen-all=false
 rpc-listen-port={{ (keepassxc "Applications/aria2-jsonrpc").UserName}}
-rpc-allow-origin-all=true 
+rpc-allow-origin-all=true
 rpc-secret={{ (keepassxc "Applications/aria2-jsonrpc").Password}}
 
-# 下载目录
+# Download directory
 dir={{ .chezmoi.homeDir }}/Downloads/Aria2
 file-allocation=falloc
 
-# 性能优化
+# Performance tuning
 max-concurrent-downloads=5
 split=16
 max-connection-per-server=16
@@ -17,42 +17,42 @@ min-split-size=10M
 max-overall-download-limit=0
 max-overall-upload-limit=0
 
-# 断点续传和会话管理
+# Resume and session management
 continue=true
 input-file={{ .chezmoi.homeDir }}/.config/aria2/aria2.session
 save-session={{ .chezmoi.homeDir }}/.config/aria2/aria2.session
 save-session-interval=60
 
-# BitTorrent 优化
+# BitTorrent tuning
 bt-enable-lpd=true
 bt-max-peers=55
 bt-request-peer-speed-limit=100K
 seed-ratio=0
 seed-time=0
 
-# DHT (PT not premission)
+# DHT (disabled — PT trackers do not permit DHT)
 enable-dht=false
 bt-enable-lpd=false
 enable-peer-exchange=false
 
-# BitTracker (PT not premission)
+# Public trackers (disabled — PT trackers do not permit extra trackers)
 # bt-tracker=udp://tracker.opentrackr.org:1337/announce,udp://open.demonii.com:1337/announce,udp://open.stealth.si:80/announce,udp://tracker.torrent.eu.org:451/announce,udp://tracker.skyts.net:6969/announce,udp://explodie.org:6969/announce,udp://exodus.desync.com:6969/announce,udp://tracker.dump.cl:6969/announce,udp://open.free-tracker.ga:6969/announce,udp://ns-1.x-fins.com:6969/announce,udp://leet-tracker.moe:1337/announce,http://www.torrentsnipe.info:2701/announce,http://www.genesis-sp.org:2710/announce,http://tracker810.xyz:11450/announce,http://tracker.xiaoduola.xyz:6969/announce,http://tracker.vanitycore.co:6969/announce,http://tracker.sbsub.com:2710/announce,http://tracker.moxing.party:6969/announce,http://tracker.lintk.me:2710/announce,http://tracker.ipv6tracker.org:80/announce
 
-# PT：伪装客户端！！
-# peer-id-prefix：伪装成 qBittorrent 4.6.2 (-qB4620-)
-# user-agent：对应的客户端名称和版本
+# PT: masquerade as a stock client to satisfy private tracker rules.
+# peer-id-prefix: spoofed as qBittorrent 4.6.2 (-qB4620-)
+# user-agent: matching client name and version
 peer-id-prefix=-qB4620-
 user-agent=qBittorrent/4.6.2
 
-# 安全性
+# Security
 check-certificate=false
 disable-ipv6=true
 
-# 日志
+# Logging
 log={{ .chezmoi.homeDir }}/.log/aria2.log
 log-level=info
 
-# 其他优化
+# Misc tuning
 disk-cache=64M
 always-resume=true
 max-tries=5
