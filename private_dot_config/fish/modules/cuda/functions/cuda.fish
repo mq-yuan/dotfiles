@@ -6,7 +6,7 @@
 # ------------------------------------------------------------------------------
 function cuda --description 'Switch between CUDA versions and manage dependencies'
     # --- Configuration ---
-    set -l default_version "12.4"
+    set -l default_version "12.8"
     set -l cuda_base_dir "$HOME/cuda"
 
     # --- Parse flags ---
