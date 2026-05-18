@@ -11,6 +11,7 @@
 
 # other
 GS      gs      50
+基模      jimo      50
 纪要    jiyc    50
 实验	uiyj	50
 几何	jihe	50
