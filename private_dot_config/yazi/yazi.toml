@@ -1,0 +1,3 @@
+[[open.prepend_rules]]
+url = "*/"
+use = ["open", "edit", "reveal"]
