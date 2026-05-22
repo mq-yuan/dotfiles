@@ -11,6 +11,9 @@
 
 # other
 GS      gs      50
+视图      uitu      50
+单目      djmu      50
+加权      jxqr      50
 基模      jimo      50
 纪要    jiyc    50
 实验	uiyj	50
