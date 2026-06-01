@@ -176,6 +176,15 @@ return {
       keymaps = {
         show_help = "<f1>",
       },
+      -- Hand directories off to the system file manager (xdg-open)
+      -- instead of letting nvim :edit them.
+      open_file_function = function(chosen_file)
+        if vim.fn.isdirectory(chosen_file) == 1 then
+          vim.system({ "xdg-open", chosen_file }, { detach = true })
+        else
+          vim.cmd(string.format("edit %s", vim.fn.fnameescape(chosen_file)))
+        end
+      end,
     },
     -- 👇 if you use `open_for_directories=true`, this is recommended
     init = function()
