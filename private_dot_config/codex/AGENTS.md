@@ -21,6 +21,11 @@
 - Prefer `logging` over `print` for non-trivial runtime output unless the project clearly uses `print`.
 
 
+## Scientific plotting
+
+- Body text font: Libertinus Serif (preferred), with the fallback chain TeX Gyre Termes → Times New Roman → DejaVu Serif.
+
+
 ## Shell and tooling (fish, uv)
 
 - My default shell is fish. Provide copy-paste ready fish-compatible commands.

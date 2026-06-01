@@ -5,6 +5,7 @@
 - Reply in Chinese by default; switch to English only when explicitly requested.
 - All repository content (code, comments, docs, configs, commit messages) must be English only.
 - Do not introduce Chinese text into any repository file, including diff/patch lines.
+- Exception: research/survey notes under a `docs/research/` (or equivalent) folder may be bilingual (Chinese + English), paragraph-by-paragraph. This relaxation applies only to such research notes, not to code, configs, or other docs.
 - Keep existing project terminology consistent; do not rename concepts without explicit instruction.
 
 
@@ -23,6 +24,10 @@
 - Comments must be in English.
 - Prefer `logging` over `print` for non-trivial runtime output.
 - For Hydra/OmegaConf structured configs, use `enum.StrEnum` (or `enum.Enum`) for categorical fields — avoid `typing.Literal` which causes OmegaConf validation errors.
+
+### Scientific Plotting
+
+- Body text font: Libertinus Serif (preferred), with the fallback chain TeX Gyre Termes → Times New Roman → DejaVu Serif.
 - **Fail-fast over silent recovery**: this is a research codebase — bugs must surface immediately, not be swallowed. Follow these rules strictly:
   - **Do not use bare `except:` or `except Exception:`** to suppress or hide errors.
   - **Avoid `try/except` blocks** unless you are handling a *specific*, *expected*, *recoverable* exception (e.g. `FileNotFoundError` when a missing file is a valid code path). In every such case add a comment explaining why the exception is caught and what the recovery is.
