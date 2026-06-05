@@ -16,8 +16,11 @@ MAGENTA='\033[35m'
 DIM='\033[2m'
 
 # Shorten home directory to ~
+# Use a variable for the replacement so bash 5 doesn't tilde-expand a bare ~
+# and bash 3.2 doesn't keep a literal backslash from \~.
+tilde='~'
 if [ -n "$HOME" ]; then
-    cwd="${cwd/#$HOME/\~}"
+    cwd="${cwd/#$HOME/$tilde}"
 fi
 
 parts=()
@@ -34,10 +37,10 @@ fi
 
 # Git segment: branch + dirty marker
 if [ -n "$cwd" ] && command -v git >/dev/null 2>&1; then
-    branch=$(git -C "${cwd/#\~/$HOME}" symbolic-ref --quiet --short HEAD 2>/dev/null \
-        || git -C "${cwd/#\~/$HOME}" rev-parse --short HEAD 2>/dev/null)
+    branch=$(git -C "${cwd/#~/$HOME}" symbolic-ref --quiet --short HEAD 2>/dev/null \
+        || git -C "${cwd/#~/$HOME}" rev-parse --short HEAD 2>/dev/null)
     if [ -n "$branch" ]; then
-        if [ -n "$(git -C "${cwd/#\~/$HOME}" status --porcelain 2>/dev/null)" ]; then
+        if [ -n "$(git -C "${cwd/#~/$HOME}" status --porcelain 2>/dev/null)" ]; then
             dirty='*'
             git_color="$YELLOW"
         else
