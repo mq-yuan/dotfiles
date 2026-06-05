@@ -49,8 +49,11 @@ function chezmoi --wraps=chezmoi
     # password prompt, then `interact` hands the PTY back to the user.
     set -lx CHEZMOI_KDBX_PW $pw
     set -lx CHEZMOI_ARGC (count $argv)
+    # Use -fx (function-scoped exported) rather than -lx: inside a `for` block,
+    # `-l` would scope the variable to the loop iteration and it would be gone
+    # by the time `expect` runs, leaving CHEZMOI_ARGV_$i unset.
     for i in (seq $CHEZMOI_ARGC)
-        set -lx CHEZMOI_ARGV_$i $argv[$i]
+        set -fx CHEZMOI_ARGV_$i $argv[$i]
     end
     expect -c '
         set timeout -1
