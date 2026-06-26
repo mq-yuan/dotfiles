@@ -8,36 +8,6 @@ function apply_template --description "Applies a project template from $HOME/.co
     set -l color_cyan (set_color cyan)
     set -l color_normal (set_color normal)
 
-    # --- Helper function: Print suggestions ---
-    function __print_suggestions --argument-names path
-        set -l base_dir $HOME/.config/templates
-
-        echo # Add a newline for better formatting
-        
-        set -l display_path (string join / (string split / --no-empty $path))
-        if [ -z "$display_path" ]
-            echo "$color_yellowAvailable categories are:$color_normal"
-        else
-            echo "$color_yellow Available options under '$display_path/' are:$color_normal"
-        end
-
-        # Call the unified helper function to get the list of items
-        set -l items (__apply_template_get_items "$path")
-        if test $status -ne 0 -o (count $items) -eq 0
-            echo "  (No templates or subcategories found here)" >&2
-            return
-        end
-
-        for item_name in $items
-            # Check if the item is a directory to apply color
-            if test -d "$base_dir/$path/$item_name"
-                echo "  - $color_cyan$item_name/$color_normal"
-            else
-                echo "  - $item_name"
-            end
-        end
-    end
-
     # ----------------------------------
     # --- Main function logic ---
     # ----------------------------------
@@ -45,7 +15,7 @@ function apply_template --description "Applies a project template from $HOME/.co
 
     if test -z "$argv[1]"
         echo "$color_red Usage: apply_template <category/subcategory/template>$color_normal" >&2
-        __print_suggestions ""
+        __apply_template_print_suggestions ""
         return 1
     end
 
@@ -67,7 +37,7 @@ function apply_template --description "Applies a project template from $HOME/.co
                 break
             end
         end
-        __print_suggestions $valid_path
+        __apply_template_print_suggestions $valid_path
         return 1
     end
 
@@ -78,17 +48,17 @@ function apply_template --description "Applies a project template from $HOME/.co
 
     if not test -d "$category_path"
         echo "$color_red Error: Category '$parts[1]' not found.$color_normal" >&2
-        __print_suggestions ""
+        __apply_template_print_suggestions ""
         return 1
     end
     if not test -d "$subcategory_path"
         echo "$color_red Error: Subcategory '$parts[2]' not found in '$parts[1]/'.$color_normal" >&2
-        __print_suggestions "$parts[1]"
+        __apply_template_print_suggestions "$parts[1]"
         return 1
     end
     if not test -e "$source_path"
         echo "$color_red Error: Template '$parts[3]' not found in '$parts[1]/$parts[2]/'.$color_normal" >&2
-        __print_suggestions "$parts[1]/$parts[2]"
+        __apply_template_print_suggestions "$parts[1]/$parts[2]"
         return 1
     end
 
@@ -109,7 +79,7 @@ function apply_template --description "Applies a project template from $HOME/.co
     else
         cp "$source_path" .
     end
-    
+
     if test $status -eq 0
         echo " $color_green done.$color_normal"
         echo "🚀 Successfully applied template '$dest_name'."
