@@ -48,13 +48,14 @@ Neovim 配置基于优秀的 [AstroNvim](https://astronvim.com/) 框架，并将
 
 ### 🌐 动态网络与代理配置
 
-网络层使用 [Mihomo](https://github.com/MetaCubeX/mihomo) 作为内核，由 [Mihomo Party (Sparkle)](https://github.com/mihomo-party-org/mihomo-party) 提供 GUI；所有节点、规则和密钥都通过 `chezmoi` 模板从 KeepassXC 注入，仓库本身不包含明文凭据。
+网络层使用 [Mihomo](https://github.com/MetaCubeX/mihomo) 作为内核，由 [Mihomo Party (Sparkle)](https://github.com/mihomo-party-org/mihomo-party) 提供 GUI。节点与密钥通过 `chezmoi` 模板从 KeepassXC 注入，仓库本身不包含明文凭据；运行时改写脚本（节点分组 / 规则 / DNS）则交由 Sparkle 自带的同步功能托管。
 
-*   **零接触配置**: Sparkle 的 `Profiles.yaml` 与 `override/Script.js` 是 chezmoi stub，分别引用 `.chezmoitemplates/clash-verge-profile.yaml`（节点）和 `.chezmoitemplates/clash-verge-script.js`（运行时改写逻辑）。订阅 token、Hysteria2/TUIC/VLESS 端口、Webdav 密码等敏感字段全部来自 KeepassXC 的 `Applications/clash-verge` 条目。
+*   **零接触配置**: Sparkle 的 `Profiles.yaml` 是 chezmoi stub，引用 `.chezmoitemplates/clash-verge-profile.yaml`（节点）。订阅 token、Hysteria2/TUIC/VLESS 端口、Webdav 密码等敏感字段全部来自 KeepassXC 的 `Applications/clash-verge` 条目。
+*   **运行时改写脚本**: 节点分组、路由规则与 DNS 改写由 Sparkle 的 override 脚本（`Script.js`）完成。**该脚本不再纳入 chezmoi 管理**，改用 Sparkle 自带的同步功能跨机分发 —— Sparkle 运行时不会回写 chezmoi 渲染的版本，二者长期漂移、维护成本高，故移交 Sparkle 托管。
 *   **动态节点分组**: 脚本根据节点名（HK / US / SG / JP …）自动生成 `url-test`、`load-balance`、`select` 三类分组。
 *   **高级路由规则**: 集成 `sukkaw` 与 `YYDS` 规则集，分流广告、流媒体、AI 服务以及国内外站点。
 *   **DNS 优化**: Fake-IP 模式，国内外域名走不同的上游 DNS，兼顾解析速度和可达性。
-*   **历史注记**: `.chezmoitemplates/clash-verge-*` 的命名沿用早期使用 Clash Verge 时的名字 —— 切到 Mihomo Party 后内容仍然兼容，因此保留了文件名以减少 diff 噪音。
+*   **历史注记**: `.chezmoitemplates/clash-verge-profile.yaml` 的命名沿用早期使用 Clash Verge 时的名字 —— 切到 Mihomo Party 后内容仍然兼容，因此保留了文件名以减少 diff 噪音。
 
 ### 🔒 安全的秘密管理
 
