@@ -19,7 +19,7 @@
 
 *   **自动化 (Automation)**: 充分利用 `chezmoi` 和脚本来自动化环境的安装与配置。
 *   **安全性 (Security)**: 仓库中**绝不**存储任何敏感信息。所有秘密（如 API 密钥）都通过 `chezmoi` 与 `KeepassXC` 的集成进行安全管理。
-*   **一致性 (Consistency)**: 在不同的操作系统（Linux 和 macOS）上提供统一、无缝的体验。
+*   **一致性 (Consistency)**: 在不同的操作系统（Linux 和 macOS）上提供统一、无缝的体验。具体哪些文件分发到哪台机器（OS × host tag），以 `.chezmoiignore` 顶部的注释为单一事实源。
 *   **生产力 (Productivity)**: 一个高度定制的 Neovim 和 Fish shell 环境，并由 AI 工具强力驱动，为实现最高效率而设计。
 
 ## ✨ 功能亮点
@@ -33,7 +33,7 @@
     *   **插件管理**: 使用 `fisher` 管理插件生态。
     *   **智能补全与缩写**: 为常用命令和 Git 工作流设置了丰富的缩写，大幅提升效率。
 *   **[Tmuxinator](https://github.com/tmuxinator/tmuxinator)**: 轻松创建和管理 `tmux` 会话。预设的 `dashboard` (`btop` + `nvtop` / `gdu-go` + `duf`) 通过 `.chezmoiignore` 限定在 Linux 主机分发。
-*   **[Fastfetch](https://github.com/fastfetch-cli/fastfetch)**: 高度定制化且美观的系统信息展示工具，仅在标记 `personal` 的主机上分发。
+*   **[Fastfetch](https://github.com/fastfetch-cli/fastfetch)**: 高度定制化且美观的系统信息展示工具，按 host tag 分发（规则见 `.chezmoiignore`）。
 
 ### 🚀 Neovim: 一个现代化的 IDE
 
