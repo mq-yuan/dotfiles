@@ -1,0 +1,32 @@
+{{- $tags := list -}}
+{{- if hasKey . "tags" }}{{ $tags = .tags }}{{ end -}}
+{{- if gt (len $tags) 0 -}}
+#!/usr/bin/env bash
+# Install packages from the chezmoi-managed Brewfile. Install-only: outdated
+# packages are NOT upgraded here (the tools_update fish module owns upgrades).
+# Re-runs whenever the Brewfile template changes (hash below). Only runs on
+# tag-bearing hosts; untagged hosts render this script empty and chezmoi skips it.
+set -euo pipefail
+
+# Brewfile hash: {{ include "private_dot_config/homebrew/Brewfile.tmpl" | sha256sum }}
+
+# brew may have just been installed by the run_once install-homebrew script and
+# not yet be on PATH for this process.
+if ! command -v brew >/dev/null 2>&1; then
+    for prefix in /opt/homebrew /usr/local /home/linuxbrew/.linuxbrew; do
+        if [ -x "$prefix/bin/brew" ]; then
+            eval "$("$prefix/bin/brew" shellenv)"
+            break
+        fi
+    done
+fi
+
+if ! command -v brew >/dev/null 2>&1; then
+    echo "Homebrew not available; cannot run brew bundle." >&2
+    exit 1
+fi
+
+brewfile="${HOME}/.config/homebrew/Brewfile"
+echo "Running brew bundle install --no-upgrade (${brewfile})..."
+brew bundle install --no-upgrade --file="${brewfile}"
+{{ end -}}

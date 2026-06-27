@@ -1,0 +1,72 @@
+# ~/.config/homebrew/Brewfile -- managed by chezmoi
+# Source: private_dot_config/homebrew/Brewfile.tmpl  (edit the .tmpl, not the target)
+#
+# Installed automatically by .chezmoiscripts/run_onchange_after_10-brew-bundle.sh.tmpl
+# on tag-bearing hosts. Run it by hand anytime with:
+#     brew bundle --file=~/.config/homebrew/Brewfile
+#
+# Layout:
+#   - Cross-platform CLI tools: macOS + tag-bearing Linux.
+#   - macOS only: GUI apps, fonts, desktop-only tools (Homebrew Cask is macOS-only).
+#   - Linux only: reserved; most Linux packages come from apt/snap/flatpak instead.
+
+# ---- Cross-platform CLI tools ----
+brew "chezmoi"
+brew "fd"
+brew "ffmpeg-full"
+brew "fish"
+brew "fnm"
+brew "fzf"
+brew "gdu"
+brew "imagemagick-full"
+brew "jq"
+brew "lazygit"
+brew "luarocks"
+brew "neovim"
+brew "poppler"
+brew "resvg"
+brew "ripgrep"
+brew "sevenzip"
+brew "tmuxinator"
+brew "tree"
+brew "treemd"
+brew "uv"
+brew "yazi"
+brew "zoxide"
+
+{{ if eq .chezmoi.os "darwin" -}}
+# ---- macOS only ----
+# Modern bash (macOS ships 3.2; some scripts assume 5.x)
+brew "bash"
+
+# GUI apps & document viewers
+cask "ghostty"
+cask "keepassxc"
+cask "skim"
+cask "basictex"
+cask "input-source-pro"
+
+# AI coding CLIs (cask-packaged on macOS)
+cask "claude-code"
+cask "codex"
+
+# Fonts
+cask "font-libertinus"
+cask "font-maple-mono-nf-cn"
+cask "font-symbols-only-nerd-font"
+
+# ---- Niche / experimental (opt-in: uncomment to install) ----
+# tap "manaflow-ai/cmux"
+# cask "cmux"                 # Ghostty-based terminal for AI agents
+# cask "pearcleaner"          # app uninstaller utility
+# snapzy lives in an untrusted tap; before enabling it run:
+#   brew tap duongductrong/snapzy && brew trust --cask duongductrong/snapzy/snapzy
+# tap "duongductrong/snapzy"
+# cask "snapzy"
+{{ end -}}
+
+{{ if eq .chezmoi.os "linux" -}}
+# ---- Linux only ----
+# Reserved for Linux-specific brew formulae. Most Linux packages are managed
+# via apt/snap/flatpak (see the tools_update fish module), not Homebrew.
+{{ end -}}
