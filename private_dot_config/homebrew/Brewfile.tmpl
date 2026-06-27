@@ -6,11 +6,24 @@
 #     brew bundle --file=~/.config/homebrew/Brewfile
 #
 # Layout:
-#   - Cross-platform CLI tools: macOS + tag-bearing Linux.
-#   - macOS only: GUI apps, fonts, desktop-only tools (Homebrew Cask is macOS-only).
-#   - Linux only: reserved; most Linux packages come from apt/snap/flatpak instead.
+#   - Cross-platform: installed via brew on macOS AND tag-bearing Linux. Keep this
+#     list deliberately small -- on Linux most tools come from apt, official install
+#     scripts, or local builds, so only list things brew is genuinely best for there.
+#   - macOS only: everything else (GUI casks, fonts, and CLI tools that on Linux are
+#     better handled by apt/scripts/source).
 
-# ---- Cross-platform CLI tools ----
+# ---- Cross-platform (keep minimal!) ----
+# apt's neovim is too old for AstroNvim, so brew is the right manager on Linux too.
+brew "neovim"
+
+{{ if eq .chezmoi.os "darwin" -}}
+# ---- macOS only ----
+# On Linux these come from apt / official install scripts / local builds, not brew.
+
+# Modern bash (macOS ships 3.2; some scripts assume 5.x)
+brew "bash"
+
+# CLI tools
 brew "chezmoi"
 brew "fd"
 brew "ffmpeg-full"
@@ -22,7 +35,6 @@ brew "imagemagick-full"
 brew "jq"
 brew "lazygit"
 brew "luarocks"
-brew "neovim"
 brew "poppler"
 brew "resvg"
 brew "ripgrep"
@@ -33,11 +45,6 @@ brew "treemd"
 brew "uv"
 brew "yazi"
 brew "zoxide"
-
-{{ if eq .chezmoi.os "darwin" -}}
-# ---- macOS only ----
-# Modern bash (macOS ships 3.2; some scripts assume 5.x)
-brew "bash"
 
 # GUI apps & document viewers
 cask "ghostty"
@@ -67,6 +74,6 @@ cask "font-symbols-only-nerd-font"
 
 {{ if eq .chezmoi.os "linux" -}}
 # ---- Linux only ----
-# Reserved for Linux-specific brew formulae. Most Linux packages are managed
-# via apt/snap/flatpak (see the tools_update fish module), not Homebrew.
+# Reserved for Linux-specific brew formulae. Add sparingly: most Linux packages
+# come from apt, official install scripts, or local builds, not Homebrew.
 {{ end -}}
