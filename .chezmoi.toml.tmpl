@@ -1,0 +1,34 @@
+{{/*
+   chezmoi config template -- rendered once at `chezmoi init` into
+   ~/.config/chezmoi/chezmoi.toml. Prompts use the *Once variants so that
+   re-running `chezmoi init` reuses the cached answers (stored under [data])
+   instead of asking again.
+
+   Tags drive distribution (see .chezmoiignore):
+     personal -- my personal Macs/desktops (adds fastfetch + sparkle)
+     school   -- the school Ubuntu workstation (adds onedrive sync)
+     work     -- the company workstation (adds the fish direnv hook)
+   A host with no tags gets the minimal base config and skips brew bundle.
+*/ -}}
+{{- $tags := promptMultichoiceOnce . "tags" "Host tags (space toggles, enter confirms)" (list "personal" "school" "work") -}}
+{{- $kdbxDatabase := promptStringOnce . "kdbxDatabase" "Absolute path to the KeePassXC .kdbx (blank to skip secret management)" "" -}}
+{{- $kdbxKeyFile := promptStringOnce . "kdbxKeyFile" "Absolute path to the KeePassXC key file (blank if the database has none)" "" -}}
+{{ if $kdbxDatabase -}}
+[keepassxc]
+    # mode "builtin" (native parser) cannot decrypt an AES-KDF + key-file kdbx;
+    # the default cli mode works. Paths are absolute because keepassxc-cli args
+    # are passed verbatim and do not undergo ~ expansion.
+    database = {{ $kdbxDatabase | quote }}
+{{- if $kdbxKeyFile }}
+    args = ["--key-file", {{ $kdbxKeyFile | quote }}]
+{{- end }}
+
+{{ end -}}
+[data]
+    tags = [{{ range $i, $v := $tags }}{{ if $i }}, {{ end }}{{ $v | quote }}{{ end }}]
+{{- if $kdbxDatabase }}
+    kdbxDatabase = {{ $kdbxDatabase | quote }}
+{{- end }}
+{{- if $kdbxKeyFile }}
+    kdbxKeyFile = {{ $kdbxKeyFile | quote }}
+{{- end }}
