@@ -1,0 +1,6 @@
+# chezmoi templates contain Go template syntax ({{ ... }}) that Prettier's
+# YAML/JSON printers mangle (e.g. `{{ x }}` -> `{ { x } }` with trailing commas),
+# which silently breaks `chezmoi apply`. Keep Prettier away from anything chezmoi
+# renders as a template.
+.chezmoitemplates/
+*.tmpl
