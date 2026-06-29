@@ -6,18 +6,36 @@
 #     brew bundle --file=~/.config/homebrew/Brewfile
 #
 # Layout:
-#   - Cross-platform: installed via brew on macOS AND tag-bearing Linux. Keep this
-#     list deliberately small -- on Linux most tools come from apt, official install
-#     scripts, or local builds, so only list things brew is genuinely best for there.
-#   - macOS only: everything else (GUI casks, fonts, and CLI tools that on Linux are
-#     better handled by apt/scripts/source).
+#   - Cross-platform: installed via brew on macOS AND tag-bearing Linux. Holds the
+#     modern CLI tools I want identical on every host, where apt's builds lag too
+#     far behind (Ubuntu 22 especially) or aren't packaged at all.
+#   - macOS only: GUI casks, fonts, and CLI tools that on Linux come from
+#     apt / official install scripts / local builds instead.
 
-# ---- Cross-platform (keep minimal!) ----
-# apt's neovim is too old for AstroNvim, so brew is the right manager on Linux too.
+{{- $tags := list }}
+{{- if hasKey . "tags" }}{{ $tags = .tags }}{{ end }}
+# ---- Cross-platform (brew on macOS AND tag-bearing Linux) ----
+# Modern CLI tools I want identical on every host. apt's builds lag too far
+# behind (Ubuntu 22 especially) or aren't packaged, so brew owns them everywhere.
 brew "neovim"
+brew "tmux"        # heavy tmux config ships here; keep it explicit, not a transitive dep
+brew "direnv"      # universal: binary + fish hook ship on every host
+brew "fd"
+brew "fzf"
+brew "ripgrep"
+brew "lazygit"
+brew "yazi"
+brew "zoxide"
+brew "gdu"
+brew "uv"
+brew "btop"
+brew "fastfetch"
+brew "jq"
+brew "tree"
+brew "treemd"
 
 {{ if eq .chezmoi.os "darwin" -}}
-# ---- macOS only ----
+# ---- macOS: core (every tagged Mac, including the lightweight one) ----
 # On Linux these come from apt / official install scripts / local builds, not brew.
 
 # Modern bash (macOS ships 3.2; some scripts assume 5.x)
@@ -25,55 +43,55 @@ brew "bash"
 
 # CLI tools
 brew "chezmoi"
-brew "fd"
-brew "ffmpeg-full"
 brew "fish"
 brew "fnm"
-brew "fzf"
-brew "gdu"
-brew "imagemagick-full"
-brew "jq"
-brew "lazygit"
-brew "luarocks"
 brew "poppler"
 brew "resvg"
-brew "ripgrep"
 brew "sevenzip"
-brew "tmuxinator"
-brew "tree"
-brew "treemd"
-brew "uv"
-brew "yazi"
-brew "zoxide"
+# ffmpeg: full build on dev boxes, lightweight build on non-dev (yazi previews)
+{{ if has "dev" $tags }}brew "ffmpeg-full"{{ else }}brew "ffmpeg"{{ end }}
 
-# GUI apps & document viewers
+# GUI apps & terminals
 cask "ghostty"
 cask "keepassxc"
-cask "skim"
-cask "basictex"
 cask "input-source-pro"
 
-# AI coding CLIs (cask-packaged on macOS)
+# AI coding tools
 cask "claude-code"
 cask "codex"
+tap "manaflow-ai/cmux"
+cask "cmux"                    # Ghostty-based terminal for AI coding agents
 
-# Fonts
-cask "font-libertinus"
+# Utilities
+cask "pearcleaner"             # app uninstaller / leftover-file cleaner
+# snapzy: screenshot tool. Its tap is non-official, so on a fresh machine run
+# this once before `brew bundle` (brew bundle cannot trust a tap for you):
+#   brew trust --cask duongductrong/snapzy/snapzy
+tap "duongductrong/snapzy"
+cask "snapzy"
+
+# Fonts (terminal / icon rendering)
 cask "font-maple-mono-nf-cn"
 cask "font-symbols-only-nerd-font"
 
-# ---- Niche / experimental (opt-in: uncomment to install) ----
-# tap "manaflow-ai/cmux"
-# cask "cmux"                 # Ghostty-based terminal for AI agents
-# cask "pearcleaner"          # app uninstaller utility
-# snapzy lives in an untrusted tap; before enabling it run:
-#   brew tap duongductrong/snapzy && brew trust --cask duongductrong/snapzy/snapzy
-# tap "duongductrong/snapzy"
-# cask "snapzy"
+{{ if has "dev" $tags -}}
+# ---- macOS: dev-only (skipped on the lightweight, proxy-only Mac) ----
+# Heavy media / LaTeX / Lua toolchain a pure-entertainment Mac doesn't need.
+brew "imagemagick-full"
+brew "luarocks"
+brew "tmuxinator"
+cask "skim"                    # PDF viewer (pairs with basictex)
+cask "basictex"                # LaTeX distribution
+cask "font-libertinus"         # scientific-plotting body font
+{{ end -}}
 {{ end -}}
 
 {{ if eq .chezmoi.os "linux" -}}
 # ---- Linux only ----
-# Reserved for Linux-specific brew formulae. Add sparingly: most Linux packages
-# come from apt, official install scripts, or local builds, not Homebrew.
+# Add sparingly: most Linux packages come from apt, official install scripts, or
+# local builds, not Homebrew.
+
+# tmuxinator's config ships to Linux hosts too, but apt's ruby packaging is
+# awkward, so brew is the cleaner install path. (macOS lists it above.)
+brew "tmuxinator"
 {{ end -}}
