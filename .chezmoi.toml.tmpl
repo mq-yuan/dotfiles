@@ -4,13 +4,14 @@
    re-running `chezmoi init` reuses the cached answers (stored under [data])
    instead of asking again.
 
-   Tags drive distribution (see .chezmoiignore):
-     personal -- my personal Macs/desktops (adds fastfetch + sparkle)
-     school   -- the school Ubuntu workstation (adds onedrive sync)
-     work     -- the company workstation (adds the fish direnv hook)
+   Tags drive distribution (see .chezmoiignore for authoritative semantics):
+     dev      -- a full dev box; gets the heavy macOS Brewfile tier (LaTeX/media/Lua)
+     proxy    -- runs the Sparkle proxy (adds .config/sparkle/)
+     onedrive -- needs the OneDrive client config (adds .config/onedrive/)
+     company  -- the company workstation; adds company-only yazi keybinds
    A host with no tags gets the minimal base config and skips brew bundle.
 */ -}}
-{{- $tags := promptMultichoiceOnce . "tags" "Host tags (space toggles, enter confirms)" (list "personal" "school" "work") -}}
+{{- $tags := promptMultichoiceOnce . "tags" "Host tags (space toggles, enter confirms)" (list "dev" "proxy" "onedrive" "company") -}}
 {{- $kdbxDatabase := promptStringOnce . "kdbxDatabase" "Absolute path to the KeePassXC .kdbx (blank to skip secret management)" "" -}}
 {{- $kdbxKeyFile := promptStringOnce . "kdbxKeyFile" "Absolute path to the KeePassXC key file (blank if the database has none)" "" -}}
 {{ if $kdbxDatabase -}}

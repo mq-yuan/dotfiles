@@ -30,15 +30,21 @@ Library/
 # Tag-gated content. Tags are set per-host in ~/.config/chezmoi/chezmoi.toml:
 #
 #   [data]
-#   tags = ["personal", "school"]   # pick any subset
+#   tags = ["dev", "proxy"]   # pick any subset
 #
 # Tag semantics:
-#   personal — my personal desktops (home + school). Adds fastfetch + sparkle.
-#   school   — the school Ubuntu workstation. Adds onedrive sync config.
-#   work     — the company workstation. Adds the fish direnv hook (the
-#              direnvrc itself stays available everywhere on Linux, so
-#              `use_cuda` etc. are usable on any Linux host that installs
-#              direnv on its own).
+#   dev      — a full development box (vs a light entertainment machine). Has no
+#              file gating here; it drives the macOS Brewfile tier (dev hosts get
+#              the heavy LaTeX/media/Lua toolchain, others a lean core set). See
+#              private_dot_config/homebrew/Brewfile.tmpl.
+#   proxy    — runs the Sparkle (Mihomo Party) proxy. Adds .config/sparkle/.
+#   onedrive — needs the OneDrive client config (Linux has no good GUI client).
+#              Adds .config/onedrive/.
+#   company  — the company workstation. Like `dev`, no file gating here; it adds
+#              company-only keybinds inside yazi/keymap.toml.tmpl (remote paths).
+#
+# Ships everywhere now (no longer tag-gated): fastfetch (cosmetic) and the
+# direnv fish hook + binary (direnv is universal).
 #
 # Machines with no tags (e.g. remote GPU hosts) get the minimal base config.
 #
@@ -50,15 +56,10 @@ Library/
 {{- $tags := list }}
 {{- if hasKey . "tags" }}{{ $tags = .tags }}{{ end }}
 
-{{- if not (has "personal" $tags) }}
-.config/fastfetch/
+{{- if not (has "proxy" $tags) }}
 .config/sparkle/
 {{- end }}
 
-{{- if not (has "school" $tags) }}
+{{- if not (has "onedrive" $tags) }}
 .config/onedrive/
-{{- end }}
-
-{{- if not (has "work" $tags) }}
-.config/fish/conf.d/16_direnv.fish
 {{- end }}

@@ -10,7 +10,7 @@ desc = "Go to ~/Projects"
 on = ["g", "d"]
 run = "cd ~/Downloads"
 desc = "Go to ~/Downloads"
-{{ if has "work" $tags }}
+{{ if has "company" $tags }}
 [[mgr.prepend_keymap]]
 on = ["g", "r"]
 run = "cd ~/Remote/Insta/userspace/home/t-yuanmengqi/Projects"
