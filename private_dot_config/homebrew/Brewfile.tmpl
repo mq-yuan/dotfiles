@@ -48,8 +48,10 @@ brew "fnm"
 brew "poppler"
 brew "resvg"
 brew "sevenzip"
-# ffmpeg: full build on dev boxes, lightweight build on non-dev (yazi previews)
-{{ if has "dev" $tags }}brew "ffmpeg-full"{{ else }}brew "ffmpeg"{{ end }}
+# ffmpeg: yazi video thumbnails + general CLI use. The regular build covers all
+# of that; ffmpeg-full's extra codecs go unused here and it's keg-only anyway
+# (would not land on PATH), so no dev/non-dev split.
+brew "ffmpeg"
 
 # GUI apps & terminals
 cask "ghostty"
@@ -59,8 +61,7 @@ cask "input-source-pro"
 # AI coding tools
 cask "claude-code"
 cask "codex"
-tap "manaflow-ai/cmux"
-cask "cmux"                    # Ghostty-based terminal for AI coding agents
+cask "cmux"                    # Ghostty-based terminal for AI coding agents (in the official cask repo now, no tap needed)
 
 # Utilities
 cask "pearcleaner"             # app uninstaller / leftover-file cleaner
