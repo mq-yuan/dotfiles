@@ -1,0 +1,40 @@
+symbolPreset: nerd
+theme:
+  dark: mahogany
+setupVersion: 1
+
+disabledProviders:
+  - claude
+retry:
+  modelFallback: false
+tools:
+  approvalMode: write
+  approval:
+    bash: allow
+    task: allow
+shellPath: /bin/bash
+modelRoles:
+  # ──────────────────────────────────────────
+  # Kimi K3：主要编码与复杂执��
+  # K3 当前不添加 thinking 后缀。
+  # ──────────────────────────────────────────
+  default: "kimi-code/k3"
+  task: "kimi-code/k3"
+  vision: "kimi-code/k3"
+  designer: "kimi-code/k3"
+
+  # ──────────────────────────────────────────
+  # Kimi K2.7 Code HighSpeed：轻量与后台任务
+  # HighSpeed 与标准 K2.7 Code 能力相同，
+  # 但输出约快 6 倍，额度消耗约为 3 倍。
+  # ──────────────────────────────────────────
+  smol: "kimi-code/kimi-for-coding-highspeed:medium"
+  tiny: "kimi-code/kimi-for-coding-highspeed:minimal"
+  commit: "kimi-code/kimi-for-coding-highspeed:low"
+
+  # ──────────────────────────────────────────
+  # GPT-5.6 Sol：规划、重点推理和独立审查
+  # ──────────────────────────────────────────
+  plan: "openai-codex/gpt-5.6-sol:medium"
+  slow: "openai-codex/gpt-5.6-sol:xhigh"
+  advisor: "openai-codex/gpt-5.6-sol:medium"
