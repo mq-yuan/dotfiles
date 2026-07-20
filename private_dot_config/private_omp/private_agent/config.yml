@@ -5,17 +5,60 @@ setupVersion: 1
 
 disabledProviders:
   - claude
+
 retry:
-  modelFallback: false
+  # Kimi 发生 429、overloaded、quota 或 provider 故障时，
+  # 自动切换到对应角色的备用模型。
+  modelFallback: true
+
+  # Kimi cooldown 结束后，后续 turn 自动恢复原模型。
+  fallbackRevertPolicy: cooldown-expiry
+
+  fallbackChains:
+    # ─────────────��───────────────────────────
+    # K3 主力角色
+    # Terra high 与 Sol medium 质量基本相当。
+    # Terra 优先，Sol 作��第二道保障。
+    # ────────────��────────────────────────────
+    default:
+      - "openai-codex/gpt-5.6-terra:high"
+      - "openai-codex/gpt-5.6-sol:medium"
+
+    task:
+      - "openai-codex/gpt-5.6-terra:high"
+      - "openai-codex/gpt-5.6-sol:medium"
+
+    vision:
+      - "openai-codex/gpt-5.6-terra:high"
+      - "openai-codex/gpt-5.6-sol:medium"
+
+    designer:
+      - "openai-codex/gpt-5.6-terra:high"
+      - "openai-codex/gpt-5.6-sol:medium"
+
+    # ─────────���───────────────────�───────────
+    # 简单与后台任务
+    # Terra medium 是允许的最低质量。
+    # ─────────────────────────���────────────────
+    smol:
+      - "openai-codex/gpt-5.6-terra:medium"
+
+    tiny:
+      - "openai-codex/gpt-5.6-terra:medium"
+
+    commit:
+      - "openai-codex/gpt-5.6-terra:medium"
+
 tools:
   approvalMode: write
   approval:
     bash: allow
     task: allow
+
 shellPath: /bin/bash
 modelRoles:
   # ──────────────────────────────────────────
-  # Kimi K3：主要编码与复杂执��
+  # Kimi K3：主要编码
   # K3 当前不添加 thinking 后缀。
   # ──────────────────────────────────────────
   default: "kimi-code/k3"
