@@ -1,0 +1,111 @@
+onboarding = false
+
+[terminal]
+new_cwd = "follow"
+
+[ui]
+# Order the agent panel as an attention queue instead of grouping by workspace
+agent_panel_sort = "priority"
+
+# Background notifications go through macOS's notification service directly
+# (alternatives: "herdr" in-app toasts, "terminal", "off")
+[ui.toast]
+delivery = "system"
+delay_seconds = 1
+
+# Play a sound when agents change state in background workspaces
+[ui.sound]
+enabled = true
+
+[keys]
+prefix = "ctrl+b"
+# Detach from the session (tmux-style; herdr's default is prefix+q)
+detach = "prefix+d"
+
+# ─────────────────────────────────────────────
+# Workspace
+# ─────────────────────────────────────────────
+
+# choose workspace
+workspace_picker = "prefix+w"
+
+# Rename the current project workspace
+rename_workspace = "prefix+comma"
+
+# Create a new workspace
+new_workspace = "prefix+shift+c"
+
+# Quickly cycle between workspaces. Takes over Tab from cycle_pane_*,
+# which is disabled below.
+next_workspace = "prefix+tab"
+previous_workspace = "prefix+shift+tab"
+
+# Herdr defaults Tab to cycling panes; we use hjkl instead, so disable these
+cycle_pane_next = ""
+cycle_pane_previous = ""
+
+# Navigate mode: j/k select workspaces; pane movement in normal mode uses
+# prefix+hjkl (focus_pane_*), which is independent of these. Pane up/down
+# inside navigate mode is explicitly disabled below (j/k can only do one
+# thing there); pane left/right still works via h/l and the always-on
+# arrow-key aliases.
+navigate_workspace_up = "k"
+navigate_workspace_down = "j"
+
+# Explicitly disabled: j/k belong to workspace selection above. Left/right
+# pane movement in navigate mode still works via h/l and arrow keys.
+navigate_pane_left = "h"
+navigate_pane_down = ""
+navigate_pane_up = ""
+navigate_pane_right = "l"
+
+# ─────────────────────────────────────────────
+# Tab
+# ─────────────────────────────────────────────
+
+new_tab = "prefix+c"
+
+# [ / ] instead of the default p/n
+previous_tab = "prefix+["
+next_tab = "prefix+]"
+
+rename_tab = "prefix+shift+t"
+
+# Jump back to the exact last-focused pane, across workspaces and tabs
+last_pane = "prefix+minus"
+
+# ─────────────────────────────────────────────
+# Pane
+# ─────────────────────────────────────────────
+
+# Match tmux's " and % visual semantics:
+# " splits horizontally = stacked (top/bottom)
+# % splits vertically = side by side (left/right)
+split_horizontal = 'prefix+"'
+split_vertical = "prefix+%"
+
+focus_pane_left = "prefix+h"
+focus_pane_down = "prefix+j"
+focus_pane_up = "prefix+k"
+focus_pane_right = "prefix+l"
+
+# Herdr uses a dedicated resize mode
+resize_mode = "prefix+r"
+
+# ─────────────────────────────────────────────
+# Copy mode
+# ─────────────────────────────────────────────
+
+# esc instead of the default prefix+[ (which previous_tab now uses)
+copy_mode = "prefix+esc"
+
+# ─────────────────────────────────────────────
+# Agent attention queue
+# ─────────────────────────────────────────────
+
+# Cycle through agents that need attention (pairs with ui.agent_panel_sort)
+previous_agent = "prefix+shift+k"
+next_agent = "prefix+shift+j"
+
+# Jump to the agent pane for the currently visible notification
+open_notification_target = "prefix+o"
