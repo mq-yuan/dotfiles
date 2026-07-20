@@ -106,6 +106,8 @@ copy_mode = "prefix+esc"
 # Cycle through agents that need attention (pairs with ui.agent_panel_sort)
 previous_agent = "prefix+shift+k"
 next_agent = "prefix+shift+j"
+# Jump straight to the Nth agent in the attention queue
+focus_agent = "prefix+alt+1..9"
 
 # Jump to the agent pane for the currently visible notification
 open_notification_target = "prefix+o"
