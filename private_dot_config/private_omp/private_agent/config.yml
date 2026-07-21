@@ -7,19 +7,20 @@ disabledProviders:
   - claude
 
 retry:
-  # Kimi 发生 429、overloaded、quota 或 provider 故障时，
-  # 自动切换到对应角色的备用模型。
+  # Automatically switch to the role's fallback model when Kimi hits
+  # 429 (rate limit), overloaded, quota exhaustion, or a provider outage.
   modelFallback: true
 
-  # Kimi cooldown 结束后，后续 turn 自动恢复原模型。
+  # Once the Kimi cooldown expires, later turns automatically revert
+  # to the original (primary) model.
   fallbackRevertPolicy: cooldown-expiry
 
   fallbackChains:
-    # ─────────────��───────────────────────────
-    # K3 主力角色
-    # Terra high 与 Sol medium 质量基本相当。
-    # Terra 优先，Sol 作��第二道保障。
-    # ────────────��────────────────────────────
+    # ──────────────────────────────────────────
+    # Fallbacks for the K3 primary roles
+    # Terra high and Sol medium are roughly equal in quality.
+    # Terra is preferred; Sol acts as the second line of defense.
+    # ──────────────────────────────────────────
     default:
       - "openai-codex/gpt-5.6-terra:high"
       - "openai-codex/gpt-5.6-sol:medium"
@@ -36,10 +37,10 @@ retry:
       - "openai-codex/gpt-5.6-terra:high"
       - "openai-codex/gpt-5.6-sol:medium"
 
-    # ─────────���───────────────────�───────────
-    # 简单与后台任务
-    # Terra medium 是允许的最低质量。
-    # ─────────────────────────���────────────────
+    # ──────────────────────────────────────────
+    # Fallbacks for lightweight and background roles
+    # Terra medium is the lowest quality tier allowed here.
+    # ──────────────────────────────────────────
     smol:
       - "openai-codex/gpt-5.6-terra:medium"
 
@@ -50,16 +51,20 @@ retry:
       - "openai-codex/gpt-5.6-terra:medium"
 
 tools:
+  # Prompt only for write operations; the tools listed under `approval`
+  # below are pre-approved and never prompt.
   approvalMode: write
   approval:
     bash: allow
     task: allow
+    read: allow
+    hub: allow
 
 shellPath: /bin/bash
 modelRoles:
   # ──────────────────────────────────────────
-  # Kimi K3：主要编码
-  # K3 当前不添加 thinking 后缀。
+  # Kimi K3: primary coding roles
+  # K3 currently takes no thinking-effort suffix.
   # ──────────────────────────────────────────
   default: "kimi-code/k3"
   task: "kimi-code/k3"
@@ -67,16 +72,16 @@ modelRoles:
   designer: "kimi-code/k3"
 
   # ──────────────────────────────────────────
-  # Kimi K2.7 Code HighSpeed：轻量与后台任务
-  # HighSpeed 与标准 K2.7 Code 能力相同，
-  # 但输出约快 6 倍，额度消耗约为 3 倍。
+  # Kimi K2.7 Code HighSpeed: lightweight and background roles
+  # HighSpeed matches standard K2.7 Code in capability, but outputs
+  # about 6x faster while consuming roughly 3x the quota.
   # ──────────────────────────────────────────
   smol: "kimi-code/kimi-for-coding-highspeed:medium"
   tiny: "kimi-code/kimi-for-coding-highspeed:minimal"
   commit: "kimi-code/kimi-for-coding-highspeed:low"
 
   # ──────────────────────────────────────────
-  # GPT-5.6 Sol：规划、重点推理和独立审查
+  # GPT-5.6 Sol: planning, focused reasoning, and independent review
   # ──────────────────────────────────────────
   plan: "openai-codex/gpt-5.6-sol:medium"
   slow: "openai-codex/gpt-5.6-sol:xhigh"
