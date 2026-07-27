@@ -20,7 +20,7 @@ function __tools_update_get_list
     set -l tools_os \
 {{- if eq .chezmoi.os "linux" }}
         "APT"              "apt"                          "sudo apt update && sudo apt upgrade"            "system"   "yes"  ""                                            \
-        "Flatpak"          "flatpak"                      "flatpak update -y"                              "user"     "no"   ""                                            \
+        "Flatpak"          "flatpak"                      {{ if and (hasKey . "proxyUrl") .proxyUrl }}"https_proxy={{ .proxyUrl }} http_proxy={{ .proxyUrl }} flatpak update -y"{{ else }}"flatpak update -y"{{ end }}                              "user"     "no"   ""                                            \
         "Snap"             "snap"                         "sudo snap refresh"                              "system"   "yes"  ""
 {{- end }}
 
