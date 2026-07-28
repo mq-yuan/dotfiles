@@ -13,3 +13,10 @@ fish_add_path /opt/homebrew/opt/imagemagick-full/bin
 {{ end }}
 fish_add_path $HOME/bin
 fish_add_path $HOME/.local/bin
+
+# Neovim Mason installs language servers (basedpyright, ruff, clangd, ...) here
+# but does not expose them on PATH. Adding it lets PATH-based tools (e.g. the omp
+# coding agent) discover them. Guarded so it is skipped on machines without Mason.
+if test -d $HOME/.local/share/nvim/mason/bin
+    fish_add_path $HOME/.local/share/nvim/mason/bin
+end
