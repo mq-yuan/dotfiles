@@ -12,6 +12,19 @@ Managed by chezmoi. Tool-specific files import or symlink this file.
 - Keep existing project terminology consistent; do not rename concepts without explicit instruction.
 
 
+## Delivering Files to the User
+
+- **NEVER deliver files via `/tmp` (including any scratchpad under `/tmp`).** The user will not
+  open them. A file handed over in `/tmp` is a non-delivery.
+- Deliver in one of exactly two ways:
+  1. **In the project directory** — save under the repo (e.g. `outputs/`) and give the path.
+  2. **On the server** — leave it on the remote and state the absolute remote path so the user
+     can open it there.
+- This applies to every artifact the user is meant to look at: images, EXR/depth dumps, reports,
+  exports, logs.
+- `/tmp` remains fine for my own intermediate work that the user never opens.
+
+
 ## Code Style
 
 ### General
