@@ -14,6 +14,7 @@
 {{- $tags := promptMultichoiceOnce . "tags" "Host tags (space toggles, enter confirms)" (list "dev" "proxy" "onedrive" "company") -}}
 {{- $kdbxDatabase := promptStringOnce . "kdbxDatabase" "Absolute path to the KeePassXC .kdbx (blank to skip secret management)" "" -}}
 {{- $kdbxKeyFile := promptStringOnce . "kdbxKeyFile" "Absolute path to the KeePassXC key file (blank if the database has none)" "" -}}
+{{- $proxyUrl := promptStringOnce . "proxyUrl" "HTTP proxy URL for network-heavy updates like flatpak (blank to disable)" "http://127.0.0.1:7890" -}}
 {{ if $kdbxDatabase -}}
 [keepassxc]
     # mode "builtin" (native parser) cannot decrypt an AES-KDF + key-file kdbx;
@@ -27,6 +28,9 @@
 {{ end -}}
 [data]
     tags = [{{ range $i, $v := $tags }}{{ if $i }}, {{ end }}{{ $v | quote }}{{ end }}]
+{{- if $proxyUrl }}
+    proxyUrl = {{ $proxyUrl | quote }}
+{{- end }}
 {{- if $kdbxDatabase }}
     kdbxDatabase = {{ $kdbxDatabase | quote }}
 {{- end }}
