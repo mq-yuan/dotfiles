@@ -59,6 +59,7 @@ tools:
     task: allow
     read: allow
     hub: allow
+    eval: allow
 
 shellPath: /bin/bash
 modelRoles:
@@ -87,5 +88,5 @@ modelRoles:
   slow: "openai-codex/gpt-5.6-sol:xhigh"
   advisor: "openai-codex/gpt-5.6-sol:medium"
 
-# Collapse the model's reasoning/thinking block in the UI.
-hideThinkingBlock: true
+# Show the model's reasoning/thinking block expanded in the UI.
+hideThinkingBlock: false
