@@ -7,28 +7,31 @@ disabledProviders:
   - claude
 
 retry:
-  # Automatically switch to the role's fallback model when Kimi hits
-  # 429 (rate limit), overloaded, quota exhaustion, or a provider outage.
+  # Automatically switch to the role's fallback model when its primary
+  # provider hits a rate limit, overload, quota exhaustion, or outage.
   modelFallback: true
 
-  # Once the Kimi cooldown expires, later turns automatically revert
-  # to the original (primary) model.
+  # Once the primary provider cooldown expires, later turns automatically
+  # revert to the original model.
   fallbackRevertPolicy: cooldown-expiry
 
   fallbackChains:
     # ──────────────────────────────────────────
-    # Fallbacks for the K3 primary roles
-    # Terra high and Sol medium are roughly equal in quality.
-    # Terra is preferred; Sol acts as the second line of defense.
+    # GPT-5.6 remains the preferred cross-provider fallback for K3 roles.
+    # DeepSeek V4 Pro adds a third option for text-only roles.
     # ──────────────────────────────────────────
     default:
       - "openai-codex/gpt-5.6-terra:high"
       - "openai-codex/gpt-5.6-sol:medium"
+      - "deepseek/deepseek-v4-pro:high"
 
     task:
       - "openai-codex/gpt-5.6-terra:high"
       - "openai-codex/gpt-5.6-sol:medium"
+      - "deepseek/deepseek-v4-pro:high"
 
+    # DeepSeek models currently accept text input only, so visual roles use
+    # the established GPT-5.6 fallbacks.
     vision:
       - "openai-codex/gpt-5.6-terra:high"
       - "openai-codex/gpt-5.6-sol:medium"
@@ -37,18 +40,31 @@ retry:
       - "openai-codex/gpt-5.6-terra:high"
       - "openai-codex/gpt-5.6-sol:medium"
 
+
+    # OpenAI-backed reasoning roles fall back through Sol, then K3.
+    plan:
+      - "openai-codex/gpt-5.6-sol:medium"
+      - "kimi-code/k3"
+
+    advisor:
+      - "openai-codex/gpt-5.6-sol:medium"
+      - "kimi-code/k3"
+
     # ──────────────────────────────────────────
-    # Fallbacks for lightweight and background roles
-    # Terra medium is the lowest quality tier allowed here.
+    # Terra medium is the first independent fallback; Kimi HighSpeed
+    # (the former primary) is the second.
     # ──────────────────────────────────────────
     smol:
       - "openai-codex/gpt-5.6-terra:medium"
+      - "kimi-code/kimi-for-coding-highspeed:medium"
 
     tiny:
       - "openai-codex/gpt-5.6-terra:medium"
+      - "kimi-code/kimi-for-coding-highspeed:minimal"
 
     commit:
       - "openai-codex/gpt-5.6-terra:medium"
+      - "kimi-code/kimi-for-coding-highspeed:low"
 
 tools:
   # Prompt only for write operations; the tools listed under `approval`
@@ -72,20 +88,20 @@ modelRoles:
   designer: "kimi-code/k3"
 
   # ──────────────────────────────────────────
-  # Kimi K2.7 Code HighSpeed: lightweight and background roles
-  # HighSpeed matches standard K2.7 Code in capability, but outputs
-  # about 6x faster while consuming roughly 3x the quota.
+  # DeepSeek V4 Flash: lightweight and background roles
+  # Verified quality with very fast output; 1M context, low cost.
   # ──────────────────────────────────────────
-  smol: "kimi-code/kimi-for-coding-highspeed:medium"
-  tiny: "kimi-code/kimi-for-coding-highspeed:minimal"
-  commit: "kimi-code/kimi-for-coding-highspeed:low"
+  smol: "deepseek/deepseek-v4-flash:high"
+  tiny: "deepseek/deepseek-v4-flash:low"
+  commit: "deepseek/deepseek-v4-flash:low"
 
   # ──────────────────────────────────────────
-  # GPT-5.6 Sol: planning, focused reasoning, and independent review
+  # DeepSeek V4 Pro: planning and independent review
+  # Sol xhigh remains for the deepest reasoning role.
   # ──────────────────────────────────────────
-  plan: "openai-codex/gpt-5.6-sol:medium"
+  plan: "deepseek/deepseek-v4-pro:high"
   slow: "openai-codex/gpt-5.6-sol:xhigh"
-  advisor: "openai-codex/gpt-5.6-sol:medium"
+  advisor: "deepseek/deepseek-v4-pro:high"
 
 # Collapse the model's reasoning/thinking block in the UI.
 hideThinkingBlock: true
