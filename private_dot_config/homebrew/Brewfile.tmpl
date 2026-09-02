@@ -49,6 +49,11 @@ brew "fnm"
 brew "poppler"
 brew "resvg"
 brew "sevenzip"
+# whatcable-cli: cable info/lookup CLI from a third-party tap. Homebrew
+# refuses formulae from untrusted taps; run_onchange_after_10-brew-bundle
+# trusts this tap before `brew bundle`, so no manual step is needed.
+tap "darrylmorley/whatcable"
+brew "whatcable-cli"
 # ffmpeg: yazi video thumbnails + general CLI use. The regular build covers all
 # of that; ffmpeg-full's extra codecs go unused here and it's keg-only anyway
 # (would not land on PATH), so no dev/non-dev split.
