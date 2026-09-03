@@ -7,10 +7,12 @@ new_cwd = "follow"
 # Order the agent panel as an attention queue instead of grouping by workspace
 agent_panel_sort = "priority"
 
-# Background notifications go through macOS's notification service directly
-# (alternatives: "herdr" in-app toasts, "terminal", "off")
+# Let the outer terminal own desktop notifications (OSC 9/777):
+# Ghostty/cmux on macOS, WezTerm on Ubuntu — also works over SSH.
+# Click focuses the terminal; prefix+o jumps to the agent pane.
+# (alternatives: "system" OS service, "herdr" in-app toasts, "off")
 [ui.toast]
-delivery = "system"
+delivery = "terminal"
 delay_seconds = 1
 
 # Play a sound when agents change state in background workspaces
