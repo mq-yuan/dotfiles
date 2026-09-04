@@ -11,6 +11,7 @@
 
 # other
 GS      gs      50
+会话      hvhx      50
 视图      uitu      50
 单目      djmu      50
 加权      jxqr      50

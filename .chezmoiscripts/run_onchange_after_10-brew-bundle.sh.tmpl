@@ -26,6 +26,13 @@ if ! command -v brew >/dev/null 2>&1; then
     exit 1
 fi
 
+{{ if eq .chezmoi.os "darwin" -}}
+# Homebrew refuses to install formulae from untrusted third-party taps.
+# Trust whatcable up front so fresh Macs install hands-free.
+brew tap darrylmorley/whatcable
+brew trust darrylmorley/whatcable
+
+{{ end -}}
 brewfile="${HOME}/.config/homebrew/Brewfile"
 echo "Running brew bundle install --no-upgrade (${brewfile})..."
 brew bundle install --no-upgrade --file="${brewfile}"

@@ -49,6 +49,11 @@ brew "fnm"
 brew "poppler"
 brew "resvg"
 brew "sevenzip"
+# whatcable-cli: cable info/lookup CLI from a third-party tap. Homebrew
+# refuses formulae from untrusted taps; run_onchange_after_10-brew-bundle
+# trusts this tap before `brew bundle`, so no manual step is needed.
+tap "darrylmorley/whatcable"
+brew "whatcable-cli"
 # ffmpeg: yazi video thumbnails + general CLI use. The regular build covers all
 # of that; ffmpeg-full's extra codecs go unused here and it's keg-only anyway
 # (would not land on PATH), so no dev/non-dev split.
@@ -63,10 +68,12 @@ cask "input-source-pro"
 cask "claude-code"
 cask "codex"
 cask "cmux"                    # Ghostty-based terminal for AI coding agents (in the official cask repo now, no tap needed)
+cask "codexbar"                # menu bar usage monitor for Codex and Claude
 
 # Utilities
 cask "keka"                    # archive extraction / compression
 cask "pearcleaner"             # app uninstaller / leftover-file cleaner
+cask "thaw"                    # menu bar manager (requires macOS 26+)
 # snapzy: screenshot tool. Its tap is non-official, so on a fresh machine run
 # this once before `brew bundle` (brew bundle cannot trust a tap for you):
 #   brew trust --cask duongductrong/snapzy/snapzy
@@ -83,7 +90,6 @@ cask "font-symbols-only-nerd-font"
 brew "imagemagick-full"
 brew "luarocks"
 brew "tmuxinator"
-cask "skim"                    # PDF viewer (pairs with basictex)
 cask "basictex"                # LaTeX distribution
 cask "font-libertinus"         # scientific-plotting body font
 {{ end -}}
