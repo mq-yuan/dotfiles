@@ -71,6 +71,7 @@ tools:
     task: allow
     read: allow
     hub: allow
+    eval: allow
 
 shellPath: /bin/bash
 modelRoles:
@@ -99,5 +100,5 @@ modelRoles:
   slow: "openai-codex/gpt-5.6-sol:xhigh"
   advisor: "deepseek/deepseek-v4-pro:high"
 
-# Collapse the model's reasoning/thinking block in the UI.
-hideThinkingBlock: true
+# Show the model's reasoning/thinking block expanded in the UI.
+hideThinkingBlock: false
