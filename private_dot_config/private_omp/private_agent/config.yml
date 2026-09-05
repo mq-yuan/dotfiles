@@ -1,7 +1,7 @@
 symbolPreset: nerd
 theme:
   dark: mahogany
-setupVersion: 1
+setupVersion: 2
 
 disabledProviders:
   - claude
