@@ -94,10 +94,10 @@ modelRoles:
 
   # ──────────────────────────────────────────
   # DeepSeek V4 Pro: planning and independent review
-  # Sol xhigh remains for the deepest reasoning role.
+  # GPT-6 Astra high now powers the deepest reasoning role.
   # ──────────────────────────────────────────
   plan: "deepseek/deepseek-v4-pro:high"
-  slow: "openai-codex/gpt-5.6-sol:xhigh"
+  slow: "openai-codex/gpt-6-astra:high"
   advisor: "deepseek/deepseek-v4-pro:high"
 
 # Show the model's reasoning/thinking block expanded in the UI.
