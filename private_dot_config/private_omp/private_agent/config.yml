@@ -17,53 +17,49 @@ retry:
 
   fallbackChains:
     # ──────────────────────────────────────────
-    # GPT-5.6 remains the preferred cross-provider fallback for K3 roles.
-    # DeepSeek V4 Pro adds a third option for text-only roles.
+    # GPT-5.6 Sol high is the unified GPT fallback for K3 roles.
+    # DeepSeek V4 Pro adds a second option for text-only roles.
     # ──────────────────────────────────────────
     default:
-      - "openai-codex/gpt-5.6-terra:high"
-      - "openai-codex/gpt-5.6-sol:medium"
+      - "openai-codex/gpt-5.6-sol:high"
       - "deepseek/deepseek-v4-pro:high"
 
     task:
-      - "openai-codex/gpt-5.6-terra:high"
-      - "openai-codex/gpt-5.6-sol:medium"
+      - "openai-codex/gpt-5.6-sol:high"
       - "deepseek/deepseek-v4-pro:high"
 
     # DeepSeek models currently accept text input only, so visual roles use
-    # the established GPT-5.6 fallbacks.
+    # the single GPT-5.6 Sol high fallback.
     vision:
-      - "openai-codex/gpt-5.6-terra:high"
-      - "openai-codex/gpt-5.6-sol:medium"
+      - "openai-codex/gpt-5.6-sol:high"
 
     designer:
-      - "openai-codex/gpt-5.6-terra:high"
-      - "openai-codex/gpt-5.6-sol:medium"
+      - "openai-codex/gpt-5.6-sol:high"
 
 
     # OpenAI-backed reasoning roles fall back through Sol, then K3.
     plan:
-      - "openai-codex/gpt-5.6-sol:medium"
+      - "openai-codex/gpt-5.6-sol:high"
       - "kimi-code/k3"
 
     advisor:
-      - "openai-codex/gpt-5.6-sol:medium"
+      - "openai-codex/gpt-5.6-sol:high"
       - "kimi-code/k3"
 
     # ──────────────────────────────────────────
-    # Terra medium is the first independent fallback; Kimi HighSpeed
+    # Sol high is the first independent fallback; Kimi HighSpeed
     # (the former primary) is the second.
     # ──────────────────────────────────────────
     smol:
-      - "openai-codex/gpt-5.6-terra:medium"
+      - "openai-codex/gpt-5.6-sol:high"
       - "kimi-code/kimi-for-coding-highspeed:medium"
 
     tiny:
-      - "openai-codex/gpt-5.6-terra:medium"
+      - "openai-codex/gpt-5.6-sol:high"
       - "kimi-code/kimi-for-coding-highspeed:minimal"
 
     commit:
-      - "openai-codex/gpt-5.6-terra:medium"
+      - "openai-codex/gpt-5.6-sol:high"
       - "kimi-code/kimi-for-coding-highspeed:low"
 
 tools:
