@@ -35,6 +35,11 @@ brew "jq"
 brew "tree"
 brew "treemd"
 
+{{ if has "dev" $tags -}}
+# ---- Dev-only (tagged "dev" on macOS AND Linux) ----
+brew "gh"          # GitHub CLI; only dev hosts talk to GitHub from the terminal
+{{ end -}}
+
 {{ if eq .chezmoi.os "darwin" -}}
 # ---- macOS: core (every tagged Mac, including the lightweight one) ----
 # On Linux these come from apt / official install scripts / local builds, not brew.
