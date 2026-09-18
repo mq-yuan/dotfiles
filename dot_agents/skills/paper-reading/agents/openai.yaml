@@ -1,0 +1,4 @@
+interface:
+  display_name: "Paper Reading"
+  short_description: "Read papers from files or authoritative links"
+  default_prompt: "Use $paper-reading to resolve this paper from the provided file or link, then explain its core idea and prerequisite gaps."
