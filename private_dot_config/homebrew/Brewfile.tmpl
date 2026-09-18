@@ -38,6 +38,7 @@ brew "treemd"
 {{ if has "dev" $tags -}}
 # ---- Dev-only (tagged "dev" on macOS AND Linux) ----
 brew "gh"          # GitHub CLI; only dev hosts talk to GitHub from the terminal
+brew "cmake"       # C/C++ build system; dev hosts build from source
 {{ end -}}
 
 {{ if eq .chezmoi.os "darwin" -}}
