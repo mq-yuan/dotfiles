@@ -32,7 +32,6 @@
     *   **模块化配置**: 通过 `conf.d` 目录结构实现清晰、有组织的配置管理。
     *   **插件管理**: 使用 `fisher` 管理插件生态。
     *   **智能补全与缩写**: 为常用命令和 Git 工作流设置了丰富的缩写，大幅提升效率。
-*   **[Tmuxinator](https://github.com/tmuxinator/tmuxinator)**: 轻松创建和管理 `tmux` 会话。预设的 `dashboard` (`btop` + `nvtop` / `gdu-go` + `duf`) 通过 `.chezmoiignore` 限定在 Linux 主机分发。
 *   **[Fastfetch](https://github.com/fastfetch-cli/fastfetch)**: 高度定制化且美观的系统信息展示工具，按 host tag 分发（规则见 `.chezmoiignore`）。
 
 ### 🚀 Neovim: 一个现代化的 IDE
