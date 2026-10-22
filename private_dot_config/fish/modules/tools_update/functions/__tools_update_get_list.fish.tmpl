@@ -14,11 +14,24 @@
 # OS tools are detected at render time via lookPath: only the package managers
 # that actually exist on this host are emitted, so the same template serves
 # CachyOS/Arch (pacman + paru), Ubuntu (apt + snap), and macOS (brew).
+{{- /* rustup 安装方式共存：rustup-init 脚本安装落在 ~/.cargo/bin，支持
+      `rustup self update`；发行版/Homebrew 构建（如 /usr/bin/rustup、
+      /opt/homebrew/bin/rustup）禁用了 self-update，其二进制由各自包管理器
+      升级，因此这里绝不能对其执行 `rustup self update`。 */ -}}
+{{- $rustupAggressive := "" -}}
+{{- $rustupPath := lookPath "rustup" -}}
+{{- if $rustupPath -}}
+{{-   if contains "/.cargo/" $rustupPath -}}
+{{-     $rustupAggressive = "rustup self update && rustup update" -}}
+{{-   else -}}
+{{-     $rustupAggressive = "rustup update" -}}
+{{-   end -}}
+{{- end }}
 function __tools_update_get_list
     set -l tools_common \
         "Fisher_Plugin"    "fisher"                       "fisher update"                                  "fish"     "no"   ""                                            \
         "Cargo_Update"     "cargo-install-update"         "cargo install-update --all"                     "language" "no"   "cargo install-update --all --git"            \
-        "Rustup"           "rustup"                       "rustup update"                                  "language" "no"   "rustup self update && rustup update"         \
+        "Rustup"           "rustup"                       "rustup update"                                  "language" "no"   {{ $rustupAggressive | quote }}                    \
         "UV_Tools"         "uv"                           "uv tool upgrade --all"                          "language" "no"   ""
 
     set -l tools_os
