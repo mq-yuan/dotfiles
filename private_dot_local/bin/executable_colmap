@@ -1,0 +1,7 @@
+#!/bin/sh
+# Run COLMAP (built against CUDA 12.8) with its CUDA runtime on
+# LD_LIBRARY_PATH. Standalone POSIX script so it works from any shell and from
+# Python/sh subprocesses, not just interactive fish. 12.8's lib64 is prepended
+# so it wins over any direnv project CUDA environment.
+exec env LD_LIBRARY_PATH="$HOME/cuda/cuda-12.8/lib64${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" \
+    "$HOME/cuda/colmap/bin/colmap" "$@"
