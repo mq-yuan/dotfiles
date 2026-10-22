@@ -24,6 +24,10 @@ end
 set --global --export XMODIFIERS "@im=fcitx"
 set --global --export QT_IM_MODULE "fcitx"
 set --global --export GTK_IM_MODULE "fcitx"
+# /tmp is a 32G tmpfs (RAM-backed): big temp consumers (pytest writes 10G+ per
+# run, gcc/cc1 assembler temp files, ...) must not live in RAM. /var/tmp is
+# disk-backed (btrfs) and systemd-tmpfiles cleans it after 30d.
+set --global --export TMPDIR "/var/tmp"
 # set scripts home
 set --global --export SCRIPTS_HOME "$HOME/Project/scripts"
 {{ end }}
