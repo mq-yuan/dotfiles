@@ -1,16 +1,16 @@
 {{- $tags := list -}}
 {{- if hasKey . "tags" }}{{ $tags = .tags }}{{ end -}}
-{{- if gt (len $tags) 0 -}}
+{{- if and (eq .chezmoi.os "darwin") (gt (len $tags) 0) -}}
 #!/usr/bin/env bash
 # Ensure Homebrew exists before the brew-bundle script runs. Idempotent: exits
-# early if brew is already on PATH or installed in a standard prefix. Only runs
-# on tag-bearing hosts (untagged hosts render this script empty -> skipped).
+# early if brew is already on PATH or installed in a standard prefix. macOS-only
+# and tag-gated; non-macOS / untagged hosts render this script empty -> skipped.
 set -euo pipefail
 
 if command -v brew >/dev/null 2>&1; then
     exit 0
 fi
-for prefix in /opt/homebrew /usr/local /home/linuxbrew/.linuxbrew; do
+for prefix in /opt/homebrew /usr/local; do
     if [ -x "$prefix/bin/brew" ]; then
         exit 0
     fi

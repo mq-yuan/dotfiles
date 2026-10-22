@@ -1,21 +1,22 @@
 # $HOME/.config/fish/conf.d/11_homebrew.fish
-# Check for interactive session AND if Homebrew is already set up to prevent re-initialization
+{{ if eq .chezmoi.os "darwin" }}
+# macOS: source Homebrew's environment and fish completions. Renders empty on
+# Linux/Arch hosts (they use pacman/paru instead of Homebrew).
 if status --is-interactive
-    if not set --query BREW_HOME #Check if Homebrew is already initialized
-        {{ if eq .chezmoi.os "linux" }}
-        eval (/home/linuxbrew/.linuxbrew/bin/brew shellenv)
-        {{ else if eq .chezmoi.os "darwin" }}
-        eval (/opt/homebrew/bin/brew shellenv)
-        {{ end }}
+    if not set --query BREW_HOME
+        if test -x /opt/homebrew/bin/brew
+            eval (/opt/homebrew/bin/brew shellenv)
+        end
     end
 end
 
-{{ if eq .chezmoi.os "linux" }}
-if test -d (brew --prefix)"/share/fish/completions"
-    set -p fish_complete_path (brew --prefix)/share/fish/completions
-end
+if type -q brew
+    if test -d (brew --prefix)"/share/fish/completions"
+        set -p fish_complete_path (brew --prefix)/share/fish/completions
+    end
 
-if test -d (brew --prefix)"/share/fish/vendor_completions.d"
-    set -p fish_complete_path (brew --prefix)/share/fish/vendor_completions.d
+    if test -d (brew --prefix)"/share/fish/vendor_completions.d"
+        set -p fish_complete_path (brew --prefix)/share/fish/vendor_completions.d
+    end
 end
 {{ end }}

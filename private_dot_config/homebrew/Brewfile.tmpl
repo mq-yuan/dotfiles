@@ -2,21 +2,16 @@
 # Source: private_dot_config/homebrew/Brewfile.tmpl  (edit the .tmpl, not the target)
 #
 # Installed automatically by .chezmoiscripts/run_onchange_after_10-brew-bundle.sh.tmpl
-# on tag-bearing hosts. Run it by hand anytime with:
+# on tag-bearing macOS hosts. Run it by hand anytime with:
 #     brew bundle --file=~/.config/homebrew/Brewfile
 #
-# Layout:
-#   - Cross-platform: installed via brew on macOS AND tag-bearing Linux. Holds the
-#     modern CLI tools I want identical on every host, where apt's builds lag too
-#     far behind (Ubuntu 22 especially) or aren't packaged at all.
-#   - macOS only: GUI casks, fonts, and CLI tools that on Linux come from
-#     apt / official install scripts / local builds instead.
+# This file is macOS-only. Arch/CachyOS hosts install their packages via
+# pacman/paru (see private_dot_config/pacman/pkglist.txt.tmpl), not Homebrew.
 
 {{- $tags := list }}
 {{- if hasKey . "tags" }}{{ $tags = .tags }}{{ end }}
-# ---- Cross-platform (brew on macOS AND tag-bearing Linux) ----
-# Modern CLI tools I want identical on every host. apt's builds lag too far
-# behind (Ubuntu 22 especially) or aren't packaged, so brew owns them everywhere.
+
+# ---- Core CLI (every tagged Mac) ----
 brew "neovim"
 brew "tmux"        # heavy tmux config ships here; keep it explicit, not a transitive dep
 brew "herdr"       # terminal agent multiplexer; config ships in ~/.config/herdr on every host
@@ -33,17 +28,6 @@ brew "btop"
 brew "fastfetch"
 brew "jq"
 brew "tree"
-brew "treemd"
-
-{{ if has "dev" $tags -}}
-# ---- Dev-only (tagged "dev" on macOS AND Linux) ----
-brew "gh"          # GitHub CLI; only dev hosts talk to GitHub from the terminal
-brew "cmake"       # C/C++ build system; dev hosts build from source
-{{ end -}}
-
-{{ if eq .chezmoi.os "darwin" -}}
-# ---- macOS: core (every tagged Mac, including the lightweight one) ----
-# On Linux these come from apt / official install scripts / local builds, not brew.
 
 # Modern bash (macOS ships 3.2; some scripts assume 5.x)
 brew "bash"
@@ -60,9 +44,7 @@ brew "sevenzip"
 # trusts this tap before `brew bundle`, so no manual step is needed.
 tap "darrylmorley/whatcable"
 brew "whatcable-cli"
-# ffmpeg: yazi video thumbnails + general CLI use. The regular build covers all
-# of that; ffmpeg-full's extra codecs go unused here and it's keg-only anyway
-# (would not land on PATH), so no dev/non-dev split.
+# ffmpeg: yazi video thumbnails + general CLI use.
 brew "ffmpeg"
 
 # GUI apps & terminals
@@ -73,7 +55,7 @@ cask "input-source-pro"
 # AI coding tools
 cask "claude-code@latest"
 cask "codex"
-cask "cmux"                    # Ghostty-based terminal for AI coding agents (in the official cask repo now, no tap needed)
+cask "cmux"                    # Ghostty-based terminal for AI coding agents
 cask "codexbar"                # menu bar usage monitor for Codex and Claude
 
 # Utilities
@@ -91,23 +73,13 @@ cask "font-maple-mono-nf-cn"
 cask "font-symbols-only-nerd-font"
 
 {{ if has "dev" $tags -}}
-# ---- macOS: dev-only (skipped on the lightweight, proxy-only Mac) ----
+# ---- Dev-only (tagged "dev" on macOS) ----
 # Heavy media / LaTeX / Lua toolchain a pure-entertainment Mac doesn't need.
+brew "gh"          # GitHub CLI; only dev hosts talk to GitHub from the terminal
+brew "cmake"       # C/C++ build system; dev hosts build from source
 brew "imagemagick-full"
 brew "luarocks"
-brew "tmuxinator"
 brew "typst"                 # modern LaTeX alternative; dev machines only
 cask "basictex"                # LaTeX distribution
 cask "font-libertinus"         # scientific-plotting body font
-{{ end -}}
-{{ end -}}
-
-{{ if eq .chezmoi.os "linux" -}}
-# ---- Linux only ----
-# Add sparingly: most Linux packages come from apt, official install scripts, or
-# local builds, not Homebrew.
-
-# tmuxinator's config ships to Linux hosts too, but apt's ruby packaging is
-# awkward, so brew is the cleaner install path. (macOS lists it above.)
-brew "tmuxinator"
 {{ end -}}

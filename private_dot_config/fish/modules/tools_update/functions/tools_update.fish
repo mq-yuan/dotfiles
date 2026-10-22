@@ -117,7 +117,7 @@ function tools_update --description "Updates various development tools."
         end
 
         # Pick aggressive variant only when both the flag is set and a variant exists.
-        # System-level tools (APT, Snap) intentionally leave aggressive_cmd empty so
+        # System-level tools (pacman, APT, Snap) intentionally leave aggressive_cmd empty so
         # `-A` never escalates them — a host-system safety boundary.
         set -l effective_cmd $update_cmd
         if test "$aggressive_mode" = "yes"; and test -n "$aggressive_cmd"
@@ -169,7 +169,7 @@ function __tools_update_print_help
     echo "OPTIONS:"
     echo "  -a, --all                Update all defined tools, including system tools."
     echo "  -A, --aggressive         Use upstream/unstable upgrade variants where available."
-    echo "                           System-level tools never escalate (APT, Snap stay stable)."
+    echo "                           System-level tools never escalate (pacman/APT/Snap stay stable)."
     echo "  -t, --type <TYPE>        Update all tools of a specific type (e.g., 'language', 'system')."
     echo "  -e, --exclude <NAME>     Exclude a specific tool from the update. Can be used multiple times."
     echo "  -h, --help               Show this help message."

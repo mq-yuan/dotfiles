@@ -1,0 +1,21 @@
+{{- $tags := list -}}
+{{- if hasKey . "tags" }}{{ $tags = .tags }}{{ end -}}
+{{- if and (lookPath "pacman") (gt (len $tags) 0) -}}
+#!/usr/bin/env bash
+# Install packages from the chezmoi-managed pacman manifest. Install-only:
+# outdated packages are NOT upgraded here (the tools_update fish module owns
+# upgrades). Re-runs whenever the manifest changes (hash below). Arch-only and
+# tag-gated; everywhere else this renders empty and chezmoi skips it.
+set -euo pipefail
+
+if ! command -v paru >/dev/null 2>&1; then
+    echo "paru not found; cannot install AUR packages." >&2
+    exit 1
+fi
+
+# Manifest hash: {{ include "private_dot_config/pacman/pkglist.txt.tmpl" | sha256sum }}
+
+pkglist="${HOME}/.config/pacman/pkglist.txt"
+echo "Running paru -S --needed --noconfirm (${pkglist})..."
+grep -Ev '^\s*(#|$)' "${pkglist}" | paru -S --needed --noconfirm -
+{{ end -}}

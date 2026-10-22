@@ -1,0 +1,60 @@
+# ~/.config/pacman/pkglist.txt -- managed by chezmoi
+# Source: private_dot_config/pacman/pkglist.txt.tmpl  (edit the .tmpl, not the target)
+#
+# Reference manifest for CachyOS / Arch hosts. paru resolves official repo names
+# first and falls back to the AUR automatically, so a single list covers both.
+#
+# Install missing packages by hand with:
+#     grep -Ev '^\s*(#|$)' ~/.config/pacman/pkglist.txt | paru -S --needed -
+# or let the tag-gated chezmoi script
+# (.chezmoiscripts/run_onchange_after_10-pacman-install.sh) do it for you.
+
+{{- $tags := list }}
+{{- if hasKey . "tags" }}{{ $tags = .tags }}{{ end }}
+
+# ---- Base: every Arch host ----
+base-devel
+chezmoi
+fish
+git
+neovim
+tmux
+direnv
+fd
+fzf
+ripgrep
+lazygit
+yazi
+zoxide
+gdu
+uv
+btop
+fastfetch
+jq
+tree
+fnm
+rustup
+ghostty
+fcitx5
+fcitx5-rime
+fcitx5-qt
+fcitx5-gtk
+fcitx5-configtool
+keepassxc
+
+# ---- AUR ----
+herdr-bin
+{{ if has "dev" $tags }}
+# ---- Dev-only (tagged "dev") ----
+cmake
+github-cli
+typst
+luarocks
+duf
+dust
+procs
+xh
+yq
+atuin
+git-delta
+{{ end }}

@@ -7,21 +7,38 @@
 #   Name, Check Command, Update Command, Type, Sudo Required?, Aggressive Command
 #
 # Aggressive Command is used when `tools_update -A/--aggressive` is passed.
-# Leave it as "" to fall back to the stable Update Command (e.g. for system-level
-# tools like APT/Snap where aggressive upgrades risk breaking the host system).
+# Leave it as "" to fall back to the stable Update Command. System-level package
+# managers (pacman/paru, apt, snap) intentionally leave aggressive_cmd empty —
+# or use a conservative variant — so `-A` never escalates a host OS upgrade.
+#
+# OS tools are detected at render time via lookPath: only the package managers
+# that actually exist on this host are emitted, so the same template serves
+# CachyOS/Arch (pacman + paru), Ubuntu (apt + snap), and macOS (brew).
 function __tools_update_get_list
     set -l tools_common \
-        "Homebrew"         "brew"                         "brew update && brew upgrade"                    "user"     "no"   "brew update && brew upgrade --greedy"        \
         "Fisher_Plugin"    "fisher"                       "fisher update"                                  "fish"     "no"   ""                                            \
         "Cargo_Update"     "cargo-install-update"         "cargo install-update --all"                     "language" "no"   "cargo install-update --all --git"            \
         "Rustup"           "rustup"                       "rustup update"                                  "language" "no"   "rustup self update && rustup update"         \
         "UV_Tools"         "uv"                           "uv tool upgrade --all"                          "language" "no"   ""
 
-    set -l tools_os \
-{{- if eq .chezmoi.os "linux" }}
-        "APT"              "apt"                          "sudo apt update && sudo apt upgrade"            "system"   "yes"  ""                                            \
-        "Flatpak"          "flatpak"                      {{ if and (hasKey . "proxyUrl") .proxyUrl }}"https_proxy={{ .proxyUrl }} http_proxy={{ .proxyUrl }} flatpak update -y"{{ else }}"flatpak update -y"{{ end }}                              "user"     "no"   ""                                            \
-        "Snap"             "snap"                         "sudo snap refresh"                              "system"   "yes"  ""
+    set -l tools_os
+{{- if lookPath "brew" }}
+    set -a tools_os "Homebrew" "brew" "brew update && brew upgrade" "user" "no" "brew update && brew upgrade --greedy"
+{{- end }}
+{{- if lookPath "pacman" }}
+    set -a tools_os "Pacman" "pacman" "sudo pacman -Syu" "system" "yes" ""
+{{- end }}
+{{- if lookPath "paru" }}
+    set -a tools_os "Paru_AUR" "paru" "paru -Sua" "system" "yes" "paru -Sua --devel"
+{{- end }}
+{{- if lookPath "apt" }}
+    set -a tools_os "APT" "apt" "sudo apt update && sudo apt upgrade" "system" "yes" ""
+{{- end }}
+{{- if lookPath "snap" }}
+    set -a tools_os "Snap" "snap" "sudo snap refresh" "system" "yes" ""
+{{- end }}
+{{- if lookPath "flatpak" }}
+    set -a tools_os "Flatpak" "flatpak" {{ if and (hasKey . "proxyUrl") .proxyUrl }}"https_proxy={{ .proxyUrl }} http_proxy={{ .proxyUrl }} flatpak update -y"{{ else }}"flatpak update -y"{{ end }} "user" "no" ""
 {{- end }}
 
     set -l tools $tools_common $tools_os
