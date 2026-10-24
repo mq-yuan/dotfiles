@@ -17,6 +17,7 @@ Library/
 .config/direnv/
 .config/fish/modules/cuda/
 .config/fish/modules/font_install/
+.config/niri/
 .config/wezterm/
 .local/share/fcitx5/
 .xprofile
