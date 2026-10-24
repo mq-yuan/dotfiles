@@ -105,12 +105,12 @@ After any Python change, run in order:
 ## Agent Skills and Instructions Management
 
 - `~/.agents/` is the canonical location for cross-tool agent assets: this file and the shared skills under `~/.agents/skills/`.
-- Claude Code, Codex, and omp consume them via symlinks: `~/.claude/skills/*` and `~/.config/codex/skills/*` link to the canonical skills, `~/.config/codex/AGENTS.md` links to this file, `~/.claude/CLAUDE.md` imports it, and `~/.codex` is a symlink to `~/.config/codex`.
+- Codex and omp read `~/.agents/skills/` natively, so they need no skill symlinks. Claude Code does not: `~/.claude/skills/*` link to the canonical skills. `~/.config/codex/AGENTS.md` links to this file, `~/.claude/CLAUDE.md` imports it, and `~/.codex` is a symlink to `~/.config/codex`.
 - Everything above is managed by chezmoi (public repo `mq-yuan/dotfiles`). Do not edit tool-side symlinks; edit the canonical files, then sync via chezmoi.
 - To add a new general-purpose skill:
   1. Create `~/.agents/skills/<name>/` with a `SKILL.md`.
-  2. Symlink it into `~/.claude/skills/` and `~/.config/codex/skills/`.
-  3. `chezmoi add` the new directory and both symlinks, then commit and push (with the user's approval).
+  2. Symlink it into `~/.claude/skills/` (Codex and omp pick it up from `~/.agents/skills/` directly).
+  3. `chezmoi add` the new directory and the Claude symlink, then commit and push (with the user's approval).
 - Project-specific skills (anything referencing a particular project, its notes, or unpublished content) stay in that project's `.claude/skills/` and must never be added to the public dotfiles repo.
 
 ## Task Discipline
