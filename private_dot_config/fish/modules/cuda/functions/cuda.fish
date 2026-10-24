@@ -1,254 +1,87 @@
 # $HOME/.config/fish/modules/cuda/functions/cuda.fish
-
-# ------------------------------------------------------------------------------
-# Main `cuda` function.
-# Orchestrates the entire CUDA environment switching process.
-# ------------------------------------------------------------------------------
-function cuda --description 'Switch between CUDA versions and manage dependencies'
-    # --- Configuration ---
-    set -l default_version "12.8"
-    set -l cuda_base_dir "$HOME/cuda"
-
-    # --- Parse flags ---
-    # --quiet: silence stdout and skip interactive prompts. Intended for shell
-    # startup where blocking on `read` would hang the session. Stderr still
-    # surfaces real problems.
-    set -l quiet 0
-    set -l positional
-    for a in $argv
-        switch $a
-            case --quiet -q
-                set quiet 1
-            case '*'
-                set -a positional $a
-        end
-    end
-
-    if test $quiet -eq 1
-        __cuda_run $cuda_base_dir $default_version $quiet $positional >/dev/null
-        return $status
-    end
-    __cuda_run $cuda_base_dir $default_version $quiet $positional
-end
-
-function __cuda_run --argument-names cuda_base_dir default_version quiet
-    set -l positional $argv[4..]
-
-    set -l target_version (__cuda_resolve_version "$default_version" $positional)
-    if test $status -ne 0
-        return 1
-    end
-
-    set -l required_gcc_version (__cuda_get_required_gcc_version "$target_version")
-    if test $status -ne 0
-        return 1
-    end
-
-    if not __cuda_check_and_advise_gcc_switch "$target_version" "$required_gcc_version" "$quiet"
-        return 1
-    end
-
-    __cuda_update_environment "$cuda_base_dir" "$target_version"
-    __cuda_activate_cudnn "$cuda_base_dir" "$target_version"
-    __cuda_verify_and_log "$target_version"
-end
-
-
-# ------------------------------------------------------------------------------
-# Helper Functions
-# ------------------------------------------------------------------------------
-
-# Resolves and returns the target CUDA version from user input.
-function __cuda_resolve_version --argument-names default_version version_arg
-    set -l cuda_base_dir "$HOME/cuda"
-    set -l target "$version_arg"
-    if test -z "$target"
-        set target "$default_version"
-    end
+#
+# Opt-in CUDA toolchain activation for the *current* shell only. Projects pin
+# their toolchain via direnv (`use cuda <ver>` in .envrc); this command exists
+# for ad-hoc work outside a project (scratch nvcc builds, one-off runs).
+#
+# Deliberately NOT auto-run at startup: no CUDA path ever leaks into the
+# global shell or desktop processes. Run `cuda 12.8`, `cuda 11.8`, `cuda latest`.
+#
+# Layout (see __cuda_base for the base dir):
+#   $CUDA_ROOT/cuda-<ver>/            CUDA toolkit
+#   $CUDA_ROOT/cudnn-<ver>_cuda-<maj> cuDNN (newest matching the CUDA major)
+# OptiX is managed only through direnv (`use optix <ver>`), not here.
+function cuda --description 'Activate a CUDA toolchain in the current shell'
+    set -l base (__cuda_base)
+    set -l target "$argv[1]"
+    test -n "$target"; or set target "12.8"
 
     if test "$target" = "latest"
-        # First, find the full path of the latest directory.
-        set -l latest_dir (ls -d $cuda_base_dir/cuda-* 2>/dev/null | sort -V | tail -n 1)
-
-        # Check if a directory was actually found before processing.
+        set -l latest_dir (find $base -maxdepth 1 -type d -name 'cuda-*' 2>/dev/null | sort -V | tail -n 1)
         if test -z "$latest_dir"
-            echo "Error: No CUDA installations found in '$cuda_base_dir' to determine 'latest'." >&2
+            echo "cuda: no CUDA toolkits found under $base" >&2
             return 1
         end
-
-        # If found, safely extract the version number.
         set target (basename "$latest_dir" | string replace 'cuda-' '')
     end
 
-    set -l cuda_dir "$cuda_base_dir/cuda-$target"
+    set -l cuda_dir "$base/cuda-$target"
     if not test -d "$cuda_dir"
-        echo "Error: CUDA version '$target' is not found at '$cuda_dir'." >&2
-        echo "Available versions:" >&2
-        for dir in (ls -d $cuda_base_dir/cuda-* 2>/dev/null)
-            if test -d "$dir"
-                echo "  - "(basename $dir | string replace 'cuda-' '') >&2
-            end
-        end
+        echo "cuda: $cuda_dir not found" >&2
         return 1
     end
 
-    echo "$target"
-    return 0
-end
-
-# Returns the required GCC version for a given CUDA version.
-function __cuda_get_required_gcc_version --argument-names cuda_version
-    set -l GCC_COMPATIBILITY_MAP \
-        "12.8" "13" \
-        "12.4" "13" \
-        "11.8" "11"
-
-    for i in (seq 1 2 (count $GCC_COMPATIBILITY_MAP))
-        set -l cuda_prefix $GCC_COMPATIBILITY_MAP[$i]
-        set -l gcc_version $GCC_COMPATIBILITY_MAP[(math $i+1)]
-        
-        if string match -q "$cuda_prefix*" "$cuda_version"
-            echo "$gcc_version"
-            return 0
-        end
+    # Host compiler. Point CC/CXX/CUDAHOSTCXX at the versioned gcc/g++ that
+    # matches this CUDA release (gcc11/gcc13 from AUR on Arch). The system
+    # default gcc is left untouched. Missing compiler is a warning, not fatal.
+    set -l gcc_ver ""
+    switch "$target"
+        case '11.8*'
+            set gcc_ver 11
+        case '12.*'
+            set gcc_ver 13
+    end
+    if test -n "$gcc_ver" -a -x "/usr/bin/gcc-$gcc_ver"
+        set -gx CC "/usr/bin/gcc-$gcc_ver"
+        set -gx CXX "/usr/bin/g++-$gcc_ver"
+        set -gx CUDAHOSTCXX "/usr/bin/g++-$gcc_ver"
+    else if test -n "$gcc_ver"
+        echo "cuda: warning: /usr/bin/gcc-$gcc_ver not found; host compiler left as-is" >&2
     end
 
-    echo "Error: Unsupported CUDA version '$cuda_version'. No GCC compatibility rule found." >&2
-    echo "Please add a rule to the GCC_COMPATIBILITY_MAP in the script." >&2
-    return 1
-end
+    set -gx CUDA_HOME "$cuda_dir"
 
-# Checks the current GCC version and advises the user to switch if necessary.
-function __cuda_check_and_advise_gcc_switch --argument-names target_version required_gcc quiet
-    set -l current_gcc_version (gcc --version | head -n 1 | string match -r '[0-9]+')
-    echo "Info: Current GCC major version is $current_gcc_version."
-    echo "Info: CUDA $target_version requires GCC $required_gcc."
-
-    if test "$current_gcc_version" != "$required_gcc"
-        # In quiet mode (e.g. shell startup) never prompt and never sudo. Just
-        # set CC/CXX to the required compiler if it is already installed; the
-        # caller can still run `cuda` interactively later to do the alternatives
-        # switch.
-        if test "$quiet" = "1"
-            if test -e "/usr/bin/gcc-$required_gcc"
-                set --global --export CC /usr/bin/gcc-$required_gcc
-                set --global --export CXX /usr/bin/g++-$required_gcc
-                return 0
-            end
-            echo "Warning: GCC $required_gcc not installed; system gcc is $current_gcc_version. Run `cuda` interactively to fix." >&2
-            return 0
-        end
-        echo "Warning: GCC version mismatch detected." >&2
-        read -P "Attempt to switch GCC version automatically? (y/N) " -l confirm
-
-        if string match -q -r '^[Yy]$' -- "$confirm"
-            echo "Info: Attempting to switch GCC with sudo..."
-            if test -e "/usr/bin/gcc-$required_gcc"
-                sudo update-alternatives --set gcc /usr/bin/gcc-$required_gcc; and sudo update-alternatives --set g++ /usr/bin/g++-$required_gcc
-                if test $status -ne 0
-                    echo "Error: Failed to switch GCC. Check sudo permissions or if g++-$required_gcc is installed." >&2
-                    return 1
-                end
-                set --global --export CC /usr/bin/gcc-$required_gcc
-                set --global --export CXX /usr/bin/g++-$required_gcc
-                echo "Info: GCC and G++ switched successfully to version $required_gcc."
-                echo "Info: CC and CXX switched successfully to path /usr/bin/gcc-$required_gcc and /usr/bin/g++-$required_gcc."
-                return 0 # Continue script
-            else
-                echo "Error: Required version gcc-$required_gcc is not installed." >&2
-                return 1
-            end
-        else
-            echo "Info: Automatic switch declined." >&2
-            echo "Please switch your GCC and G++ version manually before proceeding." >&2
-            echo "Example command:" >&2
-            echo "  sudo update-alternatives --set gcc /usr/bin/gcc-$required_gcc" >&2
-            echo "  sudo update-alternatives --set g++ /usr/bin/g++-$required_gcc" >&2
-            return 1 # Exit script
-        end
-    end
-    set --global --export CC /usr/bin/gcc-$required_gcc
-    set --global --export CXX /usr/bin/g++-$required_gcc
-    echo "Info: CC and CXX switched successfully to path /usr/bin/gcc-$required_gcc and /usr/bin/g++-$required_gcc."
-
-    echo "Info: Current GCC version is compatible. No switch needed."
-    return 0
-end
-
-# Cleans old paths and sets new environment variables for CUDA.
-function __cuda_update_environment --argument-names base_dir cuda_version
-    echo "Info: Updating environment variables for CUDA $cuda_version..."
-    set -l cuda_dir "$base_dir/cuda-$cuda_version"
-
-    function __clean_var --argument-names var_name pattern
-        set -l new_value
-        for p in $$var_name
-            if not string match -q "$pattern" "$p"
-                set new_value $new_value $p
+    # Drop any previous CUDA/cuDNN entries so re-activation is idempotent.
+    for var in PATH LD_LIBRARY_PATH CPATH
+        set -l kept
+        for p in $$var
+            if not string match -q "$base/cuda-*" "$p"; and not string match -q "$base/cudnn-*" "$p"
+                set kept $kept "$p"
             end
         end
-        set --global --export $var_name $new_value
+        set -gx $var $kept
     end
 
-    __clean_var PATH "$base_dir/cuda-*"
-    __clean_var LD_LIBRARY_PATH "$base_dir/cuda-*"
-    __clean_var LD_LIBRARY_PATH "$base_dir/cudnn-*"
-    __clean_var CPATH "$base_dir/cuda-*"
-    __clean_var CPATH "$base_dir/cudnn-*"
-
-    set --global --export CUDA_HOME "$cuda_dir"
-    set --global --export PATH "$cuda_dir/bin" $PATH
+    set -gx PATH "$cuda_dir/bin" $PATH
     if test -d "$cuda_dir/lib64"
-        set --global --export LD_LIBRARY_PATH "$cuda_dir/lib64" $LD_LIBRARY_PATH
+        set -gx LD_LIBRARY_PATH "$cuda_dir/lib64" $LD_LIBRARY_PATH
     else if test -d "$cuda_dir/lib"
-        set --global --export LD_LIBRARY_PATH "$cuda_dir/lib" $LD_LIBRARY_PATH
-    end
-end
-
-# Finds and activates the latest compatible cuDNN version.
-function __cuda_activate_cudnn --argument-names base_dir cuda_version
-    echo "Info: Searching for compatible cuDNN..."
-    set -l cuda_major (string split '.' $cuda_version | head -n 1)
-    
-    set -l cudnn_dirs (ls -d $base_dir/cudnn-*_cuda-$cuda_major 2>/dev/null | sort -V)
-    if test (count $cudnn_dirs) -eq 0
-        echo "Warning: No compatible cuDNN version found for CUDA $cuda_major." >&2
-        echo "  Please install cuDNN in a path like: $base_dir/cudnn-<version>_cuda-$cuda_major" >&2
-        return
+        set -gx LD_LIBRARY_PATH "$cuda_dir/lib" $LD_LIBRARY_PATH
     end
 
-    set -l cudnn_dir $cudnn_dirs[-1]
-    set -l cudnn_version (basename $cudnn_dir | string replace -r 'cudnn-(.*)_cuda-.*' '$1')
-    echo "Info: Activating latest compatible cuDNN: $cudnn_version"
-
-    if test -d "$cudnn_dir/lib"
-        set --global --export LD_LIBRARY_PATH "$cudnn_dir/lib" $LD_LIBRARY_PATH
-    else if test -d "$cudnn_dir/lib64"
-        set --global --export LD_LIBRARY_PATH "$cudnn_dir/lib64" $LD_LIBRARY_PATH
-    end
-    set --global --export CPATH "$cudnn_dir/include" $CPATH
-end
-
-# Verifies the switch and writes to a log file.
-function __cuda_verify_and_log --argument-names cuda_version
-    set -l log_dir "$HOME/.log"
-    set -l log_path "$log_dir/.cuda_switch.log"
-    mkdir -p "$log_dir"
-
-    if type -q nvcc
-        set -l current_version (nvcc --version | string match -r 'release \K[0-9]+\.[0-9]+')
-        if test "$current_version" = "$cuda_version"
-            echo "Success: Switched to CUDA version: $current_version"
-            echo "$(date): Switched to CUDA $current_version" >> $log_path
-        else
-            echo "Error: Switch failed! 'nvcc --version' reports $current_version but expected $cuda_version." >&2
-            echo "$(date): Failed to switch to CUDA $cuda_version (version mismatch)" >> $log_path
-            return 1
+    # Newest cuDNN matching the CUDA major version.
+    set -l major (string split '.' "$target")[1]
+    set -l cudnn_dirs (find $base -maxdepth 1 -type d -name "cudnn-*_cuda-$major" 2>/dev/null | sort -V)
+    if test (count $cudnn_dirs) -gt 0
+        set -l cudnn_dir $cudnn_dirs[-1]
+        if test -d "$cudnn_dir/lib"
+            set -gx LD_LIBRARY_PATH "$cudnn_dir/lib" $LD_LIBRARY_PATH
+        else if test -d "$cudnn_dir/lib64"
+            set -gx LD_LIBRARY_PATH "$cudnn_dir/lib64" $LD_LIBRARY_PATH
         end
+        test -d "$cudnn_dir/include"; and set -gx CPATH "$cudnn_dir/include" $CPATH
+        echo "cuda $target + cudnn "(basename $cudnn_dir | string replace -r 'cudnn-(.*)_cuda-.*' '$1')
     else
-        echo "Error: Switch failed! 'nvcc' command not found." >&2
-        echo "Please check if CUDA $cuda_version is correctly installed." >&2
-        echo "$(date): Failed to switch to CUDA $cuda_version (nvcc not found)" >> $log_path
-        return 1
+        echo "cuda $target (no cudnn for cuda-$major)"
     end
 end

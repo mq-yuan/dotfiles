@@ -5,16 +5,16 @@
    instead of asking again.
 
    Tags drive distribution (see .chezmoiignore for authoritative semantics):
-     dev      -- a full dev box; gets the heavy macOS Brewfile tier (LaTeX/media/Lua)
+     dev      -- a full dev box; gets the heavy tool tier (extra pacman/Brewfile packages)
      proxy    -- runs the Sparkle proxy (adds .config/sparkle/)
      onedrive -- needs the OneDrive client config (adds .config/onedrive/)
      company  -- the company workstation; adds company-only yazi keybinds
-   A host with no tags gets the minimal base config and skips brew bundle.
+   A host with no tags gets the minimal base config and skips package auto-install.
 */ -}}
 {{- $tags := promptMultichoiceOnce . "tags" "Host tags (space toggles, enter confirms)" (list "dev" "proxy" "onedrive" "company") -}}
 {{- $kdbxDatabase := promptStringOnce . "kdbxDatabase" "Absolute path to the KeePassXC .kdbx (blank to skip secret management)" "" -}}
 {{- $kdbxKeyFile := promptStringOnce . "kdbxKeyFile" "Absolute path to the KeePassXC key file (blank if the database has none)" "" -}}
-{{- $proxyUrl := promptStringOnce . "proxyUrl" "HTTP proxy URL for network-heavy updates like flatpak (blank to disable)" "http://127.0.0.1:7890" -}}
+{{- $proxyUrl := promptStringOnce . "proxyUrl" "HTTP proxy URL for network-heavy updates like flatpak/AUR (blank to disable)" "http://127.0.0.1:7890" -}}
 {{ if $kdbxDatabase -}}
 [keepassxc]
     # mode "builtin" (native parser) cannot decrypt an AES-KDF + key-file kdbx;

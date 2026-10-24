@@ -1,10 +1,11 @@
 setxkbmap -option ctrl:nocaps
 
-# Force fcitx5 as the input method framework for X11 clients (wezterm,
-# GTK, Qt). The desktop session may otherwise leave XMODIFIERS empty,
-# which silently breaks XIM-only clients. Requires fcitx5 installed on
-# the host (not via Flatpak): Flatpak's XIM socket lives inside the
-# sandbox and is unreachable from host processes.
+# Force fcitx5 as the input method framework for X11 clients (ghostty,
+# wezterm, GTK, Qt). The desktop session may otherwise leave XMODIFIERS
+# empty, which silently breaks XIM-only clients. Requires fcitx5 installed
+# on the host via the native package manager (pacman on Arch; not via
+# Flatpak): Flatpak's XIM socket lives inside the sandbox and is
+# unreachable from host processes.
 # Note: kitty 0.42+ does NOT support IME on X11 (Wayland only), so it
 # cannot type Chinese here regardless of these vars; see kitty #1948.
 export GTK_IM_MODULE=fcitx

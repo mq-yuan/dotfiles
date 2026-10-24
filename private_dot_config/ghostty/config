@@ -2,4 +2,7 @@ font-family = "Maple Mono NF CN"
 font-family-bold = "Maple Mono NF CN Bold"
 font-family-italic = "Maple Mono NF CN Italic"
 font-family-bold-italic = "Maple Mono NF CN Bold Italic"
+
+# Match the old Alacritty look (opacity = 0.8)
+background-opacity = 0.8
 custom-shader = "~/.config/ghostty/shaders/cursor_smear_rainbow.glsl"

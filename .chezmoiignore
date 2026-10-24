@@ -11,21 +11,22 @@ Library/
 .config/nvim/lua/plugins/latex.lua
 {{ end }}
 
-
 # Only Linux
 {{ if ne .chezmoi.os "linux" }}
-.config/aria2/
 .config/btop/
 .config/direnv/
 .config/fish/modules/cuda/
 .config/fish/modules/font_install/
-.config/mpv/
-.config/tmuxinator/
 .config/wezterm/
 .local/share/fcitx5/
 .xprofile
 {{ end }}
 
+# Only Arch (pacman/paru manifests & scripts)
+{{ if not (lookPath "pacman") }}
+.config/pacman/
+.chezmoiscripts/10-pacman-install.sh
+{{ end }}
 
 # Tag-gated content. Tags are set per-host in ~/.config/chezmoi/chezmoi.toml:
 #
@@ -33,18 +34,14 @@ Library/
 #   tags = ["dev", "proxy"]   # pick any subset
 #
 # Tag semantics:
-#   dev      — a full development box (vs a light entertainment machine). Has no
-#              file gating here; it drives the macOS Brewfile tier (dev hosts get
-#              the heavy LaTeX/media/Lua toolchain, others a lean core set). See
-#              private_dot_config/homebrew/Brewfile.tmpl.
+#   dev      — a full development box (vs a light entertainment machine). Drives
+#              the heavy tool tier: extra packages on Arch (pacman manifest) and
+#              macOS (Brewfile), e.g. gh/cmake/typst/LaTeX.
 #   proxy    — runs the Sparkle (Mihomo Party) proxy. Adds .config/sparkle/.
 #   onedrive — needs the OneDrive client config (Linux has no good GUI client).
 #              Adds .config/onedrive/.
 #   company  — the company workstation. Like `dev`, no file gating here; it adds
 #              company-only keybinds inside yazi/keymap.toml.tmpl (remote paths).
-#
-# Ships everywhere now (no longer tag-gated): fastfetch (cosmetic) and the
-# direnv fish hook + binary (direnv is universal).
 #
 # Machines with no tags (e.g. remote GPU hosts) get the minimal base config.
 #
@@ -52,7 +49,7 @@ Library/
 # (~/Library/Rime/) and Linux native (~/.local/share/fcitx5/rime/). Both
 # reference the single source at .chezmoitemplates/custom_phrase.txt, so edits
 # stay in one place. The Flatpak stub was removed when this host switched to
-# the APT-installed fcitx5.
+# the pacman-installed fcitx5.
 {{- $tags := list }}
 {{- if hasKey . "tags" }}{{ $tags = .tags }}{{ end }}
 
@@ -62,4 +59,14 @@ Library/
 
 {{- if not (has "onedrive" $tags) }}
 .config/onedrive/
+{{- end }}
+
+# Homebrew is macOS-only and tag-gated (see
+# .chezmoiscripts/run_once_before_00-install-homebrew.sh.tmpl). Arch/Ubuntu hosts
+# never get brew config/hooks.
+{{- if or (ne .chezmoi.os "darwin") (eq (len $tags) 0) }}
+.config/homebrew/
+.config/fish/conf.d/11_homebrew.fish
+.chezmoiscripts/00-install-homebrew.sh
+.chezmoiscripts/10-brew-bundle.sh
 {{- end }}

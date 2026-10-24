@@ -8,7 +8,7 @@ new_cwd = "follow"
 agent_panel_sort = "priority"
 
 # Let the outer terminal own desktop notifications (OSC 9/777):
-# Ghostty/cmux on macOS, WezTerm on Ubuntu — also works over SSH.
+# Ghostty/cmux on macOS, Ghostty on CachyOS, WezTerm on Ubuntu — also works over SSH.
 # Click focuses the terminal; prefix+o jumps to the agent pane.
 # (alternatives: "system" OS service, "herdr" in-app toasts, "off")
 [ui.toast]
