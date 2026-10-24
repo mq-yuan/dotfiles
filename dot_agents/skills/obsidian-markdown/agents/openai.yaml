@@ -1,0 +1,4 @@
+interface:
+  display_name: "Obsidian Markdown"
+  short_description: "Write Obsidian Flavored Markdown notes"
+  default_prompt: "Use $obsidian-markdown to write or edit this note with valid Obsidian Flavored Markdown (wikilinks, embeds, callouts, properties)."

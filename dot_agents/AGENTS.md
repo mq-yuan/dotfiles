@@ -63,6 +63,18 @@ Managed by chezmoi. Tool-specific files import or symlink this file.
   - Add deps: `uv add <pkg>` — no ad-hoc `pip install`.
 
 
+## Obsidian Vaults
+
+- For Obsidian Flavored Markdown syntax (wikilinks, embeds, callouts, properties), use the `obsidian-markdown` skill.
+- The official Obsidian CLI is the app binary itself: `/Applications/Obsidian.app/Contents/MacOS/Obsidian <command>` (not registered on PATH). It drives the running app; `help <command>` prints the exact parameters. Pass `vault=<name>` as the first argument; paths are relative to the vault root.
+- **Move and rename notes through the CLI, never with `mv`.** Obsidian sees a filesystem move as delete + create, so links break silently. The CLI rewrites links only when "Automatically update internal links" is on (`eval code="app.vault.getConfig('alwaysUpdateLinks')"` returns `true`).
+  - Files: `move path=<p> to=<folder>/` or `rename path=<p> name=<new>`. `move` fails with `ENOENT` when the destination folder does not exist; create it first with `eval code="app.vault.createFolder('<folder>').then(() => 'ok')"`.
+  - Folders: there is no folder command. Use `eval code="app.fileManager.renameFile(app.vault.getAbstractFileByPath('<old>'), '<new>').then(() => 'ok')"`, which updates links like a move in the app.
+- **Keep note basenames unique.** Short wikilinks (`[[Note]]`) resolve by basename and prefer the nearest file, so adding a note whose basename already exists can silently retarget existing links. Check for the name with `files` before creating or moving such a note.
+- Check `backlinks path=<p> counts` and `unresolved total` before and after any restructuring, and check `backlinks` before deleting a note.
+- Redirect CLI output to a file instead of piping it into `head`; the client does not exit when the pipe closes early.
+
+
 ## Quality Gates
 
 After any Python change, run in order:
