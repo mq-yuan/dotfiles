@@ -102,3 +102,8 @@ modelRoles:
 
 # Show the model's reasoning/thinking block expanded in the UI.
 hideThinkingBlock: false
+
+# Consent to omp auto-QA reporting tool issues (grievances); recorded here so
+# omp does not re-prompt on every host.
+dev:
+  autoqaConsent: granted
