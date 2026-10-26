@@ -62,6 +62,26 @@ Managed by chezmoi. Tool-specific files import or symlink this file.
   - Run ruff: `uvx ruff`
   - Add deps: `uv add <pkg>` — no ad-hoc `pip install`.
 
+### Project Environments
+
+- Every Python project uses `pyproject.toml` + `uv.lock` + `.python-version` as the single source of truth. Do not add `requirements.txt`, conda envs, or manually created venvs.
+- Environments are activated by **direnv** (installed on every host, Linux and macOS). Each project root has an `.envrc`; `layout uv` creates and activates `.venv`. On macOS this is direnv's built-in `layout uv`; on Linux `~/.config/direnv/direnvrc` overrides it.
+- Put project-specific env vars (e.g. `UV_PYTHON`, `TORCH_CUDA_ARCH_LIST`) in `.envrc`, not in shell profiles or ad-hoc scripts.
+- **CUDA is Linux-only.** On Linux GPU hosts, `~/.config/direnv/direnvrc` provides `use cuda <ver>` / `use optix <ver>`, which pin the CUDA/cuDNN/OptiX toolchain from `~/cuda/` and the matching host gcc. macOS has no CUDA and no such direnvrc, so an unguarded `use cuda` makes direnv fail there.
+  - Linux-only project:
+
+        use cuda 12.8
+        layout uv
+
+  - Project that is also used on macOS: guard the toolchain line.
+
+        if [[ "$(uname -s)" == Linux ]]; then
+          use cuda 12.8
+        fi
+        layout uv
+
+- Do not install system-wide CUDA, use sudo/update-alternatives, or edit `~/.config/direnv/direnvrc` to set up a project; add the matching `use ...` line to the project's `.envrc` instead. On macOS, never try to install CUDA or CUDA builds; GPU work runs on Linux hosts.
+
 
 ## Obsidian Vaults
 
