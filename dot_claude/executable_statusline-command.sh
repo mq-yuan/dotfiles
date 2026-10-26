@@ -6,6 +6,8 @@ cwd=$(echo "$input" | jq -r '.workspace.current_dir // .cwd // empty')
 model=$(echo "$input" | jq -r '.model.display_name // empty')
 used_pct=$(echo "$input" | jq -r '.context_window.used_percentage // empty')
 used_tokens=$(echo "$input" | jq -r '.context_window.total_input_tokens // empty')
+ctx_size=$(echo "$input" | jq -r '.context_window.context_window_size // empty')
+effort=$(echo "$input" | jq -r '.effort.level // empty')
 
 # ANSI colors (dimmed-friendly)
 RESET='\033[0m'
@@ -27,20 +29,33 @@ parts=()
 
 # Directory segment
 if [ -n "$cwd" ]; then
-    parts+=("$(printf "${CYAN}%s${RESET}" "$cwd")")
+    parts+=("$(printf "${CYAN}\xef\x81\xbb %s${RESET}" "$cwd")")
 fi
 
-# Model segment
+# Model segment: append context window size and effort level when available
 if [ -n "$model" ]; then
+    case "$model" in
+        *context*) ;;
+        *)
+            if [ -n "$ctx_size" ]; then
+                if [ "$ctx_size" -ge 1000000 ]; then
+                    model="$model ($((ctx_size / 1000000))M context)"
+                else
+                    model="$model ($((ctx_size / 1000))k context)"
+                fi
+            fi
+            ;;
+    esac
+    [ -n "$effort" ] && model="$model · $effort"
     parts+=("$(printf "${MAGENTA}%s${RESET}" "$model")")
 fi
 
 # Git segment: branch + dirty marker
 if [ -n "$cwd" ] && command -v git >/dev/null 2>&1; then
-    branch=$(git -C "${cwd/#~/$HOME}" symbolic-ref --quiet --short HEAD 2>/dev/null \
-        || git -C "${cwd/#~/$HOME}" rev-parse --short HEAD 2>/dev/null)
+    branch=$(git --no-optional-locks -C "${cwd/#~/$HOME}" symbolic-ref --quiet --short HEAD 2>/dev/null \
+        || git --no-optional-locks -C "${cwd/#~/$HOME}" rev-parse --short HEAD 2>/dev/null)
     if [ -n "$branch" ]; then
-        if [ -n "$(git -C "${cwd/#~/$HOME}" status --porcelain 2>/dev/null)" ]; then
+        if [ -n "$(git --no-optional-locks -C "${cwd/#~/$HOME}" status --porcelain 2>/dev/null)" ]; then
             dirty='*'
             git_color="$YELLOW"
         else
