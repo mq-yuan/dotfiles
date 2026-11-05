@@ -16,6 +16,37 @@
 # release; the system default gcc is never modified. PATH / LD_LIBRARY_PATH /
 # CPATH go through direnv's path helpers so they unwind on leaving the dir.
 
+# Use one mixed HTTP proxy for all protocols, or clear inherited proxy settings.
+# Usage: use proxy 127.0.0.1:13521
+#        use proxy off
+use_proxy() {
+    local proxy_url="${1:-off}"
+
+    # Clear every case variant first so repeated loads never retain stale values.
+    unset HTTP_PROXY HTTPS_PROXY ALL_PROXY NO_PROXY
+    unset http_proxy https_proxy all_proxy no_proxy
+
+    if [[ "$proxy_url" == "off" ]]; then
+        log_status "use proxy: disabled"
+        return 0
+    fi
+
+    if [[ "$proxy_url" != *"://"* ]]; then
+        proxy_url="http://$proxy_url"
+    fi
+
+    export HTTP_PROXY="$proxy_url"
+    export HTTPS_PROXY="$proxy_url"
+    export ALL_PROXY="$proxy_url"
+    export http_proxy="$proxy_url"
+    export https_proxy="$proxy_url"
+    export all_proxy="$proxy_url"
+    export NO_PROXY="localhost,127.0.0.1,::1"
+    export no_proxy="$NO_PROXY"
+
+    log_status "use proxy: enabled"
+}
+
 use_cuda() {
     local base="${CUDA_ROOT:-$HOME/cuda}"
     local target="${1:-12.8}"
