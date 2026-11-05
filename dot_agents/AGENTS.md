@@ -6,10 +6,19 @@ Managed by chezmoi. Tool-specific files import or symlink this file.
 ## Communication
 
 - Reply in Chinese by default; switch to English only when explicitly requested.
-- All repository content (code, comments, docs, configs, commit messages) must be English only.
-- Do not introduce Chinese text into any repository file, including diff/patch lines.
-- Exception: research/survey notes under a `docs/research/` (or equivalent) folder may be bilingual (Chinese + English), paragraph-by-paragraph. This relaxation applies only to such research notes, not to code, configs, or other docs.
+- Code, comments, configs and commit messages must be English only; never introduce Chinese text into them, including diff/patch lines.
+- Docs, READMEs, experiment records and summaries prefer English but may use Chinese where it aids reading.
 - Keep existing project terminology consistent; do not rename concepts without explicit instruction.
+
+
+## Documentation
+
+- Load the `project-docs` skill before creating, updating or consolidating documentation.
+- Record converged conclusions, not the exploration that produced them. Hypotheses, intermediate checks and refuted ideas stay out of docs unless the user explicitly asks to record them.
+- Update documents by rewriting in place; do not append dated updates or changelog sections.
+- Keep status pages short and true; check them against live state before relying on them.
+- Do not read archived or history documents unless the user asks.
+- Project facts belong in repository docs, not only in agent memory.
 
 
 ## Delivering Files to the User

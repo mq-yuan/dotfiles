@@ -1,0 +1,4 @@
+interface:
+  display_name: "Project Docs"
+  short_description: "Write converged, concise project documentation"
+  default_prompt: "Use $project-docs to decide what from this work should be documented, then update the owning documents in place."
