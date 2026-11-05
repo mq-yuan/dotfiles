@@ -6,4 +6,6 @@
 {{- end -}}
 {{- /* Load repository AGENTS.md beside CLAUDE.md / CLAUDE.local.md instead of only as a fallback. */ -}}
 {{- $settings = setValueAtPath (list "pluginConfigs" "cc-plugin-agents-md@builtin" "options" "instructionFiles") "claude-md-and-agents-md" $settings -}}
+{{- /* Enable the chezmoi-managed status line script on every host. */ -}}
+{{- $settings = setValueAtPath (list "statusLine") (dict "type" "command" "command" (printf "bash %s/.claude/statusline-command.sh" .chezmoi.homeDir)) $settings -}}
 {{ toPrettyJson $settings -}}
