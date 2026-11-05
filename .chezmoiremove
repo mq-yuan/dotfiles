@@ -1,0 +1,4 @@
+# Targets removed from every host on `chezmoi apply` after their source was dropped.
+
+# Retired with the omp modify script (1609af6); compared against the full config.
+.config/fish/modules/omp
