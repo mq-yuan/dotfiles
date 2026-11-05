@@ -1,0 +1,75 @@
+#!/usr/bin/env -S uv run --quiet --no-project --script
+# /// script
+# requires-python = ">=3.11"
+# dependencies = ["pyyaml"]
+# ///
+"""Chezmoi modify script: enforce the managed keys of the omp agent config.
+
+omp rewrites ~/.config/omp/agent/config.yml on every TUI settings change and
+also stores its own state there (for example `setupVersion`). chezmoi owns only
+the keys in MANAGED below: mappings are merged recursively, while scalars and
+lists from MANAGED replace the live values. Every other key is left to omp.
+Removing a key from MANAGED stops managing it; it does not delete it.
+"""
+
+from __future__ import annotations
+
+import sys
+from typing import Any
+
+import yaml
+
+MANAGED = """
+symbolPreset: nerd
+theme:
+  dark: mahogany
+
+disabledProviders:
+  - claude
+
+tools:
+  # Prompt only for write operations; the tools listed under `approval`
+  # below are pre-approved and never prompt.
+  approvalMode: write
+  approval:
+    bash: allow
+    task: allow
+    read: allow
+    hub: allow
+    eval: allow
+
+shellPath: /bin/bash
+
+# Show the model's reasoning/thinking block expanded in the UI.
+hideThinkingBlock: false
+
+# Consent to omp auto-QA reporting tool issues (grievances); recorded here so
+# omp does not re-prompt on every host.
+dev:
+  autoqaConsent: granted
+"""
+
+
+def merge(live: dict[str, Any], managed: dict[str, Any]) -> dict[str, Any]:
+    """Merge managed values into the live config.
+
+    Args:
+        live: Current config parsed from the target file.
+        managed: Keys owned by chezmoi.
+
+    Returns:
+        The live mapping updated in place with the managed values.
+    """
+    for key, value in managed.items():
+        if isinstance(value, dict) and isinstance(live.get(key), dict):
+            merge(live[key], value)
+        else:
+            live[key] = value
+    return live
+
+
+raw = sys.stdin.read()
+live = yaml.safe_load(raw) if raw.strip() else {}
+assert isinstance(live, dict), "omp agent config must be a YAML mapping"
+config = merge(live, yaml.safe_load(MANAGED))
+sys.stdout.write(yaml.safe_dump(config, sort_keys=False, allow_unicode=True))
