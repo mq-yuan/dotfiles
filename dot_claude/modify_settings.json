@@ -1,0 +1,9 @@
+{{- /* chezmoi:modify-template */ -}}
+{{- /* Own only the keys below; Claude Code keeps writing the rest of this file itself. */ -}}
+{{- $settings := dict -}}
+{{- if .chezmoi.stdin -}}
+{{-   $settings = fromJson .chezmoi.stdin -}}
+{{- end -}}
+{{- /* Load repository AGENTS.md beside CLAUDE.md / CLAUDE.local.md instead of only as a fallback. */ -}}
+{{- $settings = setValueAtPath (list "pluginConfigs" "cc-plugin-agents-md@builtin" "options" "instructionFiles") "claude-md-and-agents-md" $settings -}}
+{{ toPrettyJson $settings -}}
