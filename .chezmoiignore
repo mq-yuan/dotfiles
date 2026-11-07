@@ -23,6 +23,13 @@ Library/
 .xprofile
 {{ end }}
 
+# The herdr skill is rendered from `herdr --skill`, so it needs the binary.
+# Hosts get it on the first apply after herdr is installed.
+{{ if not (lookPath "herdr") }}
+.agents/skills/herdr/
+.claude/skills/herdr
+{{ end }}
+
 # Only Arch (pacman/paru manifests & scripts)
 {{ if not (lookPath "pacman") }}
 .config/pacman/
