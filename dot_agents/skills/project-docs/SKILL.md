@@ -57,6 +57,8 @@ or in scratch notes, not in docs, because later agents will read them and follow
   of X is still unknown, but A has been shown to be unrelated).
 - Do not add "ruled out", "alternatives considered" or "earlier hypothesis" sections unless the
   user explicitly asks for them.
+- A contract may state why the current choice was made in one line (use X because Y). That reason
+  is a conclusion, not a section of rejected alternatives.
 - Keep iteration history only when the user asks to preserve it, and put it in the archive.
 - Sanity checks that simply confirmed expectations are not worth recording; at most, one line in
   the owning record saying the behavior was verified.
