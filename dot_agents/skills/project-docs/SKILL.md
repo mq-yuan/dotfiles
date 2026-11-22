@@ -23,6 +23,8 @@ later reasoning. Write the converged state of the project, not the path that led
 
 - Apply these rules to projects that already have docs, or when the user asks to create them.
   Do not set up a docs structure on your own initiative.
+- When the user asks to set up docs, `project-docs init` can create a starter layout and the
+  opt-in config.
 - Use only the types a project needs; a small project may have just a README or one document.
 - Third-party code cloned to run baselines or comparisons gets no docs, and its README is not
   edited. Record its runs and results in the owning project's records.
@@ -47,6 +49,8 @@ Exploration produces hypotheses, checks, refutations and dead ends. They stay in
 or in scratch notes, not in docs, because later agents will read them and follow them.
 
 - Write only after the discussion or experiment has converged. If convergence is unclear, ask.
+  When running unattended, or while work has not converged, put progress and open questions in
+  status or the owning record, never in a finding or contract.
 - State what was established. If X is caused by Y, write that X is caused by Y. Do not mention
   the candidates that were eliminated on the way.
 - Record a negative result only when it is itself the converged conclusion (for example, the cause
@@ -98,8 +102,8 @@ memory holds collaboration preferences and pointers, never the only copy of a pr
 
 ## Language
 
-Code, comments and configs are English only. Docs, READMEs, experiment records and summaries
-prefer English but may use Chinese where it aids reading.
+Code (including comments and configs) and docs each follow the language convention the repository
+already uses. In a new repository, default to English.
 
 ## Before finishing a docs change
 
@@ -108,3 +112,4 @@ prefer English but may use Chinese where it aids reading.
 - Status is still true and short.
 - No entry document gained a link into the archive.
 - Local links and anchors resolve.
+- Optionally, if the `project-docs` CLI is available, `project-docs check` passes.

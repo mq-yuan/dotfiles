@@ -1,4 +1,4 @@
 interface:
   display_name: "Project Docs"
-  short_description: "Write converged, concise project documentation"
-  default_prompt: "Use $project-docs to decide what from this work should be documented, then update the owning documents in place."
+  short_description: "Write project docs as converged state, not append-only logs"
+  default_prompt: "Use $project-docs to distill converged conclusions from this work and update the owning documents in place."
