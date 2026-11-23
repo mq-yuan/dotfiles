@@ -131,16 +131,21 @@ After any Python change, run in order:
 - If a destructive or irreversible action is required, state it clearly and wait for confirmation.
 
 
+## Dotfiles
+
+- User-level config (`~/.config/*`, `~/.agents/`, `~/.claude/`, …) is managed by chezmoi: source `~/.local/share/chezmoi`, public repo `mq-yuan/dotfiles`. Change it in the source (`chezmoi add` new files), then `chezmoi apply`; `.chezmoiignore` decides which hosts get each file, and secrets enter only through KeepassXC templates.
+
+
 ## Agent Skills and Instructions Management
 
 - `~/.agents/` is the canonical location for cross-tool agent assets: this file and the shared skills under `~/.agents/skills/`.
 - Codex and omp read `~/.agents/skills/` natively, so they need no skill symlinks. Claude Code does not: `~/.claude/skills/*` link to the canonical skills. `~/.config/codex/AGENTS.md` links to this file, `~/.claude/CLAUDE.md` imports it, and `~/.codex` is a symlink to `~/.config/codex`.
 - Antigravity CLI (`agy`) reads neither natively; its global root is `~/.gemini/config/`. `~/.gemini/config/skills.json` lists `~/.agents/skills/` as an absolute path (agy rejects `~` there), `~/.gemini/AGENTS.md` links to this file, and global MCP servers go in `~/.gemini/config/mcp_config.json`.
-- Everything above is managed by chezmoi (public repo `mq-yuan/dotfiles`). Do not edit tool-side symlinks; edit the canonical files, then sync via chezmoi.
+- Do not edit tool-side symlinks; edit the canonical files.
 - To add a new general-purpose skill:
   1. Create `~/.agents/skills/<name>/` with a `SKILL.md`.
   2. Symlink it into `~/.claude/skills/` (Codex, omp and agy pick it up from `~/.agents/skills/` directly).
-  3. `chezmoi add` the new directory and the Claude symlink, then commit and push (with the user's approval).
+  3. `chezmoi add` the new directory and the Claude symlink.
 - Project-specific skills (anything referencing a particular project, its notes, or unpublished content) stay in that project's `.claude/skills/` and must never be added to the public dotfiles repo.
 
 ## Task Discipline
