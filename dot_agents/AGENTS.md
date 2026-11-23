@@ -15,7 +15,7 @@ Managed by chezmoi. Tool-specific files import or symlink this file.
 
 - Load the `project-docs` skill before creating, updating or consolidating documentation.
 - Record converged conclusions, not the exploration that produced them. Hypotheses, intermediate checks and refuted ideas stay out of docs unless the user explicitly asks to record them.
-- Update documents by rewriting in place; do not append dated updates or changelog sections.
+- Update documents, including agent instruction files like this one, by rewriting in place: state each fact once, merging into any existing mention rather than restating it, and do not append dated updates or changelog sections.
 - Keep status pages short and true; check them against live state before relying on them.
 - Do not read archived or history documents unless the user asks.
 - Project facts belong in repository docs, not only in agent memory.
