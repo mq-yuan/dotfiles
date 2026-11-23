@@ -73,7 +73,7 @@ or in scratch notes, not in docs, because later agents will read them and follow
 
 ## Be concise
 
-- Test each sentence: would a fresh agent act differently without it? If not, cut it.
+- Keep a sentence only if a conclusion depends on it or a fresh agent needs it to act.
 - Lead with the conclusion; details follow only as far as they support it.
 - Keep only the numbers that support a conclusion. Hashes, PIDs, ETAs, full logs and command
   transcripts go to the evidence location (outputs, run directories); link it.
